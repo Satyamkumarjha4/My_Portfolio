@@ -1,14 +1,21 @@
 import React from 'react';
+import { Route, Routes } from "react-router-dom";
 
-interface Props {
-    // Define your props here
-}
+import Home from './ui/features/Home';
+import About from './ui/features/About';
+import Projects from './ui/features/Projects';
+import Contact from './ui/features/Contact';
 
-const App: React.FC<Props> = (props) => {
+
+
+const App: React.FC = () => {
     return (
-        <>
-            Yeh App hai
-        </>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/contact" element={<Contact />} />
+        </Routes>
     );
 };
 
