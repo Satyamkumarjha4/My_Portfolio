@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-
 // import Profile from '../../../public/DSC_3735 copy.jpg';
 import Window from './Window';
 
@@ -85,10 +84,10 @@ const Hero: React.FC = () => {
                     </p>
                     <div className="flex flex-col md:flex-row gap-4 mt-8">
                         <button className="mt-6 bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300">
-                            Get in Touch
+                            <a href="/Contact">Get in Touch</a>
                         </button>
                         <button className="mt-6 bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300">
-                            View Projects
+                        <a href="/Projects">View Projects</a>
                         </button>
                     </div>
                     </div>

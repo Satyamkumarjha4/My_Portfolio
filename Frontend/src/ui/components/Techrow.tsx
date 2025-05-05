@@ -1,23 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
 
-import python_icon from '../../../public/python.jpeg'
-import C_icon from '../../../public/C.jpeg'
-import CSS_icon from '../../../public/CSS.jpeg'
-import Flask_icon from '../../../public/Flask.png'
-import HTML_icon from '../../../public/HTML.png'
-import Java_icon from '../../../public/Java.png'
-import Js_icon from '../../../public/Js.jpeg'
-import Keras_icon from '../../../public/keras.png'
-import Matplotlib_icon from '../../../public/Matplotlib.png'
-import NumPy_icon from '../../../public/numpy.png'
-import Pandas_icon from '../../../public/pandas.png'
-import Postgres_icon from '../../../public/Postgress.png'
-import Postman_icon from '../../../public/Postman.png'
-import ScikitLearn_icon from '../../../public/scikitlearn.png'
-import Streamlit_icon from '../../../public/Streamlit.png'
-import Tensorflow_icon from '../../../public/Tensorflow.png'
-import SQLite_icon from '../../../public/SQLite.jpeg'
-import Git_icon from '../../../public/Git.png'
+
+import python_icon from '/python.jpeg'
+import C_icon from '/C.jpeg'
+import CSS_icon from '/CSS.jpeg'
+import Flask_icon from '/Flask.png'
+import HTML_icon from '/HTML.png'
+import Java_icon from '/Java.png'
+import Js_icon from '/Js.jpeg'
+import Keras_icon from '/keras.png'
+import Matplotlib_icon from '/Matplotlib.png'
+import NumPy_icon from '/numpy.png'
+import Pandas_icon from '/pandas.png'
+import Postgres_icon from '/Postgress.png'
+import Postman_icon from '/Postman.png'
+import ScikitLearn_icon from '/scikitlearn.png'
+import Streamlit_icon from '/Streamlit.png'
+import Tensorflow_icon from '/Tensorflow.png'
+import SQLite_icon from '/SQLite.jpeg'
+import Git_icon from '/Git.png'
 
 
 // Define TypeScript interfaces for our data structures
@@ -26,7 +27,7 @@ interface TechStack {
   category: Category;
   proficiency: number;
   description: string;
-  icon?: any;
+  icon?: string;
 }
 
 // Use literal types for categories to ensure type safety
@@ -39,147 +40,147 @@ const techStacks: TechStack[] = [
     category: "Languages",
     proficiency: 85,
     description: "System programming, algorithms, and data structures",
-    icon: {C_icon}
+    icon: C_icon
   },
   {
     name: "Python",
     category: "Languages",
     proficiency: 90,
     description: "Data analysis, automation, and backend development",
-    icon: {python_icon}
+    icon: python_icon
   },
   {
     name: "JavaScript",
     category: "Languages",
     proficiency: 80,
     description: "Web development, frontend and backend scripting",
-    icon: {Js_icon}
+    icon: Js_icon
   },
   {
     name: "Java",
     category: "Languages",
     proficiency: 75,
     description: "Object-oriented programming and enterprise applications",
-    icon: {Java_icon}
+    icon: Java_icon
   },
   {
     name: "HTML",
     category: "Frontend",
     proficiency: 95,
     description: "Markup language for creating web pages",
-    icon: {HTML_icon}
+    icon: HTML_icon
   },
   {
     name: "CSS",
     category: "Frontend",
     proficiency: 85,
     description: "Styling and layout for web applications",
-    icon: {CSS_icon}
+    icon: CSS_icon
   },
   {
     name: "Streamlit",
     category: "Frameworks",
     proficiency: 80,
     description: "Rapid data application development",
-    icon: {Streamlit_icon}
+    icon: Streamlit_icon
   },
   {
     name: "Flask",
     category: "Frameworks",
     proficiency: 85,
     description: "Lightweight web application framework",
-    icon: {Flask_icon}
+    icon: Flask_icon
   },
   {
     name: "SQL",
     category: "Databases",
     proficiency: 90,
     description: "Structured query language for database management",
-    icon: {SQLite_icon}
+    icon: SQLite_icon
   },
   {
     name: "SQLite",
     category: "Databases",
     proficiency: 85,
     description: "Embedded relational database",
-    icon: {SQLite_icon}
+    icon: SQLite_icon
   },
   {
     name: "Postgres",
     category: "Databases",
     proficiency: 80,
     description: "Object-relational database system",
-    icon: {Postgres_icon}
+    icon: Postgres_icon
   },
   {
     name: "MongoDB",
     category: "Databases",
     proficiency: 75,
     description: "NoSQL document database",
-    icon: {Postgres_icon}
+    icon: Postgres_icon
   },
   {
     name: "Pandas",
     category: "Data Science",
     proficiency: 90,
     description: "Data manipulation and analysis library",
-    icon: {Pandas_icon}
+    icon: Pandas_icon
   },
   {
     name: "NumPy",
     category: "Data Science",
     proficiency: 85,
     description: "Numerical computing with Python",
-    icon: {NumPy_icon}
+    icon: NumPy_icon
   },
   {
     name: "Matplotlib",
     category: "Data Science",
     proficiency: 80,
     description: "Visualization library for Python",
-    icon: {Matplotlib_icon}
+    icon: Matplotlib_icon
   },
   {
     name: "Seaborn",
     category: "Data Science",
     proficiency: 80,
     description: "Visualization library for Python",
-    icon: {Matplotlib_icon}
+    icon: Matplotlib_icon
   },
   {
     name: "Scikit-Learn",
     category: "Data Science",
     proficiency: 85,
     description: "Machine learning library for Python",
-    icon: {ScikitLearn_icon}
+    icon: ScikitLearn_icon
   },
   {
     name: "Keras",
     category: "Data Science",
     proficiency: 75,
     description: "Deep learning API running on TensorFlow",
-    icon: {Keras_icon}
+    icon: Keras_icon
   },
   {
     name: "TensorFlow",
     category: "Data Science",
     proficiency: 75,
     description: "Deep learning framework",
-    icon: {Tensorflow_icon}
+    icon: Tensorflow_icon
   },
   {
     name: "Git/GitHub",
     category: "Tools",
     proficiency: 90,
     description: "Version control and code collaboration",
-    icon: {Git_icon}
+    icon: Git_icon
   },
   {
     name: "Postman",
     category: "Tools",
     proficiency: 85,
     description: "API development and testing tool",
-    icon: {Postman_icon}
+    icon: Postman_icon
   }
 ];
 
