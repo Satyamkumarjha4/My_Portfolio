@@ -1,14 +1,19 @@
 import type React from "react"
-import { Github, Linkedin, Mail, ExternalLink } from "lucide-react"
+import { Github, Linkedin, Mail } from "lucide-react"
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear()
 
+  const navigateTo = (path: string) => {
+    window.location.href = path;
+  };
+
   return (
     <footer className="w-full bg-gray-900 text-white py-12 px-6">
-      <div className="max-w-7xl mx-auto">
+      
+      <div className="w-400 mx-auto">
         {/* Top section with columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 border-b border-gray-800 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 border-y border-gray-800 py-12 px-2">
           {/* About column */}
           <div>
             <h3 className="text-2xl font-bold mb-4">Satyam Kumar Jha</h3>
@@ -16,16 +21,16 @@ const Footer: React.FC = () => {
               Turning ideas into reality through code and innovation. Specializing in AI/ML and full-stack development.
             </p>
             <div className="flex space-x-4 mt-4">
-              <a href="#" className="text-gray-400 hover:text-indigo-400 transition-colors">
-                <Github size={20} />
+              <a href="https://github.com/Satyamkumarjha4" target="_blank" className="text-gray-400 hover:text-indigo-400 transition-colors">
+                <Github size={30} />
                 <span className="sr-only">GitHub</span>
               </a>
-              <a href="#" className="text-gray-400 hover:text-indigo-400 transition-colors">
-                <Linkedin size={20} />
+              <a href="https://linkedin.com/in/satyamkumarjha4" target="_blank" className="text-gray-400 hover:text-indigo-400 transition-colors">
+                <Linkedin size={30} />
                 <span className="sr-only">LinkedIn</span>
               </a>
-              <a href="#" className="text-gray-400 hover:text-indigo-400 transition-colors">
-                <Mail size={20} />
+              <a href="mailto:satyamjha4@gmail.com" className="text-gray-400 hover:text-indigo-400 transition-colors">
+                <Mail size={30} />
                 <span className="sr-only">Email</span>
               </a>
             </div>
@@ -36,23 +41,23 @@ const Footer: React.FC = () => {
             <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/" className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
-                  <span>Home</span>
+                <a onClick={() => navigateTo('/')}  className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
+                  <span className="transition-transform duration-300 p-1 hover:scale-110 hover:bg-gray-800 rounded-md">Home</span>
                 </a>
               </li>
               <li>
-                <a href="/About" className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
-                  <span>About</span>
+                <a onClick={() => navigateTo('/About')}  className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
+                  <span className="transition-transform duration-300 p-1 hover:scale-110 hover:bg-gray-800 rounded-md">About</span>
                 </a>
               </li>
               <li>
-                <a href="/Projects" className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
-                  <span>Projects</span>
+                <a onClick={() => navigateTo('/Projects')}  className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
+                  <span className="transition-transform duration-300 p-1 hover:scale-110 hover:bg-gray-800 rounded-md">Projects</span>
                 </a>
               </li>
               <li>
-                <a href="Contact" className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
-                  <span>Contact</span>
+                <a onClick={() => navigateTo('/Contact')}  className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
+                  <span className="transition-transform duration-300 p-1 hover:scale-110 hover:bg-gray-800 rounded-md">Contact</span>
                 </a>
               </li>
             </ul>
@@ -60,24 +65,18 @@ const Footer: React.FC = () => {
 
           {/* Contact info */}
           <div>
-            <h3 className="text-xl font-semibold mb-4">Get In Touch</h3>
-            <div className="space-y-3">
-              <p className="text-gray-300 flex items-center">
-                <Mail size={18} className="mr-2 text-indigo-400" />
-                <a href="mailto:satyamjha4@gmail.com" className="hover:text-indigo-400 transition-colors">
-                  satyamjha4@gmail.com
-                </a>
-              </p>
-              <div className="mt-6">
-                <a
-                  href="#contact"
-                  className="bg-indigo-500 text-white px-5 py-2 rounded-full hover:bg-indigo-600 transition duration-300 inline-flex items-center"
-                >
-                  Contact Me
-                  <ExternalLink size={16} className="ml-2" />
-                </a>
-              </div>
-            </div>
+            <h3 className="text-xl font-semibold mb-4">Made Using</h3>
+            <ul className="space-y-2">
+              <li className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
+                <span className="transition-transform duration-300 p-1 hover:scale-110 hover:bg-gray-800 rounded-md">React</span>
+              </li>
+              <li className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
+                <span className="transition-transform duration-300 p-1 hover:scale-110 hover:bg-gray-800 rounded-md">TypeScript</span>
+              </li>
+              <li className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center">
+                <span className="transition-transform duration-300 p-1 hover:scale-110 hover:bg-gray-800 rounded-md">Tailwind CSS</span>
+              </li>
+            </ul>
           </div>
         </div>
 
