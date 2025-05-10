@@ -68,7 +68,7 @@ const achievementsData: AchievementType[] = [
     date: "2024-08-01",
     overview:
       "Achieved top performer recognition with 95% score in a 4-week certified course covering resumes, interviews, and branding.",
-    certificate: "https://example.com/certificate/job-prep-top-performer",
+    certificate: "",
   },
   {
     id: 9,
