@@ -44,7 +44,7 @@ export function ProjectDetails({
         boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)",
       }}
     >
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col md:flex-row" id={imageUrl}>
         {imageOnRight ? (
           <>
             <ProjectInfo title={title} description={description} techStack={techStack} tags={tags} demoUrl={demoUrl} />

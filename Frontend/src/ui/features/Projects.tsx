@@ -122,7 +122,6 @@ const Projects: React.FC = () => {
             A collection of my best work showcasing my technical skills and problem-solving abilities
           </motion.p>
         </motion.div>
-
         {projects.map((project, index) => (
           <ProjectDetails
             key={index}
@@ -134,6 +133,7 @@ const Projects: React.FC = () => {
             githubUrl={project.githubUrl}
             demoUrl={project.demoUrl}
             imageOnRight={project.imageOnRight}
+            
           />
         ))}
       </div>

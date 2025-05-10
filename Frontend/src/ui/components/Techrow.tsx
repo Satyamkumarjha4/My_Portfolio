@@ -1,342 +1,222 @@
-import { useEffect, useRef, useState } from 'react'
-
-
-import python_icon from '/tech_stack/python.jpeg'
-import C_icon from '/tech_stack/C.jpeg'
-import CSS_icon from '/tech_stack/CSS.jpeg'
-import Flask_icon from '/tech_stack/Flask.png'
-import HTML_icon from '/tech_stack/HTML.png'
-import Java_icon from '/tech_stack/Java.png'
-import Js_icon from '/tech_stack/Js.jpeg'
-import Keras_icon from '/tech_stack/keras.png'
-import Matplotlib_icon from '/tech_stack/Matplotlib.png'
-import NumPy_icon from '/tech_stack/numpy.png'
-import Pandas_icon from '/tech_stack/pandas.png'
-import Postgres_icon from '/tech_stack/Postgress.png'
-import Postman_icon from '/tech_stack/Postman.png'
-import ScikitLearn_icon from '/tech_stack/scikitlearn.png'
-import Streamlit_icon from '/tech_stack/Streamlit.png'
-import Tensorflow_icon from '/tech_stack/Tensorflow.png'
-import SQLite_icon from '/tech_stack/SQLite.jpeg'
-import Git_icon from '/tech_stack/Git.png'
-
-
-// Define TypeScript interfaces for our data structures
-interface TechStack {
-  name: string;
-  category: Category;
-  proficiency: number;
-  description: string;
-  icon?: string;
-}
-
-// Use literal types for categories to ensure type safety
-type Category = 'Languages' | 'Frontend' | 'Frameworks' | 'Databases' | 'Data Science' | 'Tools';
+import { useState } from "react"
+import { motion } from "framer-motion"
+import TechCarousel from "./TechCarousel"
+import type { Category, TechStack } from "./TechTypes"
+import { FaPython, FaJava, FaHtml5, FaCss3Alt, FaJs, FaGit } from "react-icons/fa"
+import { SiFlask, SiStreamlit, SiKeras, SiTensorflow, SiNumpy, SiPandas, SiMongodb, SiPostman } from "react-icons/si"
+import { TbBrandCpp } from "react-icons/tb"
+import { BiLogoPostgresql } from "react-icons/bi"
+import { BsFiletypeSql } from "react-icons/bs"
+import { DiSqllite } from "react-icons/di"
 
 // Tech stack data with categories, icons, and proficiency levels
 const techStacks: TechStack[] = [
   {
     name: "C/C++",
     category: "Languages",
-    proficiency: 85,
+    proficiency: 60,
     description: "System programming, algorithms, and data structures",
-    icon: C_icon
+    icon: <TbBrandCpp />,
   },
   {
     name: "Python",
     category: "Languages",
     proficiency: 90,
     description: "Data analysis, automation, and backend development",
-    icon: python_icon
+    icon: <FaPython />,
   },
   {
     name: "JavaScript",
     category: "Languages",
-    proficiency: 80,
+    proficiency: 65,
     description: "Web development, frontend and backend scripting",
-    icon: Js_icon
+    icon: <FaJs />,
   },
   {
     name: "Java",
     category: "Languages",
-    proficiency: 75,
+    proficiency: 60,
     description: "Object-oriented programming and enterprise applications",
-    icon: Java_icon
+    icon: <FaJava />,
   },
   {
     name: "HTML",
     category: "Frontend",
-    proficiency: 95,
+    proficiency: 75,
     description: "Markup language for creating web pages",
-    icon: HTML_icon
+    icon: <FaHtml5 />,
   },
   {
     name: "CSS",
     category: "Frontend",
-    proficiency: 85,
+    proficiency: 65,
     description: "Styling and layout for web applications",
-    icon: CSS_icon
+    icon: <FaCss3Alt />,
   },
   {
     name: "Streamlit",
     category: "Frameworks",
-    proficiency: 80,
+    proficiency: 75,
     description: "Rapid data application development",
-    icon: Streamlit_icon
+    icon: <SiStreamlit />,
   },
   {
     name: "Flask",
     category: "Frameworks",
-    proficiency: 85,
+    proficiency: 75,
     description: "Lightweight web application framework",
-    icon: Flask_icon
+    icon: <SiFlask />,
   },
   {
     name: "SQL",
     category: "Databases",
-    proficiency: 90,
+    proficiency: 85,
     description: "Structured query language for database management",
-    icon: SQLite_icon
+    icon: <BsFiletypeSql />,
   },
   {
     name: "SQLite",
     category: "Databases",
-    proficiency: 85,
+    proficiency: 80,
     description: "Embedded relational database",
-    icon: SQLite_icon
+    icon: <DiSqllite />,
   },
   {
     name: "Postgres",
     category: "Databases",
-    proficiency: 80,
+    proficiency: 65,
     description: "Object-relational database system",
-    icon: Postgres_icon
+    icon: <BiLogoPostgresql />,
   },
   {
     name: "MongoDB",
     category: "Databases",
-    proficiency: 75,
+    proficiency: 60,
     description: "NoSQL document database",
-    icon: Postgres_icon
+    icon: <SiMongodb />,
   },
   {
     name: "Pandas",
     category: "Data Science",
-    proficiency: 90,
+    proficiency: 85,
     description: "Data manipulation and analysis library",
-    icon: Pandas_icon
+    icon: <SiPandas />,
   },
   {
     name: "NumPy",
     category: "Data Science",
     proficiency: 85,
     description: "Numerical computing with Python",
-    icon: NumPy_icon
-  },
-  {
-    name: "Matplotlib",
-    category: "Data Science",
-    proficiency: 80,
-    description: "Visualization library for Python",
-    icon: Matplotlib_icon
-  },
-  {
-    name: "Seaborn",
-    category: "Data Science",
-    proficiency: 80,
-    description: "Visualization library for Python",
-    icon: Matplotlib_icon
-  },
-  {
-    name: "Scikit-Learn",
-    category: "Data Science",
-    proficiency: 85,
-    description: "Machine learning library for Python",
-    icon: ScikitLearn_icon
+    icon: <SiNumpy />,
   },
   {
     name: "Keras",
     category: "Data Science",
     proficiency: 75,
     description: "Deep learning API running on TensorFlow",
-    icon: Keras_icon
+    icon: <SiKeras />,
   },
   {
     name: "TensorFlow",
     category: "Data Science",
-    proficiency: 75,
+    proficiency: 60,
     description: "Deep learning framework",
-    icon: Tensorflow_icon
+    icon: <SiTensorflow />,
   },
   {
     name: "Git/GitHub",
     category: "Tools",
     proficiency: 90,
     description: "Version control and code collaboration",
-    icon: Git_icon
+    icon: <FaGit />,
   },
   {
     name: "Postman",
     category: "Tools",
-    proficiency: 85,
+    proficiency: 80,
     description: "API development and testing tool",
-    icon: Postman_icon
-  }
-];
+    icon: <SiPostman />,
+  },
+]
 
+// Component for the tech stack section
+export default function Techrow() {
+  const [selectedCategory, setSelectedCategory] = useState<Category | "All">("All")
 
-// Define interface for category colors
-interface CategoryColorMap {
-  [key: string]: string
-}
+  // Get unique categories
+  const categories: (Category | "All")[] = ["All", ...Array.from(new Set(techStacks.map((tech) => tech.category)))]
 
-// Color schemes for different categories
-const categoryColors: CategoryColorMap = {
-  Languages: "bg-blue-100 border-blue-500 text-blue-700",
-  Frontend: "bg-purple-100 border-purple-500 text-purple-700",
-  Frameworks: "bg-green-100 border-green-500 text-green-700",
-  Databases: "bg-red-100 border-red-500 text-red-700",
-  "Data Science": "bg-yellow-100 border-yellow-500 text-yellow-700",
-  Tools: "bg-indigo-100 border-indigo-500 text-indigo-700",
-}
-
-// Component for the tech stack carousel
-export default function TechStackCarousel() {
-  const [isPaused, setIsPaused] = useState<boolean>(false)
-  const [hoveredStack, setHoveredStack] = useState<string | null>(null)
-  const carouselRef = useRef<HTMLDivElement | null>(null)
-  const containerRef = useRef<HTMLDivElement | null>(null)
-
-  // Clone items for infinite scrolling
-  useEffect(() => {
-    if (containerRef.current && carouselRef.current) {
-      // Clone the first set of items and append to the end for seamless looping
-      const items = carouselRef.current.children
-      const clonedItems = Array.from(items).map((item) => item.cloneNode(true))
-
-      clonedItems.forEach((item) => {
-        carouselRef.current?.appendChild(item)
-      })
-    }
-  }, [])
-
-  // Effect for automatic scrolling with infinite loop
-  useEffect(() => {
-    if (!isPaused && carouselRef.current) {
-      const scrollInterval = setInterval(() => {
-        if (carouselRef.current) {
-          const scrollWidth = carouselRef.current.scrollWidth
-          const scrollLeft = carouselRef.current.scrollLeft
-
-          // If we've scrolled to the cloned section (halfway point)
-          if (scrollLeft >= scrollWidth / 4) {
-            // Reset to the beginning without animation
-            carouselRef.current.style.scrollBehavior = "auto"
-            carouselRef.current.scrollLeft = 0
-            // Restore smooth scrolling
-            setTimeout(() => {
-              if (carouselRef.current) {
-                carouselRef.current.style.scrollBehavior = "smooth"
-              }
-            }, 10)
-          } else {
-            // Continue scrolling
-            carouselRef.current.scrollLeft += 1
-          }
-        }
-      }, 20)
-
-      return () => clearInterval(scrollInterval)
-    }
-  }, [isPaused])
-
-  // Render proficiency circle
-  const renderProficiencyCircle = (proficiency: number) => {
-    const getCircleColor = (value: number): string => {
-      if (value >= 90) return "bg-green-500 text-white"
-      if (value >= 75) return "bg-blue-500 text-white"
-      if (value >= 60) return "bg-yellow-500 text-white"
-      return "bg-red-500 text-white"
+  // Define category colors for filter buttons
+  const getCategoryButtonClass = (category: Category | "All") => {
+    if (category === "All") {
+      return selectedCategory === "All"
+        ? "bg-gray-800 text-white border-gray-600"
+        : "bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600"
     }
 
-    return (
-      <div className="flex items-center justify-center mt-2">
-        <div
-          className={`rounded-full ${getCircleColor(proficiency)} flex items-center justify-center transition-all duration-300 animate-pulse`}
-          style={{
-            width: "80px",
-            height: "80px",
-          }}
-        >
-          <span className="font-bold text-xl">{proficiency}%</span>
-        </div>
-      </div>
-    )
+    switch (category) {
+      case "Languages":
+        return selectedCategory === category
+          ? "bg-blue-700 text-white border-blue-500"
+          : "bg-blue-900/30 text-blue-300 border-blue-800 hover:bg-blue-800/50"
+      case "Frontend":
+        return selectedCategory === category
+          ? "bg-purple-700 text-white border-purple-500"
+          : "bg-purple-900/30 text-purple-300 border-purple-800 hover:bg-purple-800/50"
+      case "Frameworks":
+        return selectedCategory === category
+          ? "bg-green-700 text-white border-green-500"
+          : "bg-green-900/30 text-green-300 border-green-800 hover:bg-green-800/50"
+      case "Databases":
+        return selectedCategory === category
+          ? "bg-red-700 text-white border-red-500"
+          : "bg-red-900/30 text-red-300 border-red-800 hover:bg-red-800/50"
+      case "Data Science":
+        return selectedCategory === category
+          ? "bg-yellow-700 text-white border-yellow-500"
+          : "bg-yellow-900/30 text-yellow-300 border-yellow-800 hover:bg-yellow-800/50"
+      case "Tools":
+        return selectedCategory === category
+          ? "bg-indigo-700 text-white border-indigo-500"
+          : "bg-indigo-900/30 text-indigo-300 border-indigo-800 hover:bg-indigo-800/50"
+      default:
+        return "bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600"
+    }
   }
 
   return (
-    <div className="w-9/10 mx-auto p-4 bg-gray-900" ref={containerRef}>
-      <h2 className="text-2xl font-bold text-center mb-6 text-5xl text-indigo-500">My Skills</h2>
+    <div className="w-full mx-auto p-4 bg-gray-900">
+      <motion.h2
+        className="text-5xl font-bold text-center mb-6 text-indigo-500"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        My Skills
+      </motion.h2>
 
       {/* Tech Stack Filter Buttons */}
-      <div className="w-400 flex flex-wrap justify-center item-center gap-4 mb-6">
-        {Object.keys(categoryColors).map((category) => (
-          <span
+      <motion.div
+        className="flex flex-wrap justify-center items-center gap-4 mb-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        {categories.map((category) => (
+          <motion.button
             key={category}
-            className={`px-3 py-1 rounded-full text-m font-medium border ${categoryColors[category]} shadow-md hover:shadow-lg transition-all duration-300`}
+            className={`px-4 py-2 rounded-full text-sm font-medium border ${getCategoryButtonClass(category)} shadow-md transition-all duration-300`}
+            onClick={() => setSelectedCategory(category)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             {category}
-          </span>
+          </motion.button>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Carousel Container */}
-      <div className="relative overflow-hidden py-4">
-        <div
-          ref={carouselRef}
-          className="flex space-x-6 overflow-x-auto pb-4 scrollbar-hide"
-          style={{ scrollBehavior: "smooth" }}
-        >
-          {techStacks.map((tech, index) => (
-            <div
-              key={index}
-              className={`flex-shrink-0 w-72 h-72 rounded-full border-2 transition-all duration-300 ${
-                hoveredStack === tech.name
-                  ? `${categoryColors[tech.category].split(" ")[0]} border-4 ${categoryColors[tech.category].split(" ")[1]} shadow-lg transform -translate-y-2`
-                  : "bg-white border-gray-200 hover:shadow-md"
-              }`}
-              onMouseEnter={() => {
-                setIsPaused(true)
-                setHoveredStack(tech.name)
-              }}
-              onMouseLeave={() => {
-                setIsPaused(false)
-                setHoveredStack(null)
-              }}
-            >
-              <div className="p-4 flex flex-col items-center justify-center h-full">
-                {/* Show icon when not hovered */}
-                {hoveredStack !== tech.name && (
-                  <>
-                    <div className="w-20 h-20 relative mb-2">
-                      <img src={tech.icon} alt={tech.name} className="object-contain" />
-                    </div>
-                  </>
-                )}
-
-                {/* Show proficiency circle and description on hover */}
-                {hoveredStack === tech.name && (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <h3 className="font-bold text-2xl text-center mb-2">{tech.name}</h3>
-                    {renderProficiencyCircle(tech.proficiency)}
-                    <p className="text-xs mt-3 text-center line-clamp-2">{tech.description}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Tech Stack Carousel */}
+      <TechCarousel techStacks={techStacks} selectedCategory={selectedCategory} />
     </div>
   )
 }

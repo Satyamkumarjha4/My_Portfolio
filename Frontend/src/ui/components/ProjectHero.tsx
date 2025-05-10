@@ -12,7 +12,7 @@ const ProjectsHero: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden z-0">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
 
