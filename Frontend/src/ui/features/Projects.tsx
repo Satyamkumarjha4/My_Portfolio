@@ -6,38 +6,29 @@ import { ProjectDetails } from "../components/ProjectDetails"
 import ProjectsHero from "../components/ProjectHero"
 import ScrollToTopButton from "../components/ScrollToTopbutton"
 
+
+
 const projects = [
-  {
-    title: "Car Price Prediction Web App",
-    description:
-      "A data-driven web application that predicts the price of used cars based on their features. It utilizes advanced machine learning models including CatBoost and ensemble techniques to provide accurate results. The backend is built using Flask, and the app is deployed on Render for easy accessibility. Users can input details like brand, model, year, mileage, and fuel type to get instant price estimates. The project emphasizes feature engineering, model optimization, and a clean user interface.",
-    techStack: ["Flask", "Python", "CatBoost", "Render"],
-    tags: ["Machine Learning", "Web App", "Regression", "Car Pricing"],
-    imageUrl: "/placeholder.svg?height=400&width=600",
-    githubUrl: "https://github.com/satyamkumarjha/car-price-predictor",
-    demoUrl: "https://car-price-predictor-4aiw.onrender.com",
-    imageOnRight: false,
-  },
   {
     title: "Movie Buddy – Recommendation Engine",
     description:
       "An interactive and personalized movie recommendation engine that leverages NLP techniques and cosine similarity to suggest movies based on user input. It uses metadata like genres, cast, and keywords to create a tag-based vector for each movie and generates recommendations accordingly. Built with Streamlit for a user-friendly interface, and integrated with the TMDb API to fetch real-time poster images and movie details. The project demonstrates the power of content-based filtering in recommendation systems.",
     techStack: ["Streamlit", "Pandas", "Scikit-learn", "TMDb API"],
     tags: ["NLP", "Recommender System", "Movie App", "Content-Based Filtering"],
-    imageUrl: "/placeholder.svg?height=400&width=600",
-    githubUrl: "https://github.com/satyamkumarjha/movie-recommender",
-    demoUrl: "https://moviebuddy-demo.vercel.app",
+    imageUrl: "/project_images/movie_recomendation_system.png",
+    githubUrl: "https://github.com/Satyamkumarjha4/Movie_Recomendation_System",
+    demoUrl: "https://movie-recomendation-system-skj.streamlit.app/",
     imageOnRight: true,
   },
   {
-    title: "Contact Manager Desktop App",
+    title: "Car Price Prediction Web App",
     description:
-      "A feature-rich desktop application designed to efficiently manage personal or professional contacts. Built with PyQt5 for the GUI and SQLite for persistent data storage, it supports creating, editing, searching, and deleting contact entries. The project follows object-oriented principles and includes a user-friendly interface designed with PyQt Designer. It is ideal for users who need an offline and organized way to handle their contact database, with emphasis on usability and clean design.",
-    techStack: ["PyQt5", "SQLite", "Python", "PyQt Designer"],
-    tags: ["Desktop App", "Contact Management", "GUI", "OOP"],
-    imageUrl: "/placeholder.svg?height=400&width=600",
-    githubUrl: "https://github.com/satyamkumarjha/contact-manager",
-    demoUrl: "",
+      "A data-driven web application that predicts the price of used cars based on their features. It utilizes advanced machine learning models including CatBoost and ensemble techniques to provide accurate results. The backend is built using Flask, and the app is deployed on Render for easy accessibility. Users can input details like brand, model, year, mileage, and fuel type to get instant price estimates. The project emphasizes feature engineering, model optimization, and a clean user interface.",
+    techStack: ["Flask", "Python", "CatBoost", "Render"],
+    tags: ["Machine Learning", "Web App", "Regression", "Car Pricing"],
+    imageUrl: "/project_images/car_prediction.png",
+    githubUrl: "https://github.com/Satyamkumarjha4/Car_Price_Predictor",
+    demoUrl: "https://car-price-predictor-4aiw.onrender.com",
     imageOnRight: false,
   },
   {
@@ -46,12 +37,35 @@ const projects = [
       "Binge+ is a dynamic content discovery platform that enables users to explore movies and web series interactively. It features real-time search, filtering by genres or ratings, and displays live metadata such as cast, plot summaries, and posters fetched via the TMDb API. Built using HTML, CSS, and JavaScript, this responsive website provides a seamless user experience and caters to entertainment enthusiasts looking for curated content. It's designed to function as a lightweight and fast front-end application.",
     techStack: ["HTML", "CSS", "JavaScript", "TMDb API"],
     tags: ["Movie App", "Web Series", "Frontend", "API Integration"],
-    imageUrl: "/placeholder.svg?height=400&width=600",
-    githubUrl: "https://github.com/satyamkumarjha/bingeplus",
-    demoUrl: "https://bingeplus-demo.vercel.app",
+    imageUrl: "/project_images/Binge.png",
+    githubUrl: "https://github.com/binge-plus",
+    demoUrl: "https://bit.ly/binge-movies-",
     imageOnRight: true,
   },
-]
+  {
+    title: "Tic-Tac-Toe Game with AI",
+    description:
+      "An interactive web-based Tic-Tac-Toe game where players compete against an AI opponent. Built using Streamlit for a simple interface, the game includes two difficulty levels: easy (random AI) and medium (blocking strategy). The app uses Python for game logic and ensures smooth gameplay with dynamic board rendering, game state tracking, and replay functionality. It demonstrates efficient use of session state, conditional rendering, and UI interactivity within Streamlit.",
+    techStack: ["Streamlit", "Python"],
+    tags: ["Game", "AI", "Streamlit", "Mini Project"],
+    imageUrl: "/project_images/tic-tac-toe.png",
+    githubUrl: "https://github.com/Satyamkumarjha4/AI_Projects",
+    demoUrl: "https://minmax-tic-tac-toe.streamlit.app/", // add demo URL if available
+    imageOnRight: false,
+  },
+  {
+    title: "Contact Manager Desktop App",
+    description:
+      "A feature-rich desktop application designed to efficiently manage personal or professional contacts. Built with PyQt5 for the GUI and SQLite for persistent data storage, it supports creating, editing, searching, and deleting contact entries. The project follows object-oriented principles and includes a user-friendly interface designed with PyQt Designer. It is ideal for users who need an offline and organized way to handle their contact database, with emphasis on usability and clean design.",
+    techStack: ["SQLite", "Python", "Streamlit"],
+    tags: ["Website", "Contact Management", "OOP"],
+    imageUrl: "/project_images/contact_management.png",
+    githubUrl: "https://github.com/Satyamkumarjha4/CodSoft/blob/main/STcontact.py",
+    demoUrl: "https://stcontactpy-edcajvvka5wklxn9rq7bcm.streamlit.app/",
+    imageOnRight: true,
+  }
+];
+
 
 const Projects: React.FC = () => {
   const { scrollYProgress } = useScroll()
