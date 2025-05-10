@@ -3,7 +3,8 @@ import { motion, useScroll, useSpring } from "framer-motion"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import { ProjectDetails } from "../components/ProjectDetails"
-
+import ProjectsHero from "../components/ProjectHero"
+import ScrollToTopButton from "../components/ScrollToTopbutton"
 
 const projects = [
   {
@@ -61,41 +62,53 @@ const Projects: React.FC = () => {
   })
 
   return (
-    <div className="bg-gray-900 min-h-screen">
+    <motion.div
+      className="bg-gray-900 min-h-screen"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-indigo-500 z-50 origin-left" style={{ scaleX }} />
       <Navbar />
 
-      <motion.div
-        className="flex flex-col items-center justify-center py-20 md:py-32 bg-gray-900"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.h1
-          className="text-4xl md:text-5xl font-bold text-white"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-        >
-          Projects
-        </motion.h1>
-        <motion.div
-          className="w-20 h-1 bg-indigo-500 my-6"
-          initial={{ width: 0 }}
-          animate={{ width: 80 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        />
-        <motion.p
-          className="mt-4 text-lg text-gray-400 text-center max-w-2xl px-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-        >
-          Explore my projects that showcase my skills and expertise in building innovative solutions.
-        </motion.p>
-      </motion.div>
+      <ProjectsHero />
 
-      <div className="container mx-auto px-4 py-8 z-0">
+      <div className="container mx-auto px-4 py-16 z-0">
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold text-white text-center mb-4"
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Featured Projects
+          </motion.h2>
+          <motion.div
+            className="w-20 h-1 bg-indigo-500 mx-auto mb-8"
+            initial={{ width: 0 }}
+            whileInView={{ width: 80 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          />
+          <motion.p
+            className="text-lg text-gray-300 text-center max-w-3xl mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            A collection of my best work showcasing my technical skills and problem-solving abilities
+          </motion.p>
+        </motion.div>
+
         {projects.map((project, index) => (
           <ProjectDetails
             key={index}
@@ -111,8 +124,9 @@ const Projects: React.FC = () => {
         ))}
       </div>
 
+      <ScrollToTopButton />
       <Footer />
-    </div>
+    </motion.div>
   )
 }
 
