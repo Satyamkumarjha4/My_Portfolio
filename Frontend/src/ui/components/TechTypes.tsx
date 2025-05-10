@@ -1,17 +1,25 @@
+import { ReactNode } from "react"
+
 // Define TypeScript interfaces for our data structures
 export interface TechStack {
     name: string
     category: Category
-    icon: any
+    icon: ReactNode
     proficiency: number
     description: string
   }
     
   // Use literal types for categories to ensure type safety
-  export type Category = "Languages" | "Frontend" | "Frameworks" | "Databases" | "Data Science" | "Tools"
+  export type Category = 
+  | "Languages"
+  | "Frontend"
+  | "Frameworks"
+  | "Databases"
+  | "Data Science"
+  | "Tools"
     
   // Define interface for category colors
-  export interface CategoryColorMap {
+  export type CategoryColorMap = {
     [key in Category]: string
   }
     
