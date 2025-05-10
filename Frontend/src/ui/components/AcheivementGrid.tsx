@@ -1,104 +1,211 @@
-import React, { useState } from 'react';
-import { Filter, ChevronDown, ChevronUp } from 'lucide-react';
-import AchievementCard, { type AchievementType } from './AchievementCards';
+"use client"
+
+import type React from "react"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Filter, ChevronDown, ChevronUp } from "lucide-react"
+import AchievementCard, { type AchievementType } from "./AchievementCards"
 
 // Sample achievement data
 const achievementsData: AchievementType[] = [
-    {
-        id: 1,
-        title: "Top Performer – Internship & Job Preparation Training",
-        date: "2024-08-01",
-        overview:
-          "Recognized as a top performer in a certified 4-week training program on job preparation, covering resume building, interviews, and personal branding.",
-      },
-      {
-        id: 2,
-        title: "Prompt Engineering Certification – GenAI",
-        date: "2024-08-24",
-        overview:
-          "Earned certification with 85% score in Internshala's GenAI Prompt Engineering course, applying AI across domains including marketing, HR, and software development.",
-      },
-      {
-        id: 3,
-        title: "Research on KNN Optimization using SFLA",
-        date: "2024-11-04",
-        overview:
-          "Published research on improving KNN accuracy from 85.70% to 87.42% using the Shuffled Frog Leaping Algorithm for feature selection optimization.",
-      },
-      {
-        id: 4,
-        title: "Hackathon Finalist – MAIT",
-        date: "2024-03-12",
-        overview:
-          "Developed a hospital automation web platform during a college hackathon to streamline appointment booking and reduce wait times.",
-      },
-      {
-        id: 5,
-        title: "Car Price Predictor Project – CatBoost Model",
-        date: "2025-04-02",
-        overview:
-          "Built and deployed a web app that predicts second-hand car prices with 91% accuracy using CatBoost and deployed it on Render.",
-      },
-      {
-        id: 6,
-        title: "100 Days of Code – GenAI & Full Stack Development",
-        date: "2024-11-14",
-        overview:
-          "Successfully documented a 100-day challenge exploring prompt engineering, C++, and full-stack development via daily LinkedIn updates.",
-      }
-      
-];
+  {
+    id: 1,
+    title: "Machine Learning – Internshala Certification",
+    date: "2024-08-01",
+    overview:
+      "Completed certified training on supervised and unsupervised learning via Internshala, focusing on practical ML applications.",
+    certificate: "https://drive.google.com/file/d/12-ooGdY1TRg4mHjNx_UoGgIxX8iE7C_0/view?usp=drive_link",
+  },
+  {
+    id: 2,
+    title: "Programming with Python – Internshala Certification",
+    date: "2024-07-10",
+    overview:
+      "Gained hands-on experience in core Python concepts and real-world applications through Internshala's certified program.",
+    certificate: "https://drive.google.com/file/d/16jUid31uqQuA6RBvcLXuq0YjanL3sOzH/view?usp=drive_link",
+  },
+  {
+    id: 3,
+    title: "Prompt Engineering for GenAI – Internshala Certification",
+    date: "2024-08-24",
+    overview:
+      "Learned prompt design strategies and GenAI applications across domains like marketing, HR, and development. Scored 85%.",
+    certificate: "https://drive.google.com/file/d/1_FPA1D7OGWrY1OX3YiLSqCJtEM8NPAMo/view?usp=drive_link",
+  },
+  {
+    id: 4,
+    title: "Introduction to Programming in C – NPTEL (IIT Kanpur)",
+    date: "2024-09-01",
+    overview:
+      "Completed foundational course on C programming offered by IIT Kanpur via NPTEL, building a strong base in structured programming.",
+    certificate: "https://drive.google.com/file/d/1BVWRNdD5gvHAS9xPm4eQvJ-zZElw5UYY/view?usp=drive_link",
+  },
+  {
+    id: 5,
+    title: "Data Structures and Algorithms using Python – NPTEL",
+    date: "2024-10-01",
+    overview:
+      "Studied core data structures, algorithms, and problem-solving in Python through a comprehensive NPTEL course.",
+    certificate: "https://drive.google.com/file/d/1r0cbmSkhULG79bB7xYFGULMjX7o_yo2R/view?usp=drive_link",
+  },
+  {
+    id: 6,
+    title: "Python for Data Science – NPTEL (Top 5% Toppers)",
+    date: "2024-11-01",
+    overview:
+      "Explored data analysis, visualization, and scientific computing using Python. Recognized among top 5% performers.",
+    certificate: "https://drive.google.com/file/d/1oZlciqTzt16UmPG7JvvR-qhJPWZizb0y/view?usp=drive_link",
+  },
+  {
+    id: 7,
+    title: "AI: Search Methods for Problem Solving – NPTEL",
+    date: "2024-11-20",
+    overview:
+      "Learned fundamental AI concepts, including search techniques and strategies for solving complex problems.",
+    certificate: "https://drive.google.com/file/d/14dbkGfkSKqVNEIDUztWLbzAeFTMx20Zk/view?usp=drive_link",
+  },
+  {
+    id: 8,
+    title: "Top Performer – Internship & Job Preparation Training",
+    date: "2024-08-01",
+    overview:
+      "Achieved top performer recognition with 95% score in a 4-week certified course covering resumes, interviews, and branding.",
+    certificate: "https://example.com/certificate/job-prep-top-performer",
+  },
+  {
+    id: 9,
+    title: "CBSE State Championship – Badminton (2019)",
+    date: "2019-10-15",
+    overview: "Represented the North Zone (Delhi) in the CBSE State Championship for Badminton at the school level.",
+    certificate: "",
+  },
+  {
+    id: 10,
+    title: "Inter-Zonal Captain – Netball (Delhi)",
+    date: "2019-12-01",
+    overview:
+      "Captained the zone netball team, led training and game strategies, and secured 2nd place out of 10 teams in Delhi's inter-zonal competition.",
+    certificate: "",
+  },
+]
 
 interface AchievementGridProps {
-  achievements?: AchievementType[];
-  title?: string;
-  subtitle?: string;
+  achievements?: AchievementType[]
+  title?: string
+  subtitle?: string
 }
 
 const AchievementGrid: React.FC<AchievementGridProps> = ({
   achievements = achievementsData,
   title = "My Achievements",
-  subtitle = "A showcase of my professional accomplishments and milestones"
+  subtitle = "A showcase of my professional accomplishments and milestones",
 }) => {
-  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest")
+  const [isFiltering, setIsFiltering] = useState(false)
 
   // Sort achievements based on date
   const sortedAchievements = [...achievements].sort((a, b) => {
-    const dateA = new Date(a.date).getTime();
-    const dateB = new Date(b.date).getTime();
-    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
-  });
+    const dateA = new Date(a.date).getTime()
+    const dateB = new Date(b.date).getTime()
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB
+  })
+
+  const toggleSortOrder = () => {
+    setIsFiltering(true)
+    setSortOrder(sortOrder === "newest" ? "oldest" : "newest")
+    setTimeout(() => setIsFiltering(false), 300)
+  }
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-900 py-16">
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-900 py-16" id="achievements">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+        <motion.div
+          className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <div>
-            <h2 className="text-5xl font-bold text-white mb-4">{title}</h2>
-            <p className="text-lg text-gray-300">{subtitle}</p>
-            <span className="block h-1 w-20 bg-indigo-500 mt-4 rounded-full"></span>
+            <motion.h2
+              className="text-5xl font-bold text-white mb-4"
+              initial={{ opacity: 0, y: -20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              {title}
+            </motion.h2>
+            <motion.p
+              className="text-lg text-gray-300"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              {subtitle}
+            </motion.p>
+            <motion.span
+              className="block h-1 w-20 bg-indigo-500 mt-4 rounded-full"
+              initial={{ width: 0, opacity: 0 }}
+              whileInView={{ width: 80, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            />
           </div>
 
-          <div className="flex items-center mt-6 md:mt-0">
-            <button 
+          <motion.div
+            className="flex items-center mt-6 md:mt-0"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <motion.button
               className="flex items-center gap-2 bg-gray-800 text-white px-6 py-3 rounded-full hover:bg-gray-700 transition duration-300 border border-transparent hover:border-indigo-500/20"
-              onClick={() => setSortOrder(sortOrder === "newest" ? "oldest" : "newest")}
+              onClick={toggleSortOrder}
+              whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(99, 102, 241, 0.3)" }}
+              whileTap={{ scale: 0.95 }}
             >
               <Filter className="h-4 w-4" />
               Sort by: {sortOrder === "newest" ? "Newest First" : "Oldest First"}
-              {sortOrder === "newest" ? <ChevronDown className="h-4 w-4 ml-2" /> : <ChevronUp className="h-4 w-4 ml-2" />}
-            </button>
-          </div>
-        </div>
+              {sortOrder === "newest" ? (
+                <ChevronDown className="h-4 w-4 ml-2" />
+              ) : (
+                <ChevronUp className="h-4 w-4 ml-2" />
+              )}
+            </motion.button>
+          </motion.div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sortedAchievements.map((achievement) => (
-            <AchievementCard key={achievement.id} achievement={achievement} />
-          ))}
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={sortOrder}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit={{ opacity: 0, y: 20 }}
+          >
+            {sortedAchievements.map((achievement) => (
+              <AchievementCard key={achievement.id} achievement={achievement} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AchievementGrid;
+export default AchievementGrid
