@@ -3,15 +3,11 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
-interface ProfileImageProps {
-  images: string[]
-  interval?: number
-}
 
-const ProfileImage: React.FC<ProfileImageProps> = ({
-  images = ["DSC_3735 copy.jpg", "DSC_3735 copy.jpg", "DSC_3735 copy.jpg", "DSC_3735 copy.jpg"],
-  interval = 5000,
-}) => {
+const ProfileImage: React.FC= () => {
+  const images = ["DSC_3735 copy.jpg", "DSC_3735 copy.jpg", "DSC_3735 copy.jpg", "DSC_3735 copy.jpg"]
+  const interval = 5000
+
   const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
