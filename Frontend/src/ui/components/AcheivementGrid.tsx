@@ -1,7 +1,5 @@
-"use client"
-
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Filter, ChevronDown, ChevronUp } from "lucide-react"
 import AchievementCard, { type AchievementType } from "./AchievementCards"
@@ -102,18 +100,40 @@ const AchievementGrid: React.FC<AchievementGridProps> = ({
 }) => {
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest")
   const [isFiltering, setIsFiltering] = useState(false)
+  const [displayedAchievements, setDisplayedAchievements] = useState<AchievementType[]>([])
 
-  // Sort achievements based on date
-  const sortedAchievements = [...achievements].sort((a, b) => {
-    const dateA = new Date(a.date).getTime()
-    const dateB = new Date(b.date).getTime()
-    return sortOrder === "newest" ? dateB - dateA : dateA - dateB
-  })
+  // Sort achievements whenever sortOrder changes
+  useEffect(() => {
+    setIsFiltering(true)
+    
+    // Use setTimeout to create a visual transition effect
+    const timer = setTimeout(() => {
+      const sorted = [...achievements].sort((a, b) => {
+        const dateA = new Date(a.date).getTime()
+        const dateB = new Date(b.date).getTime()
+        return sortOrder === "newest" ? dateB - dateA : dateA - dateB
+      })
+      
+      setDisplayedAchievements(sorted)
+      setIsFiltering(false)
+    }, 300)
+    
+    return () => clearTimeout(timer)
+  }, [sortOrder, achievements])
+
+  // Initialize displayedAchievements on first render
+  useEffect(() => {
+    const sorted = [...achievements].sort((a, b) => {
+      const dateA = new Date(a.date).getTime()
+      const dateB = new Date(b.date).getTime()
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB
+    })
+    
+    setDisplayedAchievements(sorted)
+  }, [])
 
   const toggleSortOrder = () => {
-    setIsFiltering(true)
     setSortOrder(sortOrder === "newest" ? "oldest" : "newest")
-    setTimeout(() => setIsFiltering(false), 300)
   }
 
   // Animation variants
@@ -125,6 +145,16 @@ const AchievementGrid: React.FC<AchievementGridProps> = ({
         staggerChildren: 0.1,
       },
     },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.4 }
+    },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
   }
 
   return (
@@ -177,6 +207,7 @@ const AchievementGrid: React.FC<AchievementGridProps> = ({
               onClick={toggleSortOrder}
               whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(99, 102, 241, 0.3)" }}
               whileTap={{ scale: 0.95 }}
+              disabled={isFiltering}
             >
               <Filter className="h-4 w-4" />
               Sort by: {sortOrder === "newest" ? "Newest First" : "Oldest First"}
@@ -190,19 +221,33 @@ const AchievementGrid: React.FC<AchievementGridProps> = ({
         </motion.div>
 
         <AnimatePresence mode="wait">
-          <motion.div
-            key={sortOrder}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            exit={{ opacity: 0, y: 20 }}
-          >
-            {sortedAchievements.map((achievement) => (
-              <AchievementCard key={achievement.id} achievement={achievement} />
-            ))}
-          </motion.div>
+          {!isFiltering && (
+            <motion.div
+              key={sortOrder}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              {displayedAchievements.map((achievement) => (
+                <motion.div key={achievement.id} variants={itemVariants}>
+                  <AchievementCard achievement={achievement} />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </AnimatePresence>
+        
+        {isFiltering && (
+          <div className="flex justify-center items-center py-20">
+            <motion.div 
+              className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
