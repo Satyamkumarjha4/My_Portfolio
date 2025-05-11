@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { Mail, Phone, Linkedin, Github, FileDown } from "lucide-react"
 import { motion } from "framer-motion"
@@ -30,8 +28,8 @@ const ContactDetails: React.FC = () => {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="text-lg text-gray-300 mb-12 max-w-2xl"
           >
-            Whether you have a project in mind or just want to connect, I'm always open to discussing new opportunities
-            and ideas.
+            Whether you're looking to collaborate on a project, exchange ideas, or seek and share advice — 
+            I'm always open to meaningful connections.
           </motion.p>
 
           {/* Contact Information */}
@@ -126,7 +124,7 @@ const ContactDetails: React.FC = () => {
             className="mb-12"
           >
             <a
-              href="/resume.pdf"
+              href="https://drive.google.com/file/d/1tQ9_ap-tw5Et5qku7h7328wDLC3Bg8I8/view?usp=sharing"
               download
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-full hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-indigo-500/30 transform hover:-translate-y-1"
             >

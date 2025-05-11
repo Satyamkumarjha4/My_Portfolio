@@ -22,7 +22,7 @@ const Hero: React.FC = () => {
   const [displayText, setDisplayText] = useState("")
   const [titleIndex, setTitleIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [typingSpeed, setTypingSpeed] = useState(100)
+  const [typingSpeed, setTypingSpeed] = useState(150)
   const [showWindow, setShowWindow] = useState(true)
 
   const handleTyping = useCallback(() => {
@@ -107,7 +107,7 @@ const Hero: React.FC = () => {
               A driven Computer Science & Engineering student specializing in AI/ML and full-stack development. Skilled
               in Python, SQL, React, Express, TypeScript and building intelligent systems using Machine Learning and
               Deep Learning. Passionate about data-driven problem solving and scalable solutions. Adept at database
-              management and API integration, with a hands-on approach to learning, experimenting, and innovating with
+              management and frontend applications, with a hands-on approach to learning, experimenting, and innovating with
               emerging technologies.
             </motion.p>
             <motion.div

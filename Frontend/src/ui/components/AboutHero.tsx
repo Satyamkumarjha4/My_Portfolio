@@ -66,7 +66,8 @@ const AboutHero: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          Discover my journey, achievements, and the path that has shaped my career in technology and development.
+          Discover my journey, achievements, and the path that has shaped my career in technology and development. 
+          Explore my academic and professional timeline, key accomplishments, and certifications that highlight my growth.
         </motion.p>
 
         <motion.button

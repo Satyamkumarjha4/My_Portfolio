@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useState, type ChangeEvent } from "react"
 import { Star, Send, CheckCircle } from "lucide-react"
@@ -142,7 +140,7 @@ const FeedbackForm: React.FC = () => {
             >
               <CheckCircle className="mr-3 text-indigo-400" size={24} />
               <div>
-                <strong className="font-bold text-indigo-300">Thank you!</strong>
+                <strong className="font-bold text-indigo-300">Thank you for your feedback!</strong>
                 <span className="block text-indigo-200"> Your feedback has been submitted successfully.</span>
               </div>
             </motion.div>
@@ -172,7 +170,7 @@ const FeedbackForm: React.FC = () => {
                     className={`w-full px-4 py-3 bg-gray-700 border rounded-lg focus:outline-none focus:ring-2 text-white ${
                       errors.email ? "border-red-500 focus:ring-red-400" : "border-gray-600 focus:ring-indigo-500"
                     }`}
-                    placeholder="your.email@example.com"
+                    placeholder="What is your Email-ID?"
                   />
                 </motion.div>
                 {errors.email && (
@@ -210,7 +208,7 @@ const FeedbackForm: React.FC = () => {
                     className={`w-full px-4 py-3 bg-gray-700 border rounded-lg focus:outline-none focus:ring-2 text-white ${
                       errors.name ? "border-red-500 focus:ring-red-400" : "border-gray-600 focus:ring-indigo-500"
                     }`}
-                    placeholder="Your Name"
+                    placeholder="What is your Name?"
                   />
                 </motion.div>
                 {errors.name && (

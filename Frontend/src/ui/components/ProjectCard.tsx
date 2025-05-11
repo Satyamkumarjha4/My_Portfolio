@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useRef } from "react"
 import { motion, useMotionValue, useTransform, useSpring, useAnimationControls } from "framer-motion"
@@ -93,7 +91,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, te
 
   return (
     <>
-    <Link to={`/projects/#${image}`}>
+    <Link to={`/projects/`}>
     <motion.div
       ref={cardRef}
       className="relative h-full perspective-1000 cursor-pointer"

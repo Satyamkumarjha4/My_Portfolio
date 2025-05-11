@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { Github, Linkedin, Mail } from "lucide-react"
 import { motion } from "framer-motion"

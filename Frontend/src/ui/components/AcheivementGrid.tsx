@@ -11,7 +11,7 @@ const achievementsData: AchievementType[] = [
     title: "Machine Learning – Internshala Certification",
     date: "2024-08-01",
     overview:
-      "Completed certified training on supervised and unsupervised learning via Internshala, focusing on practical ML applications.",
+      "Completed certified training on supervised and unsupervised learning via Internshala, focusing on introduction to ML world.",
     certificate: "https://drive.google.com/file/d/12-ooGdY1TRg4mHjNx_UoGgIxX8iE7C_0/view?usp=drive_link",
   },
   {
@@ -27,7 +27,7 @@ const achievementsData: AchievementType[] = [
     title: "Prompt Engineering for GenAI – Internshala Certification",
     date: "2024-08-24",
     overview:
-      "Learned prompt design strategies and GenAI applications across domains like marketing, HR, and development. Scored 85%.",
+      "Learned prompt design strategies and GenAI applications/tools across domains like marketing, HR, and development. Scored 85%.",
     certificate: "https://drive.google.com/file/d/1_FPA1D7OGWrY1OX3YiLSqCJtEM8NPAMo/view?usp=drive_link",
   },
   {
@@ -67,7 +67,7 @@ const achievementsData: AchievementType[] = [
     title: "Top Performer – Internship & Job Preparation Training",
     date: "2024-08-01",
     overview:
-      "Achieved top performer recognition with 95% score in a 4-week certified course covering resumes, interviews, and branding.",
+      "Achieved top performer recognition with 95% score in a 4-week certified course covering resumes, interviews, and job applications.",
     certificate: "",
   },
   {
@@ -95,7 +95,7 @@ interface AchievementGridProps {
 
 const AchievementGrid: React.FC<AchievementGridProps> = ({
   achievements = achievementsData,
-  title = "My Achievements",
+  title = "My Certifications & Achievements",
   subtitle = "A showcase of my professional accomplishments and milestones",
 }) => {
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest")

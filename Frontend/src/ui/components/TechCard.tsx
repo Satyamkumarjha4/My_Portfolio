@@ -18,7 +18,7 @@ const TechCard: React.FC<TechCardProps> = ({ tech, isHovered, onMouseEnter, onMo
         return "bg-blue-100 border-blue-500 text-blue-700"
       case "Frontend":
         return "bg-purple-100 border-purple-500 text-purple-700"
-      case "Frameworks":
+      case "Python Frameworks":
         return "bg-green-100 border-green-500 text-green-700"
       case "Databases":
         return "bg-red-100 border-red-500 text-red-700"

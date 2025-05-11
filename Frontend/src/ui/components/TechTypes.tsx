@@ -13,7 +13,7 @@ export interface TechStack {
   export type Category = 
   | "Languages"
   | "Frontend"
-  | "Frameworks"
+  | "Python Frameworks"
   | "Databases"
   | "Data Science"
   | "Tools"
@@ -27,7 +27,7 @@ export interface TechStack {
   export const categoryColors: CategoryColorMap = {
     "Languages": "bg-blue-100 border-blue-500 text-blue-700",
     "Frontend": "bg-purple-100 border-purple-500 text-purple-700",
-    "Frameworks": "bg-green-100 border-green-500 text-green-700",
+    "Python Frameworks": "bg-green-100 border-green-500 text-green-700",
     "Databases": "bg-red-100 border-red-500 text-red-700",
     "Data Science": "bg-yellow-100 border-yellow-500 text-yellow-700",
     "Tools": "bg-indigo-100 border-indigo-500 text-indigo-700",
@@ -40,7 +40,7 @@ export interface TechStack {
         return "text-blue-500"
       case "Frontend":
         return "text-purple-500"
-      case "Frameworks":
+      case "Python Frameworks":
         return "text-green-500"
       case "Databases":
         return "text-red-500"

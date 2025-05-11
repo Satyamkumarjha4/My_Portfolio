@@ -10,7 +10,7 @@ const sampleTimelineData: TimelineItemType[] = [
     title: "B.Tech in Computer Science Engineering, MAIT Delhi (GGSIPU)",
     date: "2023 - 2027 (Expected)",
     description:
-      "Pursuing B.Tech at Maharaja Agrasen Institute of Technology, Rohini. Focused on AI, full-stack development, and research.",
+      "Pursuing B.Tech at Maharaja Agrasen Institute of Technology, Rohini, Delhi. Focused on AI, full-stack development, and research.",
     type: "education",
     remarks: "CGPA: 8.7 till 3rd semester",
   },
@@ -35,9 +35,9 @@ const sampleTimelineData: TimelineItemType[] = [
     title: "Hackathon Participant – Smart India Hackathon 2024",
     date: "September - December 2024",
     description:
-      "Built a freelancer opportunities platform with AI-based job matching. Developed DBMS and cosine similarity-based recommendation model.",
+      "Built a freelancer opportunities platform with AI-based job matching. Developed DBMS and cosine similarity-based recommendation model. Selected among the top 25 teams from the total of 250+ teams.",
     type: "hackathon",
-    remarks: "Top 25 team from college (out of 250 teams)",
+    remarks: "AI/ML & DBMS Developer",
   },
   {
     id: "5",
@@ -46,7 +46,7 @@ const sampleTimelineData: TimelineItemType[] = [
     description:
       "Created an integrated interview platform with real-time code editor and virtual interviews using socket programming.",
     type: "hackathon",
-    remarks: "60% project completion with core features built",
+    remarks: "Team Lead and developed the LLM based code editor",
   },
   {
     id: "6",

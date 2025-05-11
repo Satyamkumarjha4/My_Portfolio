@@ -99,8 +99,11 @@ const ProjectsHero: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          Explore my portfolio of projects showcasing my skills in web development, machine learning, and software
-          engineering.
+          Explore a curated collection of my work that highlights my journey through web development, machine learning, and 
+          software engineering. 
+          From dynamic web apps to intelligent ML systems, this portfolio is a testament to my hands-on experience and learning.
+          <br />
+          Browse through the projects, check out the live demos, and dive into the code via GitHub to see how I build and innovate.
         </motion.p>
 
         <motion.button

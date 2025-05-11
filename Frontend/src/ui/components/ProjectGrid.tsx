@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useEffect } from "react"
 import { motion, useAnimation } from "framer-motion"
@@ -31,21 +29,21 @@ const ProjectsShowcase: React.FC = () => {
       description:
         "A data-driven web application that predicts used car prices using ensemble models and CatBoost, with a Flask backend.",
       image: "/project_images/car_prediction.png",
-      technologies: ["Flask", "Python", "CatBoost", "Render"],
+      technologies: ["Flask", "Python", "CatBoost", "Render","HTML", "CSS","JavaScript","Pandas","NumPy","Scikit-learn", "Kaggle", "Matplotlib","Seaborn"],
     },
     {
       title: "Movie Buddy – Recommendation Engine",
       description:
         "Interactive movie recommender that uses NLP techniques and cosine similarity for personalized suggestions.",
       image: "/project_images/movie_recomendation_system.png",
-      technologies: ["Streamlit", "Pandas", "Scikit-learn", "TMDb API"],
+      technologies: ["Streamlit", "Pandas", "Scikit-learn", "TMDb API","Python", "NLTK", "Kaggle"],
     },
     {
       title: "Binge+ – Movie & Web Series Explorer",
       description:
-        "A dynamic content discovery platform where users can explore movies and web series with filtering, search, and real-time metadata fetched from an external API.",
+        "A dynamic content discovery platform where users can explore movies and web series with filtering, search, and real-time metadata fetched from the MongoDB database.",
       image: "/project_images/Binge.png",
-      technologies: ["HTML", "CSS", "JavaScript", "TMDb API"],
+      technologies: ["HTML", "CSS", "JavaScript", "MongoDB", "Express.js", "Node.js", "Mongoose"],
     },
   ]
 
@@ -106,7 +104,7 @@ const ProjectsShowcase: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            A collection of my most significant work showcasing my skills and experience in software development.
+            A collection of my most significant work showcasing best of my skills and experience in software development.
           </motion.p>
         </motion.div>
 

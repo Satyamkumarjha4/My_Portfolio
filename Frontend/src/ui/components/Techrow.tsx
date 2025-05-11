@@ -2,12 +2,13 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import TechCarousel from "./TechCarousel"
 import type { Category, TechStack } from "./TechTypes"
-import { FaPython, FaJava, FaHtml5, FaCss3Alt, FaJs, FaGit } from "react-icons/fa"
-import { SiFlask, SiStreamlit, SiKeras, SiTensorflow, SiNumpy, SiPandas, SiMongodb, SiPostman } from "react-icons/si"
+import { FaPython, FaJava, FaHtml5, FaCss3Alt, FaJs, FaReact, FaGitAlt } from "react-icons/fa"
+import { SiFlask, SiStreamlit, SiKeras, SiTensorflow, SiNumpy, SiPandas, SiMongodb, SiPostman, SiTailwindcss, SiTypescript, SiFramer } from "react-icons/si"
 import { TbBrandCpp } from "react-icons/tb"
 import { BiLogoPostgresql } from "react-icons/bi"
 import { BsFiletypeSql } from "react-icons/bs"
 import { DiSqllite } from "react-icons/di"
+import { RiFileExcel2Fill } from "react-icons/ri"
 
 // Tech stack data with categories, icons, and proficiency levels
 const techStacks: TechStack[] = [
@@ -40,6 +41,13 @@ const techStacks: TechStack[] = [
     icon: <FaJava />,
   },
   {
+    name: "TypeScript",
+    category: "Languages",
+    proficiency: 40,
+    description: "Typed superset of JavaScript for scalable applications",
+    icon: <SiTypescript />,
+  },
+  {
     name: "HTML",
     category: "Frontend",
     proficiency: 75,
@@ -54,15 +62,36 @@ const techStacks: TechStack[] = [
     icon: <FaCss3Alt />,
   },
   {
+    name: "React",
+    category: "Frontend",
+    proficiency: 60,
+    description: "Building dynamic and component-based user interfaces",
+    icon: <FaReact />,
+  },
+  {
+    name: "Tailwind CSS",
+    category: "Frontend",
+    proficiency: 50,
+    description: "Utility-first CSS framework for rapid UI development",
+    icon: <SiTailwindcss />,
+  },
+  {
+    name: "Framer Motion",
+    category: "Frontend",
+    proficiency: 40,
+    description: "Declarative animations and transitions for React apps",
+    icon: <SiFramer />,
+  },
+  {
     name: "Streamlit",
-    category: "Frameworks",
+    category: "Python Frameworks",
     proficiency: 75,
     description: "Rapid data application development",
     icon: <SiStreamlit />,
   },
   {
     name: "Flask",
-    category: "Frameworks",
+    category: "Python Frameworks",
     proficiency: 75,
     description: "Lightweight web application framework",
     icon: <SiFlask />,
@@ -128,7 +157,7 @@ const techStacks: TechStack[] = [
     category: "Tools",
     proficiency: 90,
     description: "Version control and code collaboration",
-    icon: <FaGit />,
+    icon: <FaGitAlt />,
   },
   {
     name: "Postman",
@@ -137,6 +166,13 @@ const techStacks: TechStack[] = [
     description: "API development and testing tool",
     icon: <SiPostman />,
   },
+  {
+    name: "Excel",
+    category: "Tools",
+    proficiency: 75,
+    description: "Data analysis, visualization, and spreadsheet management",
+    icon: <RiFileExcel2Fill />,
+  }
 ]
 
 // Component for the tech stack section
@@ -163,7 +199,7 @@ export default function Techrow() {
         return selectedCategory === category
           ? "bg-purple-700 text-white border-purple-500"
           : "bg-purple-900/30 text-purple-300 border-purple-800 hover:bg-purple-800/50"
-      case "Frameworks":
+      case "Python Frameworks":
         return selectedCategory === category
           ? "bg-green-700 text-white border-green-500"
           : "bg-green-900/30 text-green-300 border-green-800 hover:bg-green-800/50"
