@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 
 const ContactDetails: React.FC = () => {
   return (
-    <div className="w-full min-h-screen bg-gray-900 flex flex-col items-start justify-center px-4 sm:px-4 md:px-12 py-16">
+    <div className="w-full min-h-screen bg-gray-900 flex flex-col items-start justify-center px-4 sm:px-4 md:px-2 py-16">
       <motion.div
         initial={{ x: "-100%", opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
