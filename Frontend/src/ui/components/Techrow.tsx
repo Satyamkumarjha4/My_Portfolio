@@ -221,7 +221,7 @@ export default function Techrow() {
   }
 
   return (
-    <div className="w-full mx-auto p-4 bg-gray-900">
+    <div className="w-full mx-auto p-4 bg-gray-900 py-16">
       <motion.h2
         className="text-5xl font-bold text-center mb-6 text-indigo-500"
         initial={{ opacity: 0, y: -20 }}

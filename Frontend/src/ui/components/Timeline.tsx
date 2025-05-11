@@ -1,3 +1,5 @@
+"use client"
+
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
@@ -96,6 +98,7 @@ const Timeline: React.FC<TimelineProps> = ({
   className = "",
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
   const timelineRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: timelineRef,
@@ -104,6 +107,22 @@ const Timeline: React.FC<TimelineProps> = ({
 
   // Sort items from latest to oldest
   const sortedItems = sortTimelineItems(items)
+
+  // Check if screen is mobile width
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 760)
+    }
+
+    // Initial check
+    checkMobile()
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkMobile)
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
 
   // Calculate which timeline item is active based on scroll position
   useEffect(() => {
@@ -161,7 +180,10 @@ const Timeline: React.FC<TimelineProps> = ({
     <div className="w-full min-h-screen flex items-center justify-center bg-gray-900 py-16" id="timeline">
       <div className={`container mx-auto ${className}`}>
         <motion.div className="text-center mb-16" initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <motion.h2 className="text-5xl font-bold text-white relative inline-block" variants={titleVariants}>
+          <motion.h2
+            className="text-3xl md:text-5xl font-bold text-white relative inline-block"
+            variants={titleVariants}
+          >
             {title}
           </motion.h2>
           <motion.span
@@ -172,7 +194,7 @@ const Timeline: React.FC<TimelineProps> = ({
             viewport={{ once: true }}
           />
           <motion.p
-            className="text-gray-300 mt-4 max-w-2xl mx-auto"
+            className="text-gray-300 mt-4 max-w-2xl mx-auto px-4"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
@@ -183,8 +205,12 @@ const Timeline: React.FC<TimelineProps> = ({
         </motion.div>
 
         <div className="relative wrap overflow-hidden p-4 md:p-10 h-full" ref={timelineRef}>
-          {/* Animated vertical line */}
-          <div className="absolute border-opacity-20 border-gray-700 h-full border left-1/2 transform -translate-x-1/2">
+          {/* Animated vertical line - positioned differently on mobile */}
+          <div
+            className={`absolute border-opacity-20 border-gray-700 h-full border 
+              ${isMobile ? "left-[20px] md:left-1/2" : "left-1/2"} 
+              transform ${isMobile ? "-translate-x-1/2 md:-translate-x-1/2" : "-translate-x-1/2"}`}
+          >
             <motion.div
               className="absolute bg-indigo-500 w-full rounded-full"
               style={{
@@ -197,7 +223,13 @@ const Timeline: React.FC<TimelineProps> = ({
 
           {/* Timeline items */}
           {sortedItems.map((item, index) => (
-            <TimelineCard key={item.id} item={item} isLeft={index % 2 === 0} isActive={index === activeIndex} />
+            <TimelineCard
+              key={item.id}
+              item={item}
+              isLeft={isMobile ? false : index % 2 === 0}
+              isActive={index === activeIndex}
+              isMobile={isMobile}
+            />
           ))}
         </div>
       </div>

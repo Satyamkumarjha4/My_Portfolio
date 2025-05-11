@@ -1,3 +1,5 @@
+"use client"
+
 import type React from "react"
 import { Github, Linkedin, Mail } from "lucide-react"
 import { motion } from "framer-motion"
@@ -50,18 +52,18 @@ const Footer: React.FC = () => {
 
   return (
     <motion.footer
-      className="w-full bg-gray-900 text-white py-12 px-6"
+      className="w-full bg-gray-900 text-white py-8 md:py-12 px-4 md:px-6"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
       variants={containerVariants}
     >
-      <div className="w-400 mx-auto">
+      <div className="w-full max-w-6xl mx-auto">
         {/* Top section with columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 border-y border-gray-800 py-12 px-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12 border-y border-gray-800 py-8 md:py-12 px-2">
           {/* About column */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-2xl font-bold mb-4">
+            <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">
               <motion.span
                 className="inline-block"
                 initial={{ opacity: 0, y: -20 }}
@@ -77,7 +79,10 @@ const Footer: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              Turning ideas into reality through code and innovation. Specializing in AI/ML and full-stack development.
+              <div className="fit-content overflow-hidden text-sm md:text-base">
+                Turning ideas into reality through code and innovation. Specializing in AI/ML and full-stack
+                development.
+              </div>
             </motion.p>
             <motion.div
               className="flex space-x-4 mt-4"
@@ -94,7 +99,7 @@ const Footer: React.FC = () => {
                 whileTap="tap"
                 rel="noreferrer"
               >
-                <Github size={30} />
+                <Github size={24} className="md:w-[30px] md:h-[30px]" />
                 <span className="sr-only">GitHub</span>
               </motion.a>
               <motion.a
@@ -106,7 +111,7 @@ const Footer: React.FC = () => {
                 whileTap="tap"
                 rel="noreferrer"
               >
-                <Linkedin size={30} />
+                <Linkedin size={24} className="md:w-[30px] md:h-[30px]" />
                 <span className="sr-only">LinkedIn</span>
               </motion.a>
               <motion.a
@@ -116,7 +121,7 @@ const Footer: React.FC = () => {
                 whileHover="hover"
                 whileTap="tap"
               >
-                <Mail size={30} />
+                <Mail size={24} className="md:w-[30px] md:h-[30px]" />
                 <span className="sr-only">Email</span>
               </motion.a>
             </motion.div>
@@ -124,44 +129,41 @@ const Footer: React.FC = () => {
 
           {/* Quick links */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Quick Links</h3>
             <ul className="space-y-2">
               {["Home", "About", "Projects", "Contact"].map((item, index) => (
-                <Link 
-                to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                key={index}
-              >
-                <motion.li
-                  key={item}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 0.1 * index }}
-                >
-                  <motion.a
-                    onClick={() => navigateTo(`/${item === "Home" ? "" : item}`)}
-                    className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center cursor-pointer"
-                    variants={linkVariants}
-                    whileHover="hover"
+                <Link to={item === "Home" ? "/" : `/${item.toLowerCase()}`} key={index}>
+                  <motion.li
+                    key={item}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 * index }}
                   >
-                    <motion.span
-                      className="p-1 rounded-md flex items-center"
-                      whileHover={{
-                        backgroundColor: "rgba(79, 70, 229, 0.1)",
-                        transition: { duration: 0.2 },
-                      }}
+                    <motion.a
+                      onClick={() => navigateTo(`/${item === "Home" ? "" : item}`)}
+                      className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center cursor-pointer"
+                      variants={linkVariants}
+                      whileHover="hover"
                     >
                       <motion.span
-                        className="mr-2"
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3, delay: 0.2 + 0.1 * index }}
+                        className="p-1 rounded-md flex items-center"
+                        whileHover={{
+                          backgroundColor: "rgba(79, 70, 229, 0.1)",
+                          transition: { duration: 0.2 },
+                        }}
                       >
-                        →
+                        <motion.span
+                          className="mr-2"
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.3, delay: 0.2 + 0.1 * index }}
+                        >
+                          →
+                        </motion.span>
+                        {item}
                       </motion.span>
-                      {item}
-                    </motion.span>
-                  </motion.a>
-                </motion.li>
+                    </motion.a>
+                  </motion.li>
                 </Link>
               ))}
             </ul>
@@ -169,7 +171,7 @@ const Footer: React.FC = () => {
 
           {/* Made Using */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-xl font-semibold mb-4">Made Using</h3>
+            <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Made Using</h3>
             <ul className="space-y-2">
               {["React", "TypeScript", "Tailwind CSS", "Framer Motion"].map((tech, index) => (
                 <motion.li
