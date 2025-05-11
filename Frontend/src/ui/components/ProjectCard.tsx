@@ -3,6 +3,7 @@
 import type React from "react"
 import { useRef } from "react"
 import { motion, useMotionValue, useTransform, useSpring, useAnimationControls } from "framer-motion"
+import { Link } from "react-router-dom"
 
 // Interface definitions
 interface TechBadgeProps {
@@ -92,7 +93,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, te
 
   return (
     <>
-    <a href={`/projects/#${image}`}>
+    <Link to={`/projects/#${image}`}>
     <motion.div
       ref={cardRef}
       className="relative h-full perspective-1000 cursor-pointer"
@@ -208,7 +209,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, te
         />
       </motion.div>
     </motion.div>
-    </a>
+    </Link>
     </>
   )
 }

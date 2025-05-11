@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Window from "./Window"
 import ProfileImage from "./ProfileImage"
+import { Link } from "react-router-dom"
 
 
 const Hero: React.FC = () => {
@@ -120,14 +121,14 @@ const Hero: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <a href="/Contact">Get in Touch</a>
+                <Link to="/Contact">Get in Touch</Link>
               </motion.button>
               <motion.button
                 className="mt-6 bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <a href="/Projects">View Projects</a>
+                <Link to="/Projects">View Projects</Link>
               </motion.button>
             </motion.div>
           </div>

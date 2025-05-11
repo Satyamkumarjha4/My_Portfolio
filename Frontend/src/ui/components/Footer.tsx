@@ -3,6 +3,7 @@
 import type React from "react"
 import { Github, Linkedin, Mail } from "lucide-react"
 import { motion } from "framer-motion"
+import { Link } from "react-router-dom"
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear()
@@ -128,6 +129,10 @@ const Footer: React.FC = () => {
             <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               {["Home", "About", "Projects", "Contact"].map((item, index) => (
+                <Link 
+                to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                key={index}
+              >
                 <motion.li
                   key={item}
                   initial={{ opacity: 0, x: -20 }}
@@ -159,6 +164,7 @@ const Footer: React.FC = () => {
                     </motion.span>
                   </motion.a>
                 </motion.li>
+                </Link>
               ))}
             </ul>
           </motion.div>

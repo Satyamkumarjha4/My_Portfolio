@@ -3,7 +3,7 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Image from "../../../public/S.png"
 
 const Navbar: React.FC = () => {
@@ -81,7 +81,11 @@ const Navbar: React.FC = () => {
           transition={{ duration: 0.3 }}
         >
           <ul className="flex space-x-4 justify-center items-center justify-between h-full">
-            {navItems.map((item) => (
+            {navItems.map((item, index) => (
+              <Link
+              to={item.label === "Home" ? "/" : `/${item.label.toLowerCase()}`}
+              key={index}
+              >
               <motion.li
                 key={item.path}
                 onClick={() => navigateTo(item.path)}
@@ -91,6 +95,7 @@ const Navbar: React.FC = () => {
                 whileHover={{ backgroundColor: "rgba(75, 85, 99, 0.5)", borderRadius: "9999px" }}
                 whileTap={{ scale: 0.95 }}
               >
+              
                 {item.label}
                 {activeTab === item.path && (
                   <motion.div
@@ -102,6 +107,7 @@ const Navbar: React.FC = () => {
                   />
                 )}
               </motion.li>
+              </Link>
             ))}
           </ul>
         </motion.div>
