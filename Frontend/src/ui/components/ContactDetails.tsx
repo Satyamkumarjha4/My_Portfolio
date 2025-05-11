@@ -66,7 +66,7 @@ const ContactDetails: React.FC = () => {
               <div>
                 <h3 className="text-lg font-medium text-indigo-400">Phone</h3>
                 <a href="tel:+917060298070" className="text-white hover:text-indigo-300 transition-colors duration-300">
-                  +91 706-029-8070
+                  +91 768-309-5499
                 </a>
               </div>
             </motion.div>
