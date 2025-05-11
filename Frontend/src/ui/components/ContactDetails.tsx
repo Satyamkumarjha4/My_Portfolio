@@ -11,7 +11,7 @@ const ContactDetails: React.FC = () => {
         transition={{ type: "tween", delay: 0.2, duration: 1 }}
         className="w-full max-w-xl bg-gray-900 rounded-2xl p-4"
       >
-        <div className="w-full py-16 pl-16">
+        <div className="w-full py-16">
           {/* Heading Section */}
           <motion.h2
             initial={{ opacity: 0 }}
