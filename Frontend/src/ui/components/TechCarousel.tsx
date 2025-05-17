@@ -15,6 +15,7 @@ interface TechCarouselProps {
 const TechCarousel: React.FC<TechCarouselProps> = ({ techStacks, selectedCategory }) => {
   const [isPaused, setIsPaused] = useState<boolean>(false)
   const [hoveredStack, setHoveredStack] = useState<string | null>(null)
+  const [isWaitingAtEnd, setIsWaitingAtEnd] = useState<boolean>(false)
   const carouselRef = useRef<HTMLDivElement | null>(null)
 
   // Filter tech stacks based on selected category
@@ -32,11 +33,22 @@ const TechCarousel: React.FC<TechCarouselProps> = ({ techStacks, selectedCategor
           const clientWidth = carouselRef.current.clientWidth
           const scrollLeft = carouselRef.current.scrollLeft
 
-          // If we've scrolled to the end, reset to the beginning
+          // If we've scrolled to the end
           if (scrollLeft + clientWidth >= scrollWidth - 10) {
-            carouselRef.current.scrollLeft = 0
-          } else {
-            // Continue scrolling
+            // If not already waiting at the end, start waiting
+            if (!isWaitingAtEnd) {
+              setIsWaitingAtEnd(true)
+              
+              // After 3 seconds, reset to the beginning
+              setTimeout(() => {
+                if (carouselRef.current) {
+                  carouselRef.current.scrollLeft = 0
+                }
+                setIsWaitingAtEnd(false)
+              }, 2000)
+            }
+          } else if (!isWaitingAtEnd) {
+            // Continue scrolling if not waiting
             carouselRef.current.scrollLeft += 1
           }
         }
@@ -44,7 +56,7 @@ const TechCarousel: React.FC<TechCarouselProps> = ({ techStacks, selectedCategor
 
       return () => clearInterval(scrollInterval)
     }
-  }, [isPaused])
+  }, [isPaused, isWaitingAtEnd])
 
   return (
     <motion.div
