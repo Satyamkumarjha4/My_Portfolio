@@ -5,6 +5,7 @@ import Home from './ui/features/Home';
 import About from './ui/features/About';
 import Projects from './ui/features/Projects';
 import Contact from './ui/features/Contact';
+import Info from './ui/features/Info';
 
 
 
@@ -15,6 +16,7 @@ const App: React.FC = () => {
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/info" element={<Info />} />
         </Routes>
     );
 };
