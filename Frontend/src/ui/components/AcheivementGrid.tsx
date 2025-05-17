@@ -32,7 +32,7 @@ const achievementsData: AchievementType[] = [
   },
   {
     id: 4,
-    title: "Introduction to Programming in C – NPTEL (IIT Kanpur)",
+    title: "Introduction to Programming in C – NPTEL",
     date: "2024-09-01",
     overview:
       "Completed foundational course on C programming offered by IIT Kanpur via NPTEL, building a strong base in structured programming.",
