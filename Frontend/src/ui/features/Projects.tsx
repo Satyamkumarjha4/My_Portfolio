@@ -96,7 +96,7 @@ const Projects: React.FC = () => {
 
       <ProjectsHero />
 
-      <div className="container mx-auto px-4 py-16 z-0">
+      <div className="container mx-auto px-4 py-16 z-0 ">
         <motion.div
           className="mb-16"
           initial={{ opacity: 0 }}

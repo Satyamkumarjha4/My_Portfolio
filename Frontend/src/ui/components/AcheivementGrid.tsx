@@ -158,7 +158,7 @@ const AchievementGrid: React.FC<AchievementGridProps> = ({
   }
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-900 py-16" id="achievements">
+    <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-indigo-900/20 py-16" id="achievements">
       <div className="container mx-auto px-6">
         <motion.div
           className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16"
