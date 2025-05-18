@@ -85,6 +85,20 @@ const achievementsData: AchievementType[] = [
       "Captained the zone netball team, led training and game strategies, and secured 2nd place out of 10 teams in Delhi's inter-zonal competition.",
     certificate: "",
   },
+  {
+    "id": 7,
+    "title": "Data Analytics with Python – NPTEL (Certified by IIT Faculty)",
+    "date": "2025-04-01",
+    "overview": "Completed a 12-week IIT-led course on statistical thinking, hypothesis testing, regression, clustering, and data-driven modeling using Python. Strengthened practical and theoretical foundations for data science roles.",
+    "certificate": "https://drive.google.com/file/d/1GDtmqL86zxJo6xv7fSumU4kDU0R6eiOb/view?usp=sharing"
+  },
+  {
+    "id": 8,
+    "title": "Web Development Training – Internshala",
+    "date": "2025-05-17",
+    "overview": "Completed an 8-week intensive training covering HTML, CSS, Bootstrap, DBMS, PHP, JavaScript, React, AI in Web Development, and a final hands-on project. Strengthened full-stack web development skills.",
+    "certificate": "https://drive.google.com/file/d/1eXh0xAyFlxKaDyLPa-MgDgl-Siz3u52Y/view?usp=sharing"
+  },  
 ]
 
 interface AchievementGridProps {
