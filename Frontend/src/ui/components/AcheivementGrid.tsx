@@ -98,7 +98,15 @@ const achievementsData: AchievementType[] = [
     "date": "2025-05-17",
     "overview": "Completed an 8-week intensive training covering HTML, CSS, Bootstrap, DBMS, PHP, JavaScript, React, AI in Web Development, and a final hands-on project. Strengthened full-stack web development skills.",
     "certificate": "https://drive.google.com/file/d/1eXh0xAyFlxKaDyLPa-MgDgl-Siz3u52Y/view?usp=sharing"
-  },  
+  },
+  {
+  "id": 13,
+  "title": "Getting Started with Competitive Programming – NPTEL",
+  "date": "2025-04-30",
+  "overview": "Completed a 12-week certified course offered by NPTEL, focused on core algorithmic techniques including sorting, searching, greedy algorithms, graph theory, disjoint set union, minimum spanning trees, shortest paths, network flows, and dynamic programming. Strengthened competitive programming skills in preparation for contests like ICPC and tech placements.",
+  "certificate": "https://drive.google.com/file/d/1iqzEnV6_7J-9uQDTTd_ss4simWa1s1b5/view?usp=sharing"
+}
+  
 ]
 
 interface AchievementGridProps {
