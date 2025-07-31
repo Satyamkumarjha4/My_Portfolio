@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id             String   @id @default(uuid())
+  title          String
+  description    String
+  techStack      String[]
+  tags           String[]
+  imageUrl       String
+  githubUrl      String
+  demoUrl        String
+  imageOnRight   Boolean
+}
+
+model Achievement {
+  id           String   @id @default(uuid())
+  title        String
+  date         DateTime
+  overview     String
+  certificate  String?
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  email     String
+  name      String
+  rating    Int
+  remark    String?
+  createdAt DateTime @default(now())
+}
+
+model TechStack {
+  id          String   @id @default(uuid())
+  name        String
+  category    TechCategory
+  proficiency Int
+  description String
+  iconName    String
+}
+
+enum TechCategory {
+  Languages
+  Frontend
+  Python_Frameworks
+  Databases
+  Data_Science
+  Tools
+}
+
+model TimelineItem {
+  id          String   @id @default(uuid())
+  title       String
+  date        String
+  description String
+  type        TimelineType
+  remarks     String?
+}
+
+enum TimelineType {
+  EDUCATION
+  HACKATHON
+  WORK
+}
