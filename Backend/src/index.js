@@ -10,11 +10,7 @@ import timelineRoutes from './routes/timelineRoutes.js';
 dotenv.config();
 
 const app = express();
-app.use(cors({
-  origin: 'https://satyamportfolio-seven.vercel.app/',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(cors());
 app.use(express.json());
 
 // API Routes
