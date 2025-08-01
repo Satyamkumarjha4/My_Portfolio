@@ -9,18 +9,18 @@ export type TimelineItemType = {
   title: string
   date: string
   description: string
-  type: "education" | "work" | "hackathon"
+  type: "EDUCATION" | "WORK" | "HACKATHON"
   remarks?: string
 }
 
 // Icon component to display different icons based on the type
 const TypeIcon: React.FC<{ type: TimelineItemType["type"] }> = ({ type }) => {
   switch (type) {
-    case "education":
+    case "EDUCATION":
       return <GraduationCap className="h-5 w-5 text-white" />
-    case "work":
+    case "WORK":
       return <Briefcase className="h-5 w-5 text-white" />
-    case "hackathon":
+    case "HACKATHON":
       return <Code className="h-5 w-5 text-white" />
     default:
       return <CalendarDays className="h-5 w-5 text-white" />

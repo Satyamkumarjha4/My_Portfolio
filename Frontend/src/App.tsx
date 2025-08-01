@@ -9,7 +9,6 @@ import Info from './ui/features/Info';
 import Admin from './admin/Page/Admin';
 
 
-
 const App: React.FC = () => {
     return (
         <Routes>
@@ -18,7 +17,7 @@ const App: React.FC = () => {
             <Route path="/projects" element={<Projects />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/info" element={<Info />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/*" element={<Admin />} />
         </Routes>
     );
 };
