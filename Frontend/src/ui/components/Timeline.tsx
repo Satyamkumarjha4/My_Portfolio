@@ -1,6 +1,6 @@
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
-import { motion, useScroll, useTransform, useSpring } from "framer-motion"
+import { motion, useScroll, useSpring } from "framer-motion"
 import { TimelineCard, type TimelineItemType } from "./TimelineCard"
 import { axiosInstance } from "../utils/axios.ts"
 
@@ -119,8 +119,6 @@ const Timeline: React.FC<TimelineProps> = ({
       // Calculate the visible progress through the timeline
       const timelineHeight = timelineRect.height
       const scrolledPastTop = Math.max(0, -timelineTop)
-      const visibleHeight = Math.min(timelineHeight - scrolledPastTop, viewportHeight - Math.max(0, timelineTop))
-      
       // Calculate progress as a percentage (0 to 1)
       const progress = scrolledPastTop / (timelineHeight - viewportHeight + 100) // Add padding
       const clampedProgress = Math.max(0, Math.min(1, progress))
@@ -153,12 +151,6 @@ const Timeline: React.FC<TimelineProps> = ({
     },
   }
 
-  // Transform scroll progress to line height with better mapping
-  const lineHeight = useTransform(
-    smoothProgress, 
-    [0, 1], 
-    ["0%", "100%"]
-  )
 
   // Calculate line height based on active index for more precise sync
   const [lineHeightState, setLineHeightState] = useState("0%")

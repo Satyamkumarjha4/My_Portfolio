@@ -3,13 +3,6 @@ import { motion } from "framer-motion"
 import TechCarousel from "./TechCarousel"
 import type { Category, TechStack } from "./TechTypes"
 import { axiosInstance } from "../utils/axios.ts"
-import { FaPython, FaJava, FaHtml5, FaCss3Alt, FaJs, FaReact, FaGitAlt } from "react-icons/fa"
-import { SiFlask, SiStreamlit, SiKeras, SiTensorflow, SiNumpy, SiPandas, SiMongodb, SiPostman, SiTailwindcss, SiTypescript, SiFramer } from "react-icons/si"
-import { TbBrandCpp } from "react-icons/tb"
-import { BiLogoPostgresql } from "react-icons/bi"
-import { BsFiletypeSql } from "react-icons/bs"
-import { DiSqllite } from "react-icons/di"
-import { RiFileExcel2Fill } from "react-icons/ri"
 
 // Tech stack data with categories, icons, and proficiency levels
 
