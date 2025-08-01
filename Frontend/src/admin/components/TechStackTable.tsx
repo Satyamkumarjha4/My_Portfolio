@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { axiosInstance } from '../../ui/utils/axios';
+import { safeAxiosInstance } from '../../ui/utils/axios';
 import TechStackModal from './TechStackModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Code, Layers } from 'lucide-react';
@@ -40,7 +40,7 @@ const TechStackTable: React.FC = () => {
     const fetchTechStacks = async () => {
         try {
             setLoading(true);
-            const res = await axiosInstance.get('/tech-stacks');
+            const res = await safeAxiosInstance.get('/tech-stacks');
             setTechStacks(res.data);
         } catch (err) {
             console.error('Fetch error:', err);
@@ -75,7 +75,7 @@ const TechStackTable: React.FC = () => {
 
     const handleDelete = async () => {
         try {
-            await Promise.all(selected.map(id => axiosInstance.delete(`/tech-stacks/${id}`)));
+            await Promise.all(selected.map(id => safeAxiosInstance.delete(`/tech-stacks/${id}`)));
             setSelected([]);
             fetchTechStacks();
         } catch (err) {

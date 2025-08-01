@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { axiosInstance } from '../../ui/utils/axios';
+import { safeAxiosInstance } from '../../ui/utils/axios';
 import { X, Save, Plus, Github, ExternalLink, Image } from 'lucide-react';
 
 interface Props {
@@ -128,9 +128,9 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
 
         try {
             if (existingProject && existingProject.id) {
-                await axiosInstance.put(`/projects/${existingProject.id}`, payload);
+                await safeAxiosInstance.put(`/projects/${existingProject.id}`, payload);
             } else {
-                await axiosInstance.post('/projects', payload);
+                await safeAxiosInstance.post('/projects', payload);
             }
             
             // Call success callback to refresh data

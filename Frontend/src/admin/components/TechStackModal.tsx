@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { axiosInstance } from '../../ui/utils/axios';
+import { safeAxiosInstance } from '../../ui/utils/axios';
 import { X, Save, Plus, Code, Layers } from 'lucide-react';
 
 interface Props {
@@ -106,9 +106,9 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
 
         try {
             if (existingTechStack && existingTechStack.id) {
-                await axiosInstance.put(`/tech-stacks/${existingTechStack.id}`, payload);
+                await safeAxiosInstance.put(`/tech-stacks/${existingTechStack.id}`, payload);
             } else {
-                await axiosInstance.post('/tech-stacks', payload);
+                await safeAxiosInstance.post('/tech-stacks', payload);
             }
             
             // Call success callback to refresh data

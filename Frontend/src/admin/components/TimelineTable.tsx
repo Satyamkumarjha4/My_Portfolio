@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { axiosInstance } from '../../ui/utils/axios';
+import { safeAxiosInstance } from '../../ui/utils/axios';
 import TimelineModal from './TimelineModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Calendar, BookOpen, Trophy, Briefcase, Clock } from 'lucide-react';
@@ -28,7 +28,7 @@ const TimelineTable: React.FC = () => {
     const fetchTimelineItems = async () => {
         try {
             setLoading(true);
-            const res = await axiosInstance.get('/timeline');
+            const res = await safeAxiosInstance.get('/timeline');
             setTimelineItems(res.data);
         } catch (err) {
             console.error('Fetch error:', err);
@@ -63,7 +63,7 @@ const TimelineTable: React.FC = () => {
 
     const handleDelete = async () => {
         try {
-            await Promise.all(selected.map(id => axiosInstance.delete(`/timeline/${id}`)));
+            await Promise.all(selected.map(id => safeAxiosInstance.delete(`/timeline/${id}`)));
             setSelected([]);
             fetchTimelineItems();
         } catch (err) {

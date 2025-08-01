@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { axiosInstance } from '../../ui/utils/axios';
+import { safeAxiosInstance } from '../../ui/utils/axios';
 import { X, Save, Plus, Calendar, BookOpen, Trophy, Briefcase } from 'lucide-react';
 
 interface Props {
@@ -92,9 +92,9 @@ const TimelineModal: React.FC<Props> = ({ onClose, existingItem, onSuccess }) =>
 
         try {
             if (existingItem && existingItem.id) {
-                await axiosInstance.put(`/timeline/${existingItem.id}`, payload);
+                await safeAxiosInstance.put(`/timeline/${existingItem.id}`, payload);
             } else {
-                await axiosInstance.post('/timeline', payload);
+                await safeAxiosInstance.post('/timeline', payload);
             }
             
             // Call success callback to refresh data

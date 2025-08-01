@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { axiosInstance } from '../../ui/utils/axios';
+import { safeAxiosInstance } from '../../ui/utils/axios';
 import AchievementModal from './AchievementModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Award, Calendar, ExternalLink, FileText } from 'lucide-react';
@@ -26,7 +26,7 @@ const AchievementsTable: React.FC = () => {
     const fetchAchievements = async () => {
         try {
             setLoading(true);
-            const res = await axiosInstance.get('/achievements');
+            const res = await safeAxiosInstance.get('/achievements');
             setAchievements(res.data);
         } catch (err) {
             console.error('Fetch error:', err);
@@ -61,7 +61,7 @@ const AchievementsTable: React.FC = () => {
 
     const handleDelete = async () => {
         try {
-            await Promise.all(selected.map(id => axiosInstance.delete(`/achievements/${id}`)));
+            await Promise.all(selected.map(id => safeAxiosInstance.delete(`/achievements/${id}`)));
             setSelected([]);
             fetchAchievements();
         } catch (err) {

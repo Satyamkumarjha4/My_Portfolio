@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { axiosInstance } from '../../ui/utils/axios';
+import { safeAxiosInstance } from '../../ui/utils/axios';
 import { X, Save, Plus, Award, Calendar, FileText } from 'lucide-react';
 
 interface Props {
@@ -100,9 +100,9 @@ const AchievementModal: React.FC<Props> = ({ onClose, existingAchievement, onSuc
 
         try {
             if (existingAchievement && existingAchievement.id) {
-                await axiosInstance.put(`/achievements/${existingAchievement.id}`, payload);
+                await safeAxiosInstance.put(`/achievements/${existingAchievement.id}`, payload);
             } else {
-                await axiosInstance.post('/achievements', payload);
+                await safeAxiosInstance.post('/achievements', payload);
             }
             
             // Call success callback to refresh data
