@@ -29,19 +29,6 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
         'Tools'
     ];
 
-    const proficiencyLabels = {
-        0: 'No Experience',
-        10: 'Just Started',
-        20: 'Basic Understanding',
-        30: 'Some Practice',
-        40: 'Comfortable',
-        50: 'Intermediate',
-        60: 'Good Knowledge',
-        70: 'Advanced',
-        80: 'Very Advanced',
-        90: 'Expert Level',
-        100: 'Master'
-    };
 
     useEffect(() => {
         if (existingTechStack) {

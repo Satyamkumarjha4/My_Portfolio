@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { axiosInstance } from '../../ui/utils/axios';
 import TechStackModal from './TechStackModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
-import { Plus, Edit3, Trash2, Search, RefreshCw, Code, Layers, Star } from 'lucide-react';
+import { Plus, Edit3, Trash2, Search, RefreshCw, Code, Layers } from 'lucide-react';
 
 interface TechStack {
     id: string;
@@ -35,33 +35,7 @@ const TechStackTable: React.FC = () => {
         'Tools'
     ];
 
-    const proficiencyLabels = {
-        0: 'No Experience',
-        10: 'Just Started',
-        20: 'Basic Understanding',
-        30: 'Some Practice',
-        40: 'Comfortable',
-        50: 'Intermediate',
-        60: 'Good Knowledge',
-        70: 'Advanced',
-        80: 'Very Advanced',
-        90: 'Expert Level',
-        100: 'Master'
-    };
 
-    const proficiencyColors = {
-        0: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
-        10: 'bg-red-500/20 text-red-300 border-red-500/30',
-        20: 'bg-red-500/20 text-red-300 border-red-500/30',
-        30: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
-        40: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
-        50: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-        60: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-        70: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-        80: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-        90: 'bg-green-500/20 text-green-300 border-green-500/30',
-        100: 'bg-green-500/20 text-green-300 border-green-500/30',
-    };
 
     const fetchTechStacks = async () => {
         try {
