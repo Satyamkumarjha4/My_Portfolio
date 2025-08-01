@@ -2,6 +2,7 @@ import type React from "react"
 import { useState, type ChangeEvent } from "react"
 import { Star, Send, CheckCircle } from "lucide-react"
 import { motion } from "framer-motion"
+import { axiosInstance } from "../utils/axios.ts"
 
 interface FormData {
   email: string
@@ -14,6 +15,7 @@ interface FormErrors {
   email?: string
   name?: string
   rating?: string
+  submit?: string
 }
 
 const FeedbackForm: React.FC = () => {
@@ -85,6 +87,16 @@ const FeedbackForm: React.FC = () => {
     if (validateForm()) {
       console.log("Form submitted:", formData)
       // Here you would typically send the data to your backend
+      const sendData = async () => {
+        try {
+          await axiosInstance.post("/feedback", formData)
+        } catch (error) {
+          console.error("Error submitting feedback:", error)
+          setErrors({ ...errors, submit: "Failed to submit feedback. Please try again later." })
+          return
+        }
+      }
+      sendData()
 
       // Show success message with animation
       setIsSubmitted(true)

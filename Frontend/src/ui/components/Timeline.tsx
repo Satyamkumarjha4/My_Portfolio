@@ -1,74 +1,8 @@
-"use client"
-
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useSpring } from "framer-motion"
 import { TimelineCard, type TimelineItemType } from "./TimelineCard"
-
-// Sample data (replace with your own)
-const sampleTimelineData: TimelineItemType[] = [
-  {
-    id: "1",
-    title: "B.Tech in Computer Science Engineering, MAIT Delhi (GGSIPU)",
-    date: "2023 - 2027 (Expected)",
-    description:
-      "Pursuing B.Tech at Maharaja Agrasen Institute of Technology, Rohini, Delhi. Focused on AI, full-stack development, and research.",
-    type: "education",
-    remarks: "CGPA: 8.7 till 3rd semester",
-  },
-  {
-    id: "2",
-    title: "CBSE (Class XII), PCM with Computer Science",
-    date: "2022",
-    description: "Completed senior secondary education from Arwachin International School, Dilshad Garden, Delhi.",
-    type: "education",
-    remarks: "Scored 84.6%",
-  },
-  {
-    id: "3",
-    title: "CBSE (Class X)",
-    date: "2020",
-    description: "Completed secondary education from Arwachin International School, Dilshad Garden, Delhi.",
-    type: "education",
-    remarks: "Scored 91.4%",
-  },
-  {
-    id: "4",
-    title: "Hackathon Participant – Smart India Hackathon 2024",
-    date: "September - December 2024",
-    description:
-      "Built a freelancer opportunities platform with AI-based job matching. Developed DBMS and cosine similarity-based recommendation model. Selected among the top 25 teams from the total of 250+ teams.",
-    type: "hackathon",
-    remarks: "AI/ML & DBMS Developer",
-  },
-  {
-    id: "5",
-    title: "Hackathon Participant – HACKCBS 7.0",
-    date: "November 2024",
-    description:
-      "Created an integrated interview platform with real-time code editor and virtual interviews using socket programming.",
-    type: "hackathon",
-    remarks: "Team Lead and developed the LLM based code editor",
-  },
-  {
-    id: "6",
-    title: "Hackathon Participant – CodeNakshatra 1.0",
-    date: "April 2025",
-    description:
-      "Led team to build a cross-platform gig marketplace using React Native and NestJS. Included in-app messaging, multilingual support, and subscription model.",
-    type: "hackathon",
-    remarks: "Team Lead & DBMS Architect",
-  },
-  {
-    id: "7",
-    title: "Hackathon Participant – Vihaan 8.0",
-    date: "April 2025",
-    description:
-      "Developed a doctor-patient platform with real-time booking, WebRTC video calls, digital prescriptions, and monetization features.",
-    type: "hackathon",
-    remarks: "Team Lead & DBMS Developer",
-  },
-]
+import { axiosInstance } from "../utils/axios.ts"
 
 // Sort timeline items from latest to oldest
 const sortTimelineItems = (items: TimelineItemType[]): TimelineItemType[] => {
@@ -93,20 +27,60 @@ interface TimelineProps {
 }
 
 const Timeline: React.FC<TimelineProps> = ({
-  items = sampleTimelineData,
+  items,
   title = "Academic & Professional Timeline",
   className = "",
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const [timelineItems, setTimelineItems] = useState<TimelineItemType[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [isMobile, setIsMobile] = useState(false)
   const timelineRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Use the timeline container for more precise scroll tracking
   const { scrollYProgress } = useScroll({
     target: timelineRef,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end end"],
   })
 
+  // Add smooth spring animation to the line
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  })
+
+  // Fetch timeline data from API
+  useEffect(() => {
+    const fetchTimelineData = async () => {
+      // If items are provided as props, use them instead of fetching
+      if (items) {
+        setTimelineItems(items)
+        setLoading(false)
+        return
+      }
+
+      try {
+        setLoading(true)
+        setError(null)
+        const response = await axiosInstance.get("/timeline")
+        setTimelineItems(response.data || [])
+      } catch (error) {
+        console.error("Error fetching timeline items:", error)
+        setError("Failed to fetch timeline data")
+        // Fallback to sample data on error
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTimelineData()
+  }, [items])
+
   // Sort items from latest to oldest
-  const sortedItems = sortTimelineItems(items)
+  const sortedItems = sortTimelineItems(timelineItems)
 
   // Check if screen is mobile width
   useEffect(() => {
@@ -124,34 +98,38 @@ const Timeline: React.FC<TimelineProps> = ({
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  // Calculate which timeline item is active based on scroll position
+  // Improved active index calculation based on scroll progress and item positions
   useEffect(() => {
     const handleScroll = () => {
-      if (!timelineRef.current) return
+      if (!timelineRef.current || sortedItems.length === 0) return
 
       const timelineRect = timelineRef.current.getBoundingClientRect()
-      const timelineTop = timelineRect.top
-      const timelineHeight = timelineRect.height
       const viewportHeight = window.innerHeight
-
-      // Calculate the visible portion of the timeline
-      const visibleStart = Math.max(0, -timelineTop)
-      const visibleEnd = Math.min(timelineHeight, viewportHeight - timelineTop)
-      const visibleHeight = visibleEnd - visibleStart
-
-      if (visibleHeight <= 0) {
+      
+      // Calculate how much of the timeline is visible
+      const timelineTop = timelineRect.top
+      const timelineBottom = timelineRect.bottom
+      
+      // If timeline is not in view at all
+      if (timelineBottom < 0 || timelineTop > viewportHeight) {
         setActiveIndex(null)
         return
       }
-
-      // Calculate the center of the visible portion
-      const visibleCenter = visibleStart + visibleHeight / 2
-
-      // Calculate which item is closest to the center
-      const itemHeight = timelineHeight / sortedItems.length
-      const activeItemIndex = Math.floor(visibleCenter / itemHeight)
-
-      setActiveIndex(activeItemIndex >= 0 && activeItemIndex < sortedItems.length ? activeItemIndex : null)
+      
+      // Calculate the visible progress through the timeline
+      const timelineHeight = timelineRect.height
+      const scrolledPastTop = Math.max(0, -timelineTop)
+      // Calculate progress as a percentage (0 to 1)
+      const progress = scrolledPastTop / (timelineHeight - viewportHeight + 100) // Add padding
+      const clampedProgress = Math.max(0, Math.min(1, progress))
+      
+      // Map progress to timeline items
+      const activeItemIndex = Math.min(
+        Math.floor(clampedProgress * sortedItems.length),
+        sortedItems.length - 1
+      )
+      
+      setActiveIndex(activeItemIndex >= 0 ? activeItemIndex : null)
     }
 
     window.addEventListener("scroll", handleScroll)
@@ -173,13 +151,54 @@ const Timeline: React.FC<TimelineProps> = ({
     },
   }
 
-  // Animation for the line
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
+
+  // Calculate line height based on active index for more precise sync
+  const [lineHeightState, setLineHeightState] = useState("0%")
+  
+  useEffect(() => {
+    if (activeIndex !== null && sortedItems.length > 0) {
+      // Calculate the percentage based on active index
+      const percentage = ((activeIndex + 1) / sortedItems.length) * 100
+      setLineHeightState(`${Math.min(percentage, 100)}%`)
+    } else if (activeIndex === null) {
+      // Use scroll progress when no active index
+      const unsubscribe = smoothProgress.onChange((value) => {
+        setLineHeightState(`${value * 100}%`)
+      })
+      return unsubscribe
+    }
+  }, [activeIndex, sortedItems.length, smoothProgress])
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mx-auto mb-4"></div>
+          <p className="text-gray-300">Loading timeline...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Error state (still shows fallback data)
+  if (error) {
+    console.warn("Timeline error:", error)
+  }
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-900 py-16" id="timeline">
+    <div
+      className="w-full min-h-screen flex items-center justify-center bg-gray-900 py-16"
+      id="timeline"
+      ref={containerRef}
+    >
       <div className={`container mx-auto ${className}`}>
-        <motion.div className="text-center mb-16" initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        <motion.div
+          className="text-center mb-16"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           <motion.h2
             className="text-3xl md:text-5xl font-bold text-white relative inline-block"
             variants={titleVariants}
@@ -204,32 +223,43 @@ const Timeline: React.FC<TimelineProps> = ({
           </motion.p>
         </motion.div>
 
-        <div className="relative wrap overflow-hidden p-4 md:p-10 h-full" ref={timelineRef}>
-          {/* Animated vertical line - positioned differently on mobile */}
+        <div
+          className="relative wrap overflow-hidden p-4 md:p-10 h-full"
+          ref={timelineRef}
+        >
+          {/* Static background line */}
           <div
             className={`absolute border-opacity-20 border-gray-700 h-full border 
               ${isMobile ? "left-[20px] md:left-1/2" : "left-1/2"} 
               transform ${isMobile ? "-translate-x-1/2 md:-translate-x-1/2" : "-translate-x-1/2"}`}
+          />
+
+          {/* Animated progress line */}
+          <div
+            className={`absolute h-full
+              ${isMobile ? "left-[20px] md:left-1/2" : "left-1/2"} 
+              transform ${isMobile ? "-translate-x-1/2 md:-translate-x-1/2" : "-translate-x-1/2"}`}
+            style={{ width: "4px", marginLeft: "-2px" }}
           >
             <motion.div
-              className="absolute bg-indigo-500 w-full rounded-full"
+              className="bg-indigo-500 w-full rounded-full origin-top transition-all duration-300 ease-out"
               style={{
-                height: lineHeight,
+                height: lineHeightState,
                 width: "4px",
-                left: "-2px",
               }}
             />
           </div>
 
           {/* Timeline items */}
           {sortedItems.map((item, index) => (
-            <TimelineCard
-              key={item.id}
-              item={item}
-              isLeft={isMobile ? false : index % 2 === 0}
-              isActive={index === activeIndex}
-              isMobile={isMobile}
-            />
+            <div key={item.id} data-timeline-card>
+              <TimelineCard
+                item={item}
+                isLeft={isMobile ? false : index % 2 === 0}
+                isActive={index === activeIndex}
+                isMobile={isMobile}
+              />
+            </div>
           ))}
         </div>
       </div>
