@@ -69,7 +69,7 @@ const Hero: React.FC = () => {
               <span className="text-indigo-500">Satyam Kumar Jha</span>
             </motion.h1>
             <motion.h3
-              className="text-3xl md:text-4xl font-semibold mb-4"
+              className="text-3xl md:text-4xl font-semibold mb-4 min-h-[4.75rem] md:min-h-[5.5rem]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}

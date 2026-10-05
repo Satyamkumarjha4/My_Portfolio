@@ -14,6 +14,7 @@ interface ProjectDetailsProps {
   demoUrl: string
   imageOnRight?: boolean
   caseStudy?: string | null
+  priority?: boolean
 }
 
 export function ProjectDetails({
@@ -26,6 +27,7 @@ export function ProjectDetails({
   demoUrl,
   imageOnRight = false,
   caseStudy,
+  priority = false,
 }: ProjectDetailsProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.3 })
@@ -51,11 +53,11 @@ export function ProjectDetails({
         {imageOnRight ? (
           <>
             <ProjectInfo title={title} description={description} techStack={techStack} tags={tags} demoUrl={demoUrl} />
-            <ProjectImage imageUrl={imageUrl} githubUrl={githubUrl} title={title} />
+            <ProjectImage imageUrl={imageUrl} githubUrl={githubUrl} title={title} priority={priority} />
           </>
         ) : (
           <>
-            <ProjectImage imageUrl={imageUrl} githubUrl={githubUrl} title={title} />
+            <ProjectImage imageUrl={imageUrl} githubUrl={githubUrl} title={title} priority={priority} />
             <ProjectInfo title={title} description={description} techStack={techStack} tags={tags} demoUrl={demoUrl} />
           </>
         )}

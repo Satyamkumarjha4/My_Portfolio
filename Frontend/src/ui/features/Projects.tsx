@@ -84,7 +84,7 @@ const Projects: React.FC = () => {
         {loading && <LoadingBlock label="Loading projects..." />}
         {error && !projects && <ErrorBlock message="Couldn't load projects." onRetry={refetch} />}
         {projects && projects.length === 0 && <EmptyBlock message="No projects yet." />}
-        {projects?.map((project) => (
+        {projects?.map((project, index) => (
           <ProjectDetails
             key={project.id}
             title={project.title}
@@ -96,6 +96,7 @@ const Projects: React.FC = () => {
             demoUrl={project.demoUrl}
             imageOnRight={project.imageOnRight}
             caseStudy={project.caseStudy}
+            priority={index === 0}
             
           />
         ))}

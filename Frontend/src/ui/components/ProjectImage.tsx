@@ -7,9 +7,10 @@ interface ProjectImageProps {
   imageUrl: string
   githubUrl: string
   title: string
+  priority?: boolean
 }
 
-export function ProjectImage({ imageUrl, githubUrl, title }: ProjectImageProps) {
+export function ProjectImage({ imageUrl, githubUrl, title, priority = false }: ProjectImageProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
@@ -36,7 +37,8 @@ export function ProjectImage({ imageUrl, githubUrl, title }: ProjectImageProps) 
         <motion.img
           src={imageUrl}
           alt={title}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
           decoding="async"
           className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
           initial={{ filter: "blur(10px)" }}

@@ -56,7 +56,7 @@ into the public JS bundle.
 | FE-004 | P1 | Full-page reload navigation | Done (verified in a browser) |
 | FE-005 | P1 | Image optimisation | Done (1.5 MB -> 240 KB, same paths) |
 | FE-006 | P1 | Shared data layer | Done (`useApi`, own implementation: no new dependency) |
-| FE-007 | P1 | Code splitting | Done (admin ~96 kB no longer in the main bundle) |
+| FE-007 | P1 | Code splitting | Done (admin ~96 kB loaded on demand; small public pages deliberately not split, see performance.md) |
 | FE-008 | P1 | SEO baseline | Done (meta, OG, JSON-LD, robots, sitemap, per-route titles) |
 | FE-009 | P1 | Timeline scroll logic | Done |
 | FE-010 | P1 | Core accessibility | Mostly done: dialog semantics + Escape, labelled login, keyboard star rating, focus ring, reduced motion. **Open:** full focus trapping in modals; a full screen-reader pass |

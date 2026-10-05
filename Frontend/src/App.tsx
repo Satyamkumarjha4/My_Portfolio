@@ -2,13 +2,14 @@ import React, { Suspense, lazy, useEffect } from 'react';
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import Home from './ui/features/Home';
+import About from './ui/features/About';
+import Projects from './ui/features/Projects';
+import Contact from './ui/features/Contact';
+import Info from './ui/features/Info';
 
-// Everything except the landing page is split into its own chunk, so the
-// admin panel (~3.5k lines) is never downloaded by regular visitors.
-const About = lazy(() => import('./ui/features/About'));
-const Projects = lazy(() => import('./ui/features/Projects'));
-const Contact = lazy(() => import('./ui/features/Contact'));
-const Info = lazy(() => import('./ui/features/Info'));
+// Public pages are small (10-17 kB each), so splitting them only added a
+// request waterfall to every landing page (measured: LCP +0.5s). Only the
+// heavy, rarely visited routes are split out: the admin panel (~96 kB) and /status.
 const Status = lazy(() => import('./ui/features/Status'));
 const Admin = lazy(() => import('./admin/Page/Admin'));
 
