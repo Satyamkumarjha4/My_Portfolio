@@ -1,6 +1,19 @@
 @import "tailwindcss";
 
+/* Respect users who ask the OS for less motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
-*::-webkit-scrollbar {
-  display: none;
+/* Visible keyboard focus everywhere */
+:focus-visible {
+  outline: 2px solid #818cf8;
+  outline-offset: 2px;
 }

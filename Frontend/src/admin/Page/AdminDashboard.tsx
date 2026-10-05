@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import DashboardHeader from '../components/DashboardHeader';
 import FeatureCard from '../components/FeatureCard';
@@ -54,14 +54,9 @@ const AdminDashboard: React.FC = () => {
         }
     };
 
-    return (
-        <div className="min-h-screen bg-gray-900">
-            {/* Background Elements */}
-            <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
-            
-            {/* Animated particles */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {Array.from({ length: 12 }).map((_, i) => (
+    // Generated once so the background does not re-randomise on every render
+    const particles = useMemo(
+      () => Array.from({ length: 12 }).map((_, i) => (
                     <div
                         key={i}
                         className="absolute rounded-full bg-indigo-500/5 animate-pulse"
@@ -74,7 +69,18 @@ const AdminDashboard: React.FC = () => {
                             animationDuration: `${Math.random() * 8 + 6}s`,
                         }}
                     />
-                ))}
+                )),
+      []
+    )
+
+    return (
+        <div className="min-h-screen bg-gray-900">
+            {/* Background Elements */}
+            <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
+            
+            {/* Animated particles */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {particles}
             </div>
 
             {/* Main Content */}

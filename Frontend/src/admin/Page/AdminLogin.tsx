@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ChevronRight, Shield, User, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../ui/utils/axios';
@@ -37,14 +37,9 @@ const AdminLogin: React.FC = () => {
         }
     };
 
-    return (
-        <div className="relative min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
-            {/* Background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
-
-            {/* Animated particles */}
-            <div className="absolute inset-0 overflow-hidden">
-                {Array.from({ length: 15 }).map((_, i) => (
+    // Generated once so the background does not re-randomise on every render
+    const particles = useMemo(
+      () => Array.from({ length: 15 }).map((_, i) => (
                     <div
                         key={i}
                         className="absolute rounded-full bg-indigo-500/10 animate-pulse"
@@ -57,7 +52,18 @@ const AdminLogin: React.FC = () => {
                             animationDuration: `${Math.random() * 8 + 6}s`,
                         }}
                     />
-                ))}
+                )),
+      []
+    )
+
+    return (
+        <div className="relative min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
+            {/* Background gradient */}
+            <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
+
+            {/* Animated particles */}
+            <div className="absolute inset-0 overflow-hidden">
+                {particles}
             </div>
 
             {/* Floating geometric shapes */}

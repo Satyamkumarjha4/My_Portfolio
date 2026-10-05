@@ -1,4 +1,5 @@
 import { Github } from "lucide-react"
+import { safeUrl } from "../utils/safeUrl"
 import { motion } from "framer-motion"
 import { useState } from "react"
 
@@ -44,7 +45,7 @@ export function ProjectImage({ imageUrl, githubUrl, title }: ProjectImageProps) 
           onLoad={() => setImageLoaded(true)}
         />
         <motion.a
-          href={githubUrl}
+          href={safeUrl(githubUrl)}
           target="_blank"
           rel="noopener noreferrer"
           className="absolute left-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500/90 shadow-md transition-all hover:bg-indigo-600 hover:shadow-lg"

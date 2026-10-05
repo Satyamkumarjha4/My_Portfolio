@@ -1,3 +1,4 @@
+import { useEscapeKey } from '../../ui/hooks/useEscapeKey';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Trash2, X } from 'lucide-react';
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const DeleteConfirmModal: React.FC<Props> = ({ onCancel, onConfirm, count }) => {
+    useEscapeKey(onCancel);
     const modalVariants = {
         hidden: { opacity: 0, scale: 0.8, y: 50 },
         visible: { 
@@ -51,6 +53,8 @@ const DeleteConfirmModal: React.FC<Props> = ({ onCancel, onConfirm, count }) => 
     return (
         <AnimatePresence>
             <motion.div
+                role="dialog"
+                aria-modal="true"
                 className="fixed inset-0 z-50 flex items-center justify-center p-4"
                 variants={overlayVariants}
                 initial="hidden"

@@ -240,17 +240,26 @@ const FeedbackForm: React.FC = () => {
                 <label className="block text-gray-300 text-sm font-medium mb-2">Rating*</label>
                 <div className="flex space-x-3">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <motion.div key={star} whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }}>
+                    <motion.button
+                      type="button"
+                      key={star}
+                      aria-label={`Rate ${star} out of 5`}
+                      aria-pressed={formData.rating === star}
+                      onClick={() => handleStarClick(star)}
+                      onMouseEnter={() => setHoveredStar(star)}
+                      onMouseLeave={() => setHoveredStar(0)}
+                      onFocus={() => setHoveredStar(star)}
+                      onBlur={() => setHoveredStar(0)}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
                       <Star
                         size={30}
-                        onClick={() => handleStarClick(star)}
-                        onMouseEnter={() => setHoveredStar(star)}
-                        onMouseLeave={() => setHoveredStar(0)}
                         fill={hoveredStar >= star || formData.rating >= star ? "#6366F1" : "none"}
                         color={hoveredStar >= star || formData.rating >= star ? "#6366F1" : "#6B7280"}
                         className="cursor-pointer transition-colors duration-200"
                       />
-                    </motion.div>
+                    </motion.button>
                   ))}
                 </div>
                 {errors.rating && (

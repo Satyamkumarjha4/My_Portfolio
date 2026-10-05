@@ -3,7 +3,7 @@ import { motion } from "framer-motion"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import Timeline from "../components/Timeline"
-import AchievementGrid from "../components/AcheivementGrid"
+import AchievementGrid from "../components/AchievementGrid"
 import AboutHero from "../components/AboutHero"
 import { usePageMeta } from "../hooks/usePageMeta"
 

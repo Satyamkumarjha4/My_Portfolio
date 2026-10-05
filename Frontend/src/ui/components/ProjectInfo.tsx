@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react"
+import { safeUrl } from "../utils/safeUrl"
 import { motion } from "framer-motion"
 
 interface ProjectInfoProps {
@@ -65,7 +66,7 @@ export function ProjectInfo({ title, description, techStack, tags, demoUrl }: Pr
         <motion.div className="mb-4">
           {demoUrl && (
             <motion.a
-              href={demoUrl}
+              href={safeUrl(demoUrl)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center rounded-lg bg-indigo-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-4 focus:ring-indigo-300"

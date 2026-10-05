@@ -1,15 +1,19 @@
+import { useEscapeKey } from '../../ui/hooks/useEscapeKey';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { adminApi } from '../../ui/utils/axios';
+import { getErrorMessage } from '../hooks';
+import type { Project } from '../types';
 import { X, Save, Plus, Github, ExternalLink, Image } from 'lucide-react';
 
 interface Props {
     onClose: () => void;
-    existingProject?: any;
+    existingProject?: Project | null;
     onSuccess?: () => void; // Add callback for successful operations
 }
 
 const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) => {
+    useEscapeKey(onClose);
     const [form, setForm] = useState({
         title: '',
         description: '',
@@ -87,7 +91,7 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
         try {
             new URL(string);
             return true;
-        } catch (_) {
+        } catch {
             return false;
         }
     };
@@ -139,27 +143,9 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
             }
             
             onClose();
-        } catch (err: any) {
+        } catch (err) {
             console.error('Submit error:', err);
-            console.error('Error response:', err.response?.data);
-            
-            let errorMessage = 'Failed to save project. Please try again.';
-            
-            if (err.response?.data?.message) {
-                errorMessage = err.response.data.message;
-            } else if (err.response?.data?.error) {
-                errorMessage = err.response.data.error;
-            } else if (err.response?.data?.errors) {
-                // Handle validation errors
-                const validationErrors = err.response.data.errors;
-                if (Array.isArray(validationErrors)) {
-                    errorMessage = validationErrors.map(e => e.message || e).join(', ');
-                } else if (typeof validationErrors === 'object') {
-                    errorMessage = Object.values(validationErrors).join(', ');
-                }
-            }
-            
-            setErrors({ submit: errorMessage });
+            setErrors({ submit: getErrorMessage(err, 'Failed to save project. Please try again.') });
         } finally {
             setLoading(false);
         }
@@ -168,6 +154,8 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
     return (
         <AnimatePresence>
             <motion.div
+                role="dialog"
+                aria-modal="true"
                 className="fixed inset-0 z-50 flex items-center justify-center p-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

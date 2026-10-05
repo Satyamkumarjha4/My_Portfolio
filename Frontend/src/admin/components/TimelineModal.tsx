@@ -1,17 +1,21 @@
+import { useEscapeKey } from '../../ui/hooks/useEscapeKey';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { adminApi } from '../../ui/utils/axios';
+import { getErrorMessage } from '../hooks';
+import type { TimelineItem } from '../types';
 import { X, Save, Plus, Calendar, BookOpen, Trophy, Briefcase } from 'lucide-react';
 
 interface Props {
     onClose: () => void;
-    existingItem?: any;
+    existingItem?: TimelineItem | null;
     onSuccess?: () => void;
 }
 
 type TimelineType = 'EDUCATION' | 'HACKATHON' | 'WORK';
 
 const TimelineModal: React.FC<Props> = ({ onClose, existingItem, onSuccess }) => {
+    useEscapeKey(onClose);
     const [form, setForm] = useState({
         title: '',
         date: '',
@@ -103,27 +107,9 @@ const TimelineModal: React.FC<Props> = ({ onClose, existingItem, onSuccess }) =>
             }
             
             onClose();
-        } catch (err: any) {
+        } catch (err) {
             console.error('Submit error:', err);
-            console.error('Error response:', err.response?.data);
-            
-            let errorMessage = 'Failed to save timeline item. Please try again.';
-            
-            if (err.response?.data?.message) {
-                errorMessage = err.response.data.message;
-            } else if (err.response?.data?.error) {
-                errorMessage = err.response.data.error;
-            } else if (err.response?.data?.errors) {
-                // Handle validation errors
-                const validationErrors = err.response.data.errors;
-                if (Array.isArray(validationErrors)) {
-                    errorMessage = validationErrors.map(e => e.message || e).join(', ');
-                } else if (typeof validationErrors === 'object') {
-                    errorMessage = Object.values(validationErrors).join(', ');
-                }
-            }
-            
-            setErrors({ submit: errorMessage });
+            setErrors({ submit: getErrorMessage(err, 'Failed to save timeline item. Please try again.') });
         } finally {
             setLoading(false);
         }
@@ -158,6 +144,8 @@ const TimelineModal: React.FC<Props> = ({ onClose, existingItem, onSuccess }) =>
     return (
         <AnimatePresence>
             <motion.div
+                role="dialog"
+                aria-modal="true"
                 className="fixed inset-0 z-50 flex items-center justify-center p-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

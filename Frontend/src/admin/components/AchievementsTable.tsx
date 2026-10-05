@@ -1,73 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { adminApi } from '../../ui/utils/axios';
+import { useAdminResource } from '../hooks';
+import type { Achievement } from '../types';
 import AchievementModal from './AchievementModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Award, Calendar, ExternalLink, FileText } from 'lucide-react';
 
-interface Achievement {
-    id: string;
-    title: string;
-    date: string;
-    overview: string;
-    certificate: string | null;
-}
-
 const AchievementsTable: React.FC = () => {
-    const [achievements, setAchievements] = useState<Achievement[]>([]);
-    const [selected, setSelected] = useState<string[]>([]);
+    const { items: achievements, selected, loading, isRefreshing, fetchItems: fetchAchievements, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Achievement>('/achievements');
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editAchievement, setEditAchievement] = useState<Achievement | null>(null);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isRefreshing, setIsRefreshing] = useState(false);
 
-    const fetchAchievements = async () => {
-        try {
-            setLoading(true);
-            const res = await adminApi.get('/achievements');
-            setAchievements(res.data);
-        } catch (err) {
-            console.error('Fetch error:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const refreshData = async () => {
-        setIsRefreshing(true);
-        await fetchAchievements();
-        setTimeout(() => setIsRefreshing(false), 500);
-    };
-
-    useEffect(() => {
-        fetchAchievements();
-    }, []);
-
-    const handleCheckbox = (id: string) => {
-        setSelected(prev =>
-            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-        );
-    };
-
-    const handleSelectAll = () => {
-        if (selected.length === filteredAchievements.length) {
-            setSelected([]);
-        } else {
-            setSelected(filteredAchievements.map(a => a.id));
-        }
-    };
-
-    const handleDelete = async () => {
-        try {
-            await Promise.all(selected.map(id => adminApi.delete(`/achievements/${id}`)));
-            setSelected([]);
-            fetchAchievements();
-        } catch (err) {
-            console.error('Delete error:', err);
-        }
-    };
 
     const filteredAchievements = achievements.filter(achievement =>
         achievement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -87,6 +32,8 @@ const AchievementsTable: React.FC = () => {
             day: 'numeric'
         });
     };
+
+    const handleSelectAll = () => toggleAll(filteredAchievements.map(item => item.id));
 
     if (loading) {
         return (

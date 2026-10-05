@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { adminApi } from '../../ui/utils/axios';
+import { useAdminResource } from '../hooks';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { Trash2, Search, RefreshCw, Mail, User, Calendar, Star } from 'lucide-react';
 
@@ -14,58 +14,10 @@ interface Feedback {
 }
 
 const FeedbackTable: React.FC = () => {
-    const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
-    const [selected, setSelected] = useState<string[]>([]);
+    const { items: feedbacks, selected, loading, isRefreshing, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Feedback>('/feedback');
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isRefreshing, setIsRefreshing] = useState(false);
 
-    const fetchFeedbacks = async () => {
-        try {
-            setLoading(true);
-            const res = await adminApi.get('/feedback');
-            setFeedbacks(res.data);
-        } catch (err) {
-            console.error('Fetch error:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const refreshData = async () => {
-        setIsRefreshing(true);
-        await fetchFeedbacks();
-        setTimeout(() => setIsRefreshing(false), 500);
-    };
-
-    useEffect(() => {
-        fetchFeedbacks();
-    }, []);
-
-    const handleCheckbox = (id: string) => {
-        setSelected(prev =>
-            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-        );
-    };
-
-    const handleSelectAll = () => {
-        if (selected.length === filteredFeedbacks.length) {
-            setSelected([]);
-        } else {
-            setSelected(filteredFeedbacks.map(f => f.id));
-        }
-    };
-
-    const handleDelete = async () => {
-        try {
-            await Promise.all(selected.map(id => adminApi.delete(`/feedback/${id}`)));
-            setSelected([]);
-            fetchFeedbacks();
-        } catch (err) {
-            console.error('Delete error:', err);
-        }
-    };
 
     const filteredFeedbacks = feedbacks.filter(feedback =>
         feedback.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -97,6 +49,8 @@ const FeedbackTable: React.FC = () => {
             />
         ));
     };
+
+    const handleSelectAll = () => toggleAll(filteredFeedbacks.map(item => item.id));
 
     if (loading) {
         return (

@@ -1,28 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { adminApi } from '../../ui/utils/axios';
+import { useAdminResource } from '../hooks';
+import type { TechStack } from '../types';
 import TechStackModal from './TechStackModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Code, Layers } from 'lucide-react';
 
-interface TechStack {
-    id: string;
-    name: string;
-    category: string;
-    proficiency: number;
-    description: string;
-    iconName: string;
-}
-
 const TechStackTable: React.FC = () => {
-    const [techStacks, setTechStacks] = useState<TechStack[]>([]);
-    const [selected, setSelected] = useState<string[]>([]);
+    const { items: techStacks, selected, loading, isRefreshing, fetchItems: fetchTechStacks, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<TechStack>('/tech-stacks');
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editTechStack, setEditTechStack] = useState<TechStack | null>(null);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isRefreshing, setIsRefreshing] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('All');
 
     const categories = [
@@ -37,51 +26,6 @@ const TechStackTable: React.FC = () => {
 
 
 
-    const fetchTechStacks = async () => {
-        try {
-            setLoading(true);
-            const res = await adminApi.get('/tech-stacks');
-            setTechStacks(res.data);
-        } catch (err) {
-            console.error('Fetch error:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const refreshData = async () => {
-        setIsRefreshing(true);
-        await fetchTechStacks();
-        setTimeout(() => setIsRefreshing(false), 500);
-    };
-
-    useEffect(() => {
-        fetchTechStacks();
-    }, []);
-
-    const handleCheckbox = (id: string) => {
-        setSelected(prev =>
-            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-        );
-    };
-
-    const handleSelectAll = () => {
-        if (selected.length === filteredTechStacks.length) {
-            setSelected([]);
-        } else {
-            setSelected(filteredTechStacks.map(t => t.id));
-        }
-    };
-
-    const handleDelete = async () => {
-        try {
-            await Promise.all(selected.map(id => adminApi.delete(`/tech-stacks/${id}`)));
-            setSelected([]);
-            fetchTechStacks();
-        } catch (err) {
-            console.error('Delete error:', err);
-        }
-    };
 
     const filteredTechStacks = techStacks.filter(techStack => {
         const matchesSearch = techStack.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -141,6 +85,8 @@ const TechStackTable: React.FC = () => {
             </div>
         );
     };
+
+    const handleSelectAll = () => toggleAll(filteredTechStacks.map(item => item.id));
 
     if (loading) {
         return (

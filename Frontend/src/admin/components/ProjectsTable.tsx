@@ -1,77 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { adminApi } from '../../ui/utils/axios';
+import { useAdminResource } from '../hooks';
+import type { Project } from '../types';
 import ProjectModal from './ProjectModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { Plus, Edit3, Trash2, ExternalLink, Github, Search, RefreshCw, Eye, EyeOff } from 'lucide-react';
 
-interface Project {
-    id: string;
-    title: string;
-    description: string;
-    techStack: string[];
-    tags: string[];
-    imageUrl: string;
-    githubUrl: string;
-    demoUrl: string;
-    imageOnRight: boolean;
-}
-
 const ProjectsTable: React.FC = () => {
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [selected, setSelected] = useState<string[]>([]);
+    const { items: projects, selected, loading, isRefreshing, fetchItems: fetchProjects, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Project>('/projects');
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editProject, setEditProject] = useState<Project | null>(null);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isRefreshing, setIsRefreshing] = useState(false);
 
-    const fetchProjects = async () => {
-        try {
-            setLoading(true);
-            const res = await adminApi.get('/projects');
-            setProjects(res.data);
-        } catch (err) {
-            console.error('Fetch error:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const refreshData = async () => {
-        setIsRefreshing(true);
-        await fetchProjects();
-        setTimeout(() => setIsRefreshing(false), 500);
-    };
-
-    useEffect(() => {
-        fetchProjects();
-    }, []);
-
-    const handleCheckbox = (id: string) => {
-        setSelected(prev =>
-            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-        );
-    };
-
-    const handleSelectAll = () => {
-        if (selected.length === filteredProjects.length) {
-            setSelected([]);
-        } else {
-            setSelected(filteredProjects.map(p => p.id));
-        }
-    };
-
-    const handleDelete = async () => {
-        try {
-            await Promise.all(selected.map(id => adminApi.delete(`/projects/${id}`)));
-            setSelected([]);
-            fetchProjects();
-        } catch (err) {
-            console.error('Delete error:', err);
-        }
-    };
 
     const filteredProjects = projects.filter(project =>
         project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -84,6 +25,8 @@ const ProjectsTable: React.FC = () => {
     const truncateText = (text: string, maxLength: number) => {
         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     };
+
+    const handleSelectAll = () => toggleAll(filteredProjects.map(item => item.id));
 
     if (loading) {
         return (
