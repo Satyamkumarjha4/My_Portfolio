@@ -7,14 +7,17 @@ export function useAdminResource<T extends { id: string }>(path: string) {
     const [selected, setSelected] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const fetchItems = useCallback(async () => {
+        // `loading` is only true for the initial load (it starts true). Re-fetches after
+        // a save/delete keep the table mounted, so focus can return to the button
+        // that opened the modal and the page does not flash a full-screen spinner.
         try {
-            setLoading(true);
             const res = await adminApi.get<T[]>(path);
             setItems(res.data);
         } catch (err) {
-            console.error('Fetch error:', err);
+            setError(getErrorMessage(err, 'Could not load data. Check your connection and refresh.'));
         } finally {
             setLoading(false);
         }
@@ -38,17 +41,27 @@ export function useAdminResource<T extends { id: string }>(path: string) {
         setSelected(selected.length === visibleIds.length ? [] : visibleIds);
     };
 
+    // Deletes each selected item independently so one failure does not hide the
+    // others, then re-syncs the list with the server either way.
     const handleDelete = async () => {
-        try {
-            await Promise.all(selected.map(id => adminApi.delete(`${path}/${id}`)));
-            setSelected([]);
-            fetchItems();
-        } catch (err) {
-            console.error('Delete error:', err);
+        setError(null);
+        const ids = [...selected];
+        const results = await Promise.allSettled(ids.map(id => adminApi.delete(`${path}/${id}`)));
+        const failedIds = ids.filter((_, i) => results[i].status === 'rejected');
+        setSelected(failedIds);
+        if (failedIds.length > 0) {
+            const firstFailure = results.find(r => r.status === 'rejected') as PromiseRejectedResult;
+            setError(
+                `${failedIds.length} of ${ids.length} item(s) could not be deleted: ` +
+                getErrorMessage(firstFailure.reason, 'request failed')
+            );
         }
+        await fetchItems();
     };
 
-    return { items, selected, setSelected, loading, isRefreshing, fetchItems, refreshData, handleCheckbox, toggleAll, handleDelete };
+    const clearError = () => setError(null);
+
+    return { items, selected, setSelected, loading, isRefreshing, error, clearError, fetchItems, refreshData, handleCheckbox, toggleAll, handleDelete };
 }
 
 // Extracts a human readable message from an axios-style error without using `any`.

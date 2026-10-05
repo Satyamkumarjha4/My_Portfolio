@@ -1,4 +1,5 @@
 import { useEscapeKey } from '../../ui/hooks/useEscapeKey';
+import { useFocusTrap } from '../../ui/hooks/useFocusTrap';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { adminApi } from '../../ui/utils/axios';
@@ -16,6 +17,7 @@ type TimelineType = 'EDUCATION' | 'HACKATHON' | 'WORK';
 
 const TimelineModal: React.FC<Props> = ({ onClose, existingItem, onSuccess }) => {
     useEscapeKey(onClose);
+    const dialogRef = useFocusTrap<HTMLDivElement>();
     const [form, setForm] = useState({
         title: '',
         date: '',
@@ -144,6 +146,8 @@ const TimelineModal: React.FC<Props> = ({ onClose, existingItem, onSuccess }) =>
     return (
         <AnimatePresence>
             <motion.div
+                ref={dialogRef}
+                tabIndex={-1}
                 role="dialog"
                 aria-modal="true"
                 className="fixed inset-0 z-50 flex items-center justify-center p-4"

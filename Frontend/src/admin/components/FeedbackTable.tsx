@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAdminResource } from '../hooks';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminErrorBanner from './AdminErrorBanner';
 import { Trash2, Search, RefreshCw, Mail, User, Calendar, Star } from 'lucide-react';
 
 interface Feedback {
@@ -14,7 +15,7 @@ interface Feedback {
 }
 
 const FeedbackTable: React.FC = () => {
-    const { items: feedbacks, selected, loading, isRefreshing, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Feedback>('/feedback');
+    const { items: feedbacks, selected, loading, isRefreshing, error, clearError, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Feedback>('/feedback');
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -65,6 +66,7 @@ const FeedbackTable: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-900">
+            <AdminErrorBanner message={error} onDismiss={clearError} />
             {/* Background Elements */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
             

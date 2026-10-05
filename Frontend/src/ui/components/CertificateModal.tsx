@@ -3,6 +3,7 @@ import { safeUrl } from "../utils/safeUrl"
 import { useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
+import { useFocusTrap } from "../hooks/useFocusTrap"
 
 interface CertificateModalProps {
   isOpen: boolean
@@ -12,6 +13,7 @@ interface CertificateModalProps {
 }
 
 const CertificateModal: React.FC<CertificateModalProps> = ({ isOpen, onClose, certificateUrl, title }) => {
+  const dialogRef = useFocusTrap<HTMLDivElement>(isOpen)
   // Close modal on escape key press
   useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
@@ -46,6 +48,8 @@ const CertificateModal: React.FC<CertificateModalProps> = ({ isOpen, onClose, ce
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          ref={dialogRef}
+          tabIndex={-1}
           role="dialog"
           aria-modal="true"
           aria-label={`Certificate: ${title}`}

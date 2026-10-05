@@ -4,10 +4,11 @@ import { useAdminResource } from '../hooks';
 import type { TechStack } from '../types';
 import TechStackModal from './TechStackModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminErrorBanner from './AdminErrorBanner';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Code, Layers } from 'lucide-react';
 
 const TechStackTable: React.FC = () => {
-    const { items: techStacks, selected, loading, isRefreshing, fetchItems: fetchTechStacks, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<TechStack>('/tech-stacks');
+    const { items: techStacks, selected, loading, isRefreshing, error, clearError, fetchItems: fetchTechStacks, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<TechStack>('/tech-stacks');
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editTechStack, setEditTechStack] = useState<TechStack | null>(null);
@@ -101,6 +102,7 @@ const TechStackTable: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-900">
+            <AdminErrorBanner message={error} onDismiss={clearError} />
             {/* Background Elements */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
             

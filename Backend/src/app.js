@@ -48,7 +48,13 @@ export const createApp = () => {
   app.use('/api/tech-stacks', techStackRoutes);
   app.use('/api/timeline', timelineRoutes);
 
-  // Liveness + DB readiness with a hard timeout so probes never hang.
+  // Liveness only: no database access. Used by the keep-warm ping so it does not
+  // keep the (separately billed, auto-suspending) Neon compute awake.
+  app.get('/livez', (req, res) => {
+    res.set('Cache-Control', 'no-store').status(200).json({ status: 'ok' });
+  });
+
+  // Readiness: liveness + DB check with a hard timeout so probes never hang.
   app.get('/health', async (req, res) => {
     const started = Date.now();
     try {

@@ -74,8 +74,10 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              I'm not just a{" "}
-              <span className="text-indigo-400 font-bold">
+              I'm not just a
+              {/* Typed title on its own line: long titles no longer jump between lines (CLS) */}
+              <br />
+              <span className="text-indigo-400 font-bold whitespace-nowrap">
                 {displayText}
                 <span className="animate-pulse">|</span>
               </span>

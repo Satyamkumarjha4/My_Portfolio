@@ -44,6 +44,21 @@ describe('auth', () => {
     expect(me.status).toBe(200);
   });
 
+  it('rejects expired, wrong-secret and alg:none tokens', async () => {
+    const jwt = (await import('jsonwebtoken')).default;
+    const b64 = (o) => Buffer.from(JSON.stringify(o)).toString('base64url');
+    const tokens = {
+      expired: jwt.sign({ role: 'admin', exp: Math.floor(Date.now() / 1000) - 10 }, process.env.JWT_SECRET),
+      wrongSecret: jwt.sign({ role: 'admin' }, 'another-secret-another-secret-another-1'),
+      algNone: `${b64({ alg: 'none', typ: 'JWT' })}.${b64({ role: 'admin' })}.`,
+      wrongRole: jwt.sign({ role: 'viewer' }, process.env.JWT_SECRET),
+    };
+    for (const [name, t] of Object.entries(tokens)) {
+      const res = await request(app).get('/api/auth/me').set('Authorization', `Bearer ${t}`);
+      expect(res.status, name).toBe(401);
+    }
+  });
+
   it('rejects missing, garbage and old-style static tokens on write routes', async () => {
     const writes = [
       ['post', '/api/projects'],
@@ -131,6 +146,15 @@ describe('validation', () => {
     expect((await h({ ...base, proficiency: 101 })).status).toBe(400);
   });
 
+  it('rejects invalid achievement dates', async () => {
+    const token = await login();
+    const res = await request(app)
+      .post('/api/achievements')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ title: 't', date: 'not-a-date', overview: 'o' });
+    expect(res.status).toBe(400);
+  });
+
   it('derives a sortable startDate for timeline items', async () => {
     const token = await login();
     const res = await request(app)
@@ -156,6 +180,8 @@ describe('feedback', () => {
   it.each([
     [{ ...good, rating: 6 }],
     [{ ...good, rating: 2.5 }],
+    [{ ...good, rating: true }],
+    [{ ...good, rating: '' }],
     [{ ...good, email: 'nope' }],
     [{ ...good, remark: 'x'.repeat(2001) }],
     [{ name: 'a' }],
@@ -194,6 +220,12 @@ describe('errors', () => {
 });
 
 describe('infrastructure', () => {
+  it('livez answers without touching the database', async () => {
+    const res = await request(app).get('/livez');
+    expect(res.status).toBe(200);
+    expect(prismaMock.$queryRaw).not.toHaveBeenCalled();
+  });
+
   it('health reports db up and down', async () => {
     expect((await request(app).get('/health')).body.db).toBe('up');
     prismaMock.$queryRaw.mockRejectedValueOnce(new Error('down'));

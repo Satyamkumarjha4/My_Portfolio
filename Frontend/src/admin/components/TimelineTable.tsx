@@ -4,10 +4,11 @@ import { useAdminResource } from '../hooks';
 import type { TimelineItem } from '../types';
 import TimelineModal from './TimelineModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminErrorBanner from './AdminErrorBanner';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Calendar, BookOpen, Trophy, Briefcase, Clock } from 'lucide-react';
 
 const TimelineTable: React.FC = () => {
-    const { items: timelineItems, selected, loading, isRefreshing, fetchItems: fetchTimelineItems, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<TimelineItem>('/timeline');
+    const { items: timelineItems, selected, loading, isRefreshing, error, clearError, fetchItems: fetchTimelineItems, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<TimelineItem>('/timeline');
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editItem, setEditItem] = useState<TimelineItem | null>(null);
@@ -83,6 +84,7 @@ const TimelineTable: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-900">
+            <AdminErrorBanner message={error} onDismiss={clearError} />
             {/* Background Elements */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
             

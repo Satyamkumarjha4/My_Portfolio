@@ -1,4 +1,5 @@
 import { useEscapeKey } from '../../ui/hooks/useEscapeKey';
+import { useFocusTrap } from '../../ui/hooks/useFocusTrap';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { adminApi } from '../../ui/utils/axios';
@@ -14,6 +15,7 @@ interface Props {
 
 const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess }) => {
     useEscapeKey(onClose);
+    const dialogRef = useFocusTrap<HTMLDivElement>();
     const [form, setForm] = useState({
         name: '',
         category: 'Languages',
@@ -71,8 +73,8 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
             newErrors.iconName = 'Icon name is required';
         }
 
-        if (form.proficiency < 0 || form.proficiency > 100) {
-            newErrors.proficiency = 'Proficiency must be between 0 and 100';
+        if (form.proficiency < 1 || form.proficiency > 100) {
+            newErrors.proficiency = 'Proficiency must be between 1 and 100';
         }
 
         setErrors(newErrors);
@@ -155,6 +157,8 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
     return (
         <AnimatePresence>
             <motion.div
+                ref={dialogRef}
+                tabIndex={-1}
                 role="dialog"
                 aria-modal="true"
                 className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -246,7 +250,7 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
                                     <input
                                         type="range"
                                         name="proficiency"
-                                        min="0"
+                                        min="1"
                                         max="100"
                                         step="5"
                                         value={form.proficiency}

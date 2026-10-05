@@ -24,6 +24,14 @@ const imageRef = z
 
 const stringList = z.array(text(60)).max(50);
 
+// Integers from JSON numbers or numeric strings (form inputs). Unlike
+// z.coerce.number(), booleans/arrays are rejected instead of becoming 1/0.
+const intInput = (min, max) =>
+  z.preprocess(
+    (v) => (typeof v === 'string' && v.trim() !== '' ? Number(v) : v),
+    z.number().int().min(min).max(max)
+  );
+
 export const projectSchema = z.object({
   title: text(200),
   description: text(5000),
@@ -47,7 +55,7 @@ export const achievementSchema = z.object({
 export const feedbackSchema = z.object({
   email: z.string().trim().email().max(254),
   name: text(100),
-  rating: z.coerce.number().int().min(1).max(5),
+  rating: intInput(1, 5),
   remark: z.string().trim().max(2000).nullish(),
 });
 
@@ -55,7 +63,7 @@ export const TECH_CATEGORIES = ['Languages', 'Frontend', 'Python_Frameworks', 'D
 export const techStackSchema = z.object({
   name: text(100),
   category: z.enum(TECH_CATEGORIES),
-  proficiency: z.coerce.number().int().min(1).max(100),
+  proficiency: intInput(1, 100),
   description: text(1000),
   iconName: text(100),
 });

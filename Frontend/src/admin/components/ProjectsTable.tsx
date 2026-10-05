@@ -4,10 +4,11 @@ import { useAdminResource } from '../hooks';
 import type { Project } from '../types';
 import ProjectModal from './ProjectModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminErrorBanner from './AdminErrorBanner';
 import { Plus, Edit3, Trash2, ExternalLink, Github, Search, RefreshCw, Eye, EyeOff } from 'lucide-react';
 
 const ProjectsTable: React.FC = () => {
-    const { items: projects, selected, loading, isRefreshing, fetchItems: fetchProjects, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Project>('/projects');
+    const { items: projects, selected, loading, isRefreshing, error, clearError, fetchItems: fetchProjects, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Project>('/projects');
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editProject, setEditProject] = useState<Project | null>(null);
@@ -41,6 +42,7 @@ const ProjectsTable: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-900">
+            <AdminErrorBanner message={error} onDismiss={clearError} />
             {/* Background Elements */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
             
