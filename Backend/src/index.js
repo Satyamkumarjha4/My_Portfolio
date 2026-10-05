@@ -3,6 +3,7 @@ dotenv.config();
 
 const { default: app } = await import('./app.js');
 const { default: prisma } = await import('./config/prisma.js');
+const { default: logger } = await import('./utils/logger.js');
 
 const required = ['DATABASE_URL', 'JWT_SECRET', 'ADMIN_ID', 'ADMIN_PASSWORD_HASH'];
 const missing = required.filter((k) => !process.env[k]);
@@ -28,5 +29,6 @@ const shutdown = (signal) => {
   });
   setTimeout(() => process.exit(1), 10_000).unref();
 };
+process.on('unhandledRejection', (err) => logger.error({ err }, 'Unhandled rejection'));
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));

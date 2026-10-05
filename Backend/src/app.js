@@ -8,6 +8,9 @@ import feedbackRoutes from './routes/feedbackRoutes.js';
 import techStackRoutes from './routes/techStackRoutes.js';
 import timelineRoutes from './routes/timelineRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import prisma from './config/prisma.js';
+import { notFound, errorHandler } from './middleware/errorHandler.js';
+import logger from './utils/logger.js';
 
 // Origins come from CORS_ORIGINS (comma separated). Trailing slashes are
 // stripped because browsers send the Origin header without one.
@@ -31,7 +34,7 @@ export const createApp = () => {
     cors({
       origin: allowed,
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
     })
   );
   app.use(compression());
@@ -44,9 +47,29 @@ export const createApp = () => {
   app.use('/api/tech-stacks', techStackRoutes);
   app.use('/api/timeline', timelineRoutes);
 
-  app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'ok', timestamp: new Date() });
+  // Liveness + DB readiness with a hard timeout so probes never hang.
+  app.get('/health', async (req, res) => {
+    const started = Date.now();
+    try {
+      await Promise.race([
+        prisma.$queryRaw`SELECT 1`,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('db timeout')), 3000).unref()),
+      ]);
+      res.set('Cache-Control', 'no-store').status(200).json({
+        status: 'ok',
+        db: 'up',
+        dbLatencyMs: Date.now() - started,
+        uptimeSeconds: Math.round(process.uptime()),
+        timestamp: new Date(),
+      });
+    } catch (err) {
+      logger.error({ err }, 'Health check failed');
+      res.set('Cache-Control', 'no-store').status(503).json({ status: 'degraded', db: 'down', timestamp: new Date() });
+    }
   });
+
+  app.use(notFound);
+  app.use(errorHandler);
 
   return app;
 };
