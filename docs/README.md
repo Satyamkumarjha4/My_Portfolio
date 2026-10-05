@@ -7,6 +7,7 @@
 | [security.md](security.md) | Threat model, auth design, what was fixed and what remains |
 | [development.md](development.md) | Local setup, environment variables, scripts, migrations, seeding |
 | [deployment.md](deployment.md) | Rotating secrets, deploying API and frontend, CI |
+| [../scripts/](../scripts/) | `smoke-test.sh` (production API checks), `cold-warm.sh` (Render latency), `measure-prod.py` (real-browser performance) |
 | [testing.md](testing.md) | Test strategy and how to run the suites |
 | [performance.md](performance.md) | Before/after Lighthouse and real-browser measurements, with caveats |
 | [audit-report.md](audit-report.md) | The original technical audit, with the status of every backlog item |
