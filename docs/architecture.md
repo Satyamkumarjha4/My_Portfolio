@@ -70,3 +70,12 @@ src/
   rendering admin routes, and the axios interceptor clears it and redirects on any 401.
 - **Rendering**: client-side only. Per-route titles/descriptions are set by
   `usePageMeta`; static OG/JSON-LD tags live in `index.html`.
+
+## "Under the hood" page (`/status`)
+
+Shows the backend instead of describing it: a live `/health` widget (DB status,
+DB latency, browser round trip, uptime, re-checked every 30 s while the tab is
+visible), the architecture diagram, an API explorer that calls the real public
+endpoints and shows status, timing, size and caching headers, and short
+engineering-decision summaries linking to these docs. Projects can also carry an
+optional plain-text `caseStudy`, rendered safely (no HTML injection) under the project card.

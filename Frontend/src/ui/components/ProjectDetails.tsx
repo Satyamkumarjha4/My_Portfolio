@@ -2,6 +2,7 @@ import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { ProjectImage } from "./ProjectImage"
 import { ProjectInfo } from "./ProjectInfo"
+import { CaseStudy } from "./CaseStudy"
 
 interface ProjectDetailsProps {
   title: string
@@ -12,6 +13,7 @@ interface ProjectDetailsProps {
   githubUrl: string
   demoUrl: string
   imageOnRight?: boolean
+  caseStudy?: string | null
 }
 
 export function ProjectDetails({
@@ -23,6 +25,7 @@ export function ProjectDetails({
   githubUrl,
   demoUrl,
   imageOnRight = false,
+  caseStudy,
 }: ProjectDetailsProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.3 })
@@ -57,6 +60,7 @@ export function ProjectDetails({
           </>
         )}
       </div>
+      {caseStudy && <CaseStudy text={caseStudy} title={title} />}
     </motion.div>
   )
 }

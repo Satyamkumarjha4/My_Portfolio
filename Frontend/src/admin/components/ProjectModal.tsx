@@ -23,6 +23,7 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
         githubUrl: '',
         demoUrl: '',
         imageOnRight: false,
+        caseStudy: '',
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -42,6 +43,7 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
                 githubUrl: existingProject.githubUrl || '',
                 demoUrl: existingProject.demoUrl || '',
                 imageOnRight: existingProject.imageOnRight || false,
+                caseStudy: existingProject.caseStudy || '',
             });
         } else {
             // Reset form for new project
@@ -54,6 +56,7 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
                 githubUrl: '',
                 demoUrl: '',
                 imageOnRight: false,
+                caseStudy: '',
             });
         }
         setErrors({});
@@ -127,6 +130,7 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
             githubUrl: form.githubUrl.trim() || null,
             demoUrl: form.demoUrl.trim() || null,
             imageOnRight: form.imageOnRight,
+            caseStudy: form.caseStudy.trim() || null,
         };
 
 
@@ -230,6 +234,23 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
                             {errors.description && (
                                 <p className="text-red-400 text-sm mt-1">{errors.description}</p>
                             )}
+                        </div>
+
+                        {/* Case study */}
+                        <div>
+                            <label className="block text-sm font-medium text-white mb-2">
+                                Case study (optional)
+                            </label>
+                            <textarea
+                                name="caseStudy"
+                                value={form.caseStudy}
+                                onChange={handleChange}
+                                placeholder={"## Problem\n\n## Key decisions\n\n## Trade-offs\n\n## Result"}
+                                rows={8}
+                                maxLength={20000}
+                                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500"
+                            />
+                            <p className="text-gray-400 text-xs mt-1">Blank line = new paragraph. Start a line with "## " for a heading.</p>
                         </div>
 
                         {/* Tech Stack */}

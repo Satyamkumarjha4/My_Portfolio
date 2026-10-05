@@ -9,6 +9,7 @@ export interface Project {
     demoUrl: string;
     imageOnRight: boolean;
     sortOrder?: number;
+    caseStudy?: string | null;
 }
 
 export interface Achievement {

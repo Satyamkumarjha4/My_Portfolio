@@ -20,6 +20,7 @@ interface Project {
   githubUrl: string;
   demoUrl: string;
   imageOnRight: boolean;
+  caseStudy?: string | null;
 }
 
 
@@ -94,6 +95,7 @@ const Projects: React.FC = () => {
             githubUrl={project.githubUrl}
             demoUrl={project.demoUrl}
             imageOnRight={project.imageOnRight}
+            caseStudy={project.caseStudy}
             
           />
         ))}

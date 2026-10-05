@@ -44,7 +44,7 @@ Ordering: projects `sortOrder, title`; achievements `date desc`; tech-stacks `ca
 
 | Resource | Fields |
 |---|---|
-| project | `title` (<=200), `description` (<=5000), `techStack[]`, `tags[]` (<=50 items of <=60 chars), `imageUrl` (http(s) URL or `/path`), `githubUrl`, `demoUrl` (http(s)), `imageOnRight` (boolean), `sortOrder` (int, optional) |
+| project | `title` (<=200), `description` (<=5000), `techStack[]`, `tags[]` (<=50 items of <=60 chars), `imageUrl` (http(s) URL or `/path`), `githubUrl`, `demoUrl` (http(s)), `imageOnRight` (boolean), `sortOrder` (int, optional), `caseStudy` (<=20000 chars, optional; blank line = paragraph, `## ` = heading) |
 | achievement | `title`, `date` (ISO date), `overview`, `certificate` (http(s) URL, `/path` or null) |
 | tech-stack | `name`, `category` (`Languages`, `Frontend`, `Python_Frameworks`, `Databases`, `Data_Science`, `Tools`), `proficiency` (int 1-100), `description`, `iconName` |
 | timeline | `title`, `date` (label, e.g. `2022 - 2026`), `description`, `type` (`EDUCATION`, `HACKATHON`, `WORK`), `remarks` (optional), `startDate` (optional; derived from the first 4-digit year in `date` when omitted) |

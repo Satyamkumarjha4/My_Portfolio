@@ -35,6 +35,7 @@ export const createApp = () => {
       origin: allowed,
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
+      exposedHeaders: ['ETag'],
     })
   );
   app.use(compression());

@@ -9,6 +9,7 @@ const About = lazy(() => import('./ui/features/About'));
 const Projects = lazy(() => import('./ui/features/Projects'));
 const Contact = lazy(() => import('./ui/features/Contact'));
 const Info = lazy(() => import('./ui/features/Info'));
+const Status = lazy(() => import('./ui/features/Status'));
 const Admin = lazy(() => import('./admin/Page/Admin'));
 
 const ScrollToTop: React.FC = () => {
@@ -36,6 +37,7 @@ const App: React.FC = () => {
                     <Route path="/projects" element={<Projects />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/info" element={<Info />} />
+                    <Route path="/status" element={<Status />} />
                     <Route path="/admin/*" element={<Admin />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

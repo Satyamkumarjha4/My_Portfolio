@@ -107,6 +107,14 @@ describe('validation', () => {
     expect(bad.status).toBe(400);
   });
 
+  it('accepts an optional case study and rejects oversized ones', async () => {
+    const token = await login();
+    const h = (b) => request(app).post('/api/projects').set('Authorization', `Bearer ${token}`).send(b);
+    expect((await h({ ...validProject, caseStudy: '## Problem\n\nText' })).status).toBe(201);
+    expect((await h({ ...validProject, caseStudy: null })).status).toBe(201);
+    expect((await h({ ...validProject, caseStudy: 'x'.repeat(20001) })).status).toBe(400);
+  });
+
   it('rejects empty update bodies', async () => {
     const token = await login();
     const res = await request(app).put('/api/projects/1').set('Authorization', `Bearer ${token}`).send({ nope: 1 });

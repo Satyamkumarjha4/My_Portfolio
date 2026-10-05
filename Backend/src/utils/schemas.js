@@ -34,6 +34,7 @@ export const projectSchema = z.object({
   demoUrl: httpUrl,
   imageOnRight: z.boolean(),
   sortOrder: z.number().int().min(0).max(10000).optional(),
+  caseStudy: z.string().trim().max(20000).nullish(),
 });
 
 export const achievementSchema = z.object({

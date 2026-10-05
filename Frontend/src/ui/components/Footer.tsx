@@ -129,7 +129,7 @@ const Footer: React.FC = () => {
           <motion.div variants={itemVariants}>
             <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              {["Home", "About", "Projects", "Contact"].map((item, index) => (
+              {["Home", "About", "Projects", "Contact", "Status"].map((item, index) => (
                 <motion.li
                     key={item}
                     initial={{ opacity: 0, x: -20 }}
