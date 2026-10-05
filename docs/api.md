@@ -59,5 +59,8 @@ Ordering: projects `sortOrder, title`; achievements `date desc`; tech-stacks `ca
 
 ## Health
 
+`GET /livez` -> `200 { status: "ok" }`. Process liveness only, no database access (used by keep-warm).
+
+
 `GET /health` -> `200 { status: "ok", db: "up", dbLatencyMs, uptimeSeconds, timestamp }`
 or `503 { status: "degraded", db: "down" }`. The DB probe has a 3 s timeout. Never cached.

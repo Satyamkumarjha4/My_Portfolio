@@ -59,12 +59,12 @@ into the public JS bundle.
 | FE-007 | P1 | Code splitting | Done (admin ~96 kB loaded on demand; small public pages deliberately not split, see performance.md) |
 | FE-008 | P1 | SEO baseline | Done (meta, OG, JSON-LD, robots, sitemap, per-route titles) |
 | FE-009 | P1 | Timeline scroll logic | Done |
-| FE-010 | P1 | Core accessibility | Mostly done: dialog semantics + Escape, labelled login, keyboard star rating, focus ring, reduced motion. **Open:** full focus trapping in modals; a full screen-reader pass |
+| FE-010 | P1 | Core accessibility | Done: dialog semantics, focus moves in / is trapped / returns to the opener (tested), Escape, labelled login, keyboard star rating, focus ring, reduced motion. **Open (P3):** a full screen-reader pass |
 | FE-011 | P1 | Single source for projects | Done |
 | FE-012 | P2 | De-duplicate admin tables/modals | **Partial**: shared hook, types and error handling (~270 lines removed). The full config-driven table/modal rewrite was not done: each table has bespoke rendering and there is no visual regression safety net |
 | FE-013 | P2 | Unused deps and debug logs | Done (`react-icons` kept: it is used by `TechCard`) |
 | FE-014 | P2 | Simplify Hero/Achievements state | Done |
-| FE-015 | P2 | Loading/empty/error states | Done for public pages. **Open:** admin delete failures only log to the console |
+| FE-015 | P2 | Loading/empty/error states | Done, including visible admin load/delete errors with partial-failure reporting |
 | FE-016 | P2 | Safe URLs on render | Done |
 | FE-017 | P3 | Misc cleanup | Done |
 | FE-018 | P3 | Frontend tests | Done (8 tests) |
@@ -77,8 +77,17 @@ into the public JS bundle.
 | FS-002 | P1 | CI pipeline | Done (`.github/workflows/ci.yml`) |
 | FS-003 | P1 | Docs and `.env.example` | Done |
 | FS-004 | P2 | Request logging / uptime | Logging done; point an uptime monitor at `/health` yourself |
-| FS-005 | P2 | API cold starts | **Open**: measure first (host unknown) |
+| FS-005 | P2 | API cold starts | Done: measured 55 s cold vs ~0.4 s warm; DB-free `/livez` keep-warm ping + 75 s client timeout with a "waking up" message |
 | FS-006 | P3 | Architecture docs + differentiation | Done: this folder, ADRs, `/status` page, project case studies |
+
+## Release review fixes (found during final verification)
+
+- 15 s client timeout turned a 55 s cold start into an error state -> 75 s + explanatory loading text
+- Closing any admin modal re-fetched with a full-page spinner, unmounting the table
+  (focus could not return; visible flash) -> spinner only on initial load (regression-tested)
+- `rating: true` was coerced to 1 -> booleans rejected for rating/proficiency
+- Admin form allowed proficiency 0 while the API requires 1-100 -> aligned
+- Hero typewriter word jumped between lines (CLS 0.127 on mobile) -> own line (0.036)
 
 ## Differentiation features added
 

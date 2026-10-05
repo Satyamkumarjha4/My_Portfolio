@@ -18,7 +18,10 @@ emails), and the admin credential. No payments, no user accounts.
   which needs `SameSite=None` and is blocked by Safari/Firefox third-party cookie
   rules. XSS exposure is limited by React escaping, URL validation (`safeUrl`,
   server-side http(s)-only schemas) and security headers. See [decisions/0001](decisions/0001-jwt-in-session-storage.md).
-- Login is limited to 10 attempts / 15 min / IP.
+- Login is limited to 10 attempts / 15 min / IP. Successful logins are counted too;
+  with 2-hour tokens a legitimate admin will not hit this, so it was left as is.
+- Logout clears the token in the browser. Tokens are stateless, so a copied token
+  stays valid until it expires (max 2 h). Rotating `JWT_SECRET` revokes all tokens.
 
 ## Controls in place
 

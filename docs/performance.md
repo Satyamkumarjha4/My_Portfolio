@@ -36,3 +36,39 @@ deployed site (Render cold starts will dominate there).
 - The first project image is `loading="eager" fetchPriority="high"`; lazy-loading
   an above-the-fold image delays LCP.
 - The hero typewriter line reserves its height, which removed most of the CLS.
+
+## Release verification (2026-10-05)
+
+Real Chrome, mobile viewport, 4x CPU slowdown, 150 ms RTT / 1.6 Mbps, cache
+disabled, median of 5. **Before** = the live production site (old code on
+Vercel + Render, API warm). **After** = this branch's production build served
+locally with gzip, calling the new API locally against the production database
+(the branch is not deployed yet). TTFB is therefore not comparable between the
+two columns; the HTML is static either way, so the branch does not change it.
+
+| Metric | Home before | Home after | Projects before | Projects after |
+|---|---:|---:|---:|---:|
+| LCP | 3748 ms | 3112 ms | 4200 ms | 3812 ms |
+| CLS | 0.707 | 0.036 | 0.002 | 0.006 |
+| INP (click) | 40 ms | 40 ms | 40 ms | 40 ms |
+| TTFB (document) | 1069 ms (prod) | 968 ms (local) | 1295 ms (prod) | 966 ms (local) |
+| Transferred | 1715 KiB | 346 KiB | 870 KiB | 343 KiB |
+| Blocking time | 0 ms | 0 ms | 33 ms | 49 ms |
+
+LCP element: Home = hero `<h1>` (text, no resource), Projects = hero `<p>` (text).
+The navbar logo (`S-*.png`, ~6 kB) is always the *first* candidate (~2.5 s) and is
+then superseded by the text. The hero text fades in with framer-motion, and text
+painted at opacity 0 is not an LCP candidate, so which element is "last" depends on
+animation timing. In Lighthouse's run the logo ended up as the final candidate and
+its simulation charged it the JS-bundle -> PNG request chain. Real measurements on
+both builds end on the hero text and LCP improved, so nothing was changed for
+Lighthouse's sake. The remaining LCP cost is the entrance animation itself (a design choice).
+
+Backend (live Render, measured from India):
+
+| State | TTFB | Total |
+|---|---:|---:|
+| Cold (after idle) | 55.4 s | 55.4 s |
+| Warm (median of 5) | 0.38 s | 0.38 s |
+
+First DB query after Neon auto-suspend: ~2.3 s (observed once via `/health`).
