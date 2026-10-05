@@ -1,9 +1,10 @@
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Filter, ChevronDown, ChevronUp } from "lucide-react"
 import AchievementCard, { type AchievementType } from "./AchievementCards"
-import { axiosInstance } from "../utils/axios.ts"
+import { useApi } from "../hooks/useApi"
+import { ErrorBlock, EmptyBlock, LoadingBlock } from "./AsyncState"
 
 // achievements data
 
@@ -18,46 +19,12 @@ const AchievementGrid: React.FC<AchievementGridProps> = ({
   subtitle = "A showcase of my professional accomplishments and milestones",
 }) => {
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest")
-  const [achievement, setAchievements] = useState<AchievementType[]>([])
-  const [isFiltering, setIsFiltering] = useState(false)
-  const [displayedAchievements, setDisplayedAchievements] = useState<AchievementType[]>([])
-  
-  useEffect(() => {
-    const fetchAchievements = async () => {
-      const response = await axiosInstance.get("/achievements")
-      setAchievements(response.data)
-    }
-    fetchAchievements()
-  }, [])
-  // Sort achievements whenever sortOrder changes
-  useEffect(() => {
-    setIsFiltering(true)
-    
-    // Use setTimeout to create a visual transition effect
-    const timer = setTimeout(() => {
-      const sorted = [...achievement].sort((a, b) => {
-        const dateA = new Date(a.date).getTime()
-        const dateB = new Date(b.date).getTime()
-        return sortOrder === "newest" ? dateB - dateA : dateA - dateB
-      })
-      
-      setDisplayedAchievements(sorted)
-      setIsFiltering(false)
-    }, 300)
-    
-    return () => clearTimeout(timer)
-  }, [sortOrder, achievement])
+  const { data, loading, error, refetch } = useApi<AchievementType[]>("/achievements")
 
-  // Initialize displayedAchievements on first render
-  useEffect(() => {
-    const sorted = [...achievement].sort((a, b) => {
-      const dateA = new Date(a.date).getTime()
-      const dateB = new Date(b.date).getTime()
-      return sortOrder === "newest" ? dateB - dateA : dateA - dateB
-    })
-    
-    setDisplayedAchievements(sorted)
-  }, [])
+  const displayedAchievements = useMemo(() => {
+    const direction = sortOrder === "newest" ? -1 : 1
+    return [...(data ?? [])].sort((a, b) => direction * (new Date(a.date).getTime() - new Date(b.date).getTime()))
+  }, [data, sortOrder])
 
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "newest" ? "oldest" : "newest")
@@ -134,7 +101,6 @@ const AchievementGrid: React.FC<AchievementGridProps> = ({
               onClick={toggleSortOrder}
               whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(99, 102, 241, 0.3)" }}
               whileTap={{ scale: 0.95 }}
-              disabled={isFiltering}
             >
               <Filter className="h-4 w-4" />
               Sort by: {sortOrder === "newest" ? "Newest First" : "Oldest First"}
@@ -148,7 +114,7 @@ const AchievementGrid: React.FC<AchievementGridProps> = ({
         </motion.div>
 
         <AnimatePresence mode="wait">
-          {!isFiltering && (
+          {displayedAchievements.length > 0 && (
             <motion.div
               key={sortOrder}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -166,15 +132,9 @@ const AchievementGrid: React.FC<AchievementGridProps> = ({
           )}
         </AnimatePresence>
         
-        {isFiltering && (
-          <div className="flex justify-center items-center py-20">
-            <motion.div 
-              className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-        )}
+        {loading && <LoadingBlock label="Loading achievements..." />}
+        {error && !data && <ErrorBlock message="Couldn't load achievements." onRetry={refetch} />}
+        {!loading && !error && displayedAchievements.length === 0 && <EmptyBlock message="No achievements yet." />}
       </div>
     </div>
   )

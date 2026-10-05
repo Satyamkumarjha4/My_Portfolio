@@ -3,9 +3,16 @@ import { useEffect } from "react"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import ProjectCard, { type ProjectCardProps } from "./ProjectCard"
+import { useApi } from "../hooks/useApi"
+import { ErrorBlock, LoadingBlock } from "./AsyncState"
 
-// Interface for our project data
-interface Project extends ProjectCardProps {}
+interface ApiProject {
+  id: string
+  title: string
+  description: string
+  imageUrl: string
+  techStack: string[]
+}
 
 const ProjectsShowcase: React.FC = () => {
   // Animation controls for staggered entrance
@@ -22,30 +29,13 @@ const ProjectsShowcase: React.FC = () => {
     }
   }, [controls, inView])
 
-  // Project data - you can modify these with your actual projects
-  const projects: Project[] = [
-    {
-      title: "Car Price Prediction Web App",
-      description:
-        "A data-driven web application that predicts used car prices using ensemble models and CatBoost, with a Flask backend.",
-      image: "/project_images/car_prediction.png",
-      technologies: ["Flask", "Python", "CatBoost", "Render","HTML", "CSS","JavaScript","Pandas","NumPy","Scikit-learn", "Kaggle", "Matplotlib","Seaborn"],
-    },
-    {
-      title: "Movie Buddy – Recommendation Engine",
-      description:
-        "Interactive movie recommender that uses NLP techniques and cosine similarity for personalized suggestions.",
-      image: "/project_images/movie_recomendation_system.png",
-      technologies: ["Streamlit", "Pandas", "Scikit-learn", "TMDb API","Python", "NLTK", "Kaggle"],
-    },
-    {
-      title: "Binge+ – Movie & Web Series Explorer",
-      description:
-        "A dynamic content discovery platform where users can explore movies and web series with filtering, search, and real-time metadata fetched from the MongoDB database.",
-      image: "/project_images/Binge.png",
-      technologies: ["HTML", "CSS", "JavaScript", "MongoDB", "Express.js", "Node.js", "Mongoose"],
-    },
-  ]
+  const { data, loading, error, refetch } = useApi<ApiProject[]>("/projects")
+  const projects: ProjectCardProps[] = (data ?? []).slice(0, 3).map((p) => ({
+    title: p.title,
+    description: p.description,
+    image: p.imageUrl,
+    technologies: p.techStack,
+  }))
 
   // Variants for staggered animations
   const containerVariants = {
@@ -108,6 +98,9 @@ const ProjectsShowcase: React.FC = () => {
           </motion.p>
         </motion.div>
 
+        {loading && <LoadingBlock label="Loading projects..." />}
+        {error && !data && <ErrorBlock message="Couldn't load projects." onRetry={refetch} />}
+
         {/* 3x2 Grid layout for projects with staggered animation */}
         <motion.div
           ref={ref}
@@ -116,9 +109,9 @@ const ProjectsShowcase: React.FC = () => {
           initial="hidden"
           animate={controls}
         >
-          {projects.map((project, index) => (
+          {projects.map((project) => (
             <motion.div
-              key={index}
+              key={project.title}
               variants={itemVariants}
               className="h-full"
               style={{

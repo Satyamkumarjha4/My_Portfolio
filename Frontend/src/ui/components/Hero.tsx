@@ -1,65 +1,47 @@
 import type React from "react"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Window from "./Window"
 import ProfileImage from "./ProfileImage"
 import { Link } from "react-router-dom"
 
 
-const Hero: React.FC = () => {
-  const titles = [
-    "AI Enthusiast",
-    "ML Engineer",
-    "Full-Stack Developer",
-    "Data Analyst",
-    "Problem Solver",
-    "React Developer",
-    "Software Engineer",
-    "Tech Explorer",
-    "Python Developer",
-  ]
+const TITLES = [
+  "AI Enthusiast",
+  "ML Engineer",
+  "Full-Stack Developer",
+  "Data Analyst",
+  "Problem Solver",
+  "React Developer",
+  "Software Engineer",
+  "Tech Explorer",
+  "Python Developer",
+]
 
+const Hero: React.FC = () => {
   const [displayText, setDisplayText] = useState("")
   const [titleIndex, setTitleIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [typingSpeed, setTypingSpeed] = useState(150)
   const [showWindow, setShowWindow] = useState(true)
 
-  const handleTyping = useCallback(() => {
-    const currentTitle = titles[titleIndex]
-    const shouldDelete = isDeleting
-
-    setDisplayText((prev) => {
-      if (!shouldDelete && prev === currentTitle) {
-        // Full word is typed, pause before deleting
-        setIsDeleting(true)
-        setTypingSpeed(750) // Pause at the end before deleting
-        return prev
-      }
-
-      if (shouldDelete && prev === "") {
-        // Finished deleting, move to next word
-        setIsDeleting(false)
-        setTypingSpeed(100) // Reset typing speed
-        setTitleIndex((titleIndex + 1) % titles.length)
-        return ""
-      }
-
-      if (shouldDelete) {
-        // Delete character
-        setTypingSpeed(50) // Delete faster than typing
-        return prev.substring(0, prev.length - 1)
-      }
-
-      // Add character
-      return currentTitle.substring(0, prev.length + 1)
-    })
-  }, [titleIndex, isDeleting, titles])
-
+  // One timer per tick, driven by derived state. No setState inside updaters.
   useEffect(() => {
-    const timer = setTimeout(handleTyping, typingSpeed)
+    const current = TITLES[titleIndex]
+    const finishedTyping = !isDeleting && displayText === current
+    const finishedDeleting = isDeleting && displayText === ""
+    const delay = finishedTyping ? 750 : isDeleting ? 50 : 100
+
+    const timer = setTimeout(() => {
+      if (finishedTyping) setIsDeleting(true)
+      else if (finishedDeleting) {
+        setIsDeleting(false)
+        setTitleIndex((i) => (i + 1) % TITLES.length)
+      } else {
+        setDisplayText(isDeleting ? displayText.slice(0, -1) : current.slice(0, displayText.length + 1))
+      }
+    }, delay)
     return () => clearTimeout(timer)
-  }, [displayText, handleTyping, typingSpeed])
+  }, [displayText, isDeleting, titleIndex])
 
   const toggleDisplay = () => {
     setShowWindow((prev) => !prev)

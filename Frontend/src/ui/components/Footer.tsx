@@ -5,12 +5,10 @@ import { Github, Linkedin, Mail } from "lucide-react"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 
+const MotionLink = motion.create(Link)
+
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear()
-
-  const navigateTo = (path: string) => {
-    window.location.href = path
-  }
 
   // Animation variants
   const containerVariants = {
@@ -132,16 +130,15 @@ const Footer: React.FC = () => {
             <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Quick Links</h3>
             <ul className="space-y-2">
               {["Home", "About", "Projects", "Contact"].map((item, index) => (
-                <Link to={item === "Home" ? "/" : `/${item.toLowerCase()}`} key={index}>
-                  <motion.li
+                <motion.li
                     key={item}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: 0.1 * index }}
                   >
-                    <motion.a
-                      onClick={() => navigateTo(`/${item === "Home" ? "" : item}`)}
-                      className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center cursor-pointer"
+                    <MotionLink
+                      to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                      className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center"
                       variants={linkVariants}
                       whileHover="hover"
                     >
@@ -162,9 +159,8 @@ const Footer: React.FC = () => {
                         </motion.span>
                         {item}
                       </motion.span>
-                    </motion.a>
+                    </MotionLink>
                   </motion.li>
-                </Link>
               ))}
             </ul>
           </motion.div>

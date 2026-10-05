@@ -1,4 +1,5 @@
 import React from 'react';
+import { usePageMeta } from "../hooks/usePageMeta"
 
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
@@ -8,6 +9,7 @@ import ProjectsShowcase from '../components/ProjectGrid';
 
 
 const Home: React.FC = () => {
+  usePageMeta("", 'Satyam Kumar Jha - full-stack developer and AI/ML engineer. Projects built with React, Express, PostgreSQL and Python.')
     return (
         <>
             <Navbar />

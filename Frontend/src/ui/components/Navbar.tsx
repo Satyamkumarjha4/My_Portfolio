@@ -12,13 +12,8 @@ const Navbar: React.FC = () => {
   const pathname = location.pathname
   const [visible, setVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
-  const [activeTab, setActiveTab] = useState("/")
+  const activeTab = pathname
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  useEffect(() => {
-    // Set active tab based on current path
-    setActiveTab(pathname)
-  }, [pathname])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,12 +69,6 @@ const Navbar: React.FC = () => {
     }
   }, [mobileMenuOpen])
 
-  const navigateTo = (path: string) => {
-    window.location.href = path
-    setActiveTab(path)
-    setMobileMenuOpen(false)
-  }
-
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/about", label: "About" },
@@ -100,12 +89,15 @@ const Navbar: React.FC = () => {
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <motion.div className="w-12 md:w-16 p-2" whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.9 }}>
-          <img
-            src={Image || "/placeholder.svg"}
-            alt="logo"
-            className="rounded-full mt-4 cursor-pointer"
-            onClick={() => navigateTo("/")}
-          />
+          <Link to="/" aria-label="Home">
+            <img
+              src={Image}
+              alt="Satyam Kumar Jha logo"
+              width={64}
+              height={64}
+              className="rounded-full mt-4"
+            />
+          </Link>
         </motion.div>
 
         {/* Desktop Navigation - Hidden on mobile */}
@@ -116,16 +108,17 @@ const Navbar: React.FC = () => {
           transition={{ duration: 0.3 }}
         >
           <ul className="flex space-x-1 md:space-x-4 justify-center items-center justify-between h-full">
-            {navItems.map((item, index) => (
-              <Link to={item.label === "Home" ? "/" : `/${item.label.toLowerCase()}`} key={index}>
-                <motion.li
-                  key={item.path}
-                  onClick={() => navigateTo(item.path)}
-                  className={`text-white cursor-pointer text-sm md:text-lg p-1 md:p-2 relative ${
-                    activeTab === item.path ? "font-medium" : ""
-                  }`}
-                  whileHover={{ backgroundColor: "rgba(75, 85, 99, 0.5)", borderRadius: "9999px" }}
-                  whileTap={{ scale: 0.95 }}
+            {navItems.map((item) => (
+              <motion.li
+                key={item.path}
+                className={`text-white text-sm md:text-lg relative ${activeTab === item.path ? "font-medium" : ""}`}
+                whileHover={{ backgroundColor: "rgba(75, 85, 99, 0.5)", borderRadius: "9999px" }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link
+                  to={item.path}
+                  className="relative block p-1 md:p-2 focus-visible:outline-2 focus-visible:outline-indigo-400 rounded-full"
+                  aria-current={activeTab === item.path ? "page" : undefined}
                 >
                   {item.label}
                   {activeTab === item.path && (
@@ -137,8 +130,8 @@ const Navbar: React.FC = () => {
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
-                </motion.li>
-              </Link>
+                </Link>
+              </motion.li>
             ))}
           </ul>
         </motion.div>
@@ -200,12 +193,9 @@ const Navbar: React.FC = () => {
 
               <div className="flex flex-col items-center mt-8">
                 <motion.div className="w-16 h-16 mb-6" whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.9 }}>
-                  <img
-                    src={Image || "/placeholder.svg"}
-                    alt="logo"
-                    className="rounded-full cursor-pointer"
-                    onClick={() => navigateTo("/")}
-                  />
+                  <Link to="/" aria-label="Home" onClick={() => setMobileMenuOpen(false)}>
+                    <img src={Image} alt="Satyam Kumar Jha logo" width={64} height={64} className="rounded-full" />
+                  </Link>
                 </motion.div>
 
                 <nav className="w-full">
@@ -219,7 +209,7 @@ const Navbar: React.FC = () => {
                         transition={{ delay: index * 0.1 }}
                       >
                         <Link
-                          to={item.label === "Home" ? "/" : `/${item.label.toLowerCase()}`}
+                          to={item.path}
                           className="w-full"
                           onClick={() => setMobileMenuOpen(false)}
                         >
@@ -229,7 +219,6 @@ const Navbar: React.FC = () => {
                             } rounded-md transition-colors`}
                             whileHover={{ x: 5 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => navigateTo(item.path)}
                           >
                             {item.label}
                           </motion.div>

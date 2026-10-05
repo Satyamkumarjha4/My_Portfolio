@@ -10,7 +10,8 @@ export type TimelineItemType = {
   date: string
   description: string
   type: "EDUCATION" | "WORK" | "HACKATHON"
-  remarks?: string
+  remarks?: string | null
+  startDate?: string | null
 }
 
 // Icon component to display different icons based on the type

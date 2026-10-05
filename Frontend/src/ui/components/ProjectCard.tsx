@@ -134,6 +134,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, te
           <motion.img
             src={image}
             alt={title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover"
             style={{
               x: imageX,

@@ -35,6 +35,8 @@ export function ProjectImage({ imageUrl, githubUrl, title }: ProjectImageProps) 
         <motion.img
           src={imageUrl}
           alt={title}
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
           initial={{ filter: "blur(10px)" }}
           animate={{ filter: imageLoaded ? "blur(0px)" : "blur(10px)" }}

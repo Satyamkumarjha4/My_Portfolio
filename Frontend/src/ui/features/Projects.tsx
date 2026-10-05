@@ -1,14 +1,17 @@
-import  React, {useState} from "react"
+import type React from "react"
 import { motion, useScroll, useSpring } from "framer-motion"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import { ProjectDetails } from "../components/ProjectDetails"
 import ProjectsHero from "../components/ProjectHero"
 import ScrollToTopButton from "../components/ScrollToTopbutton"
-import {axiosInstance} from "../utils/axios.ts"
+import { useApi } from "../hooks/useApi"
+import { usePageMeta } from "../hooks/usePageMeta"
+import { EmptyBlock, ErrorBlock, LoadingBlock } from "../components/AsyncState"
 
 
 interface Project {
+  id: string;
   title: string;
   description: string;
   techStack: string[];
@@ -21,28 +24,14 @@ interface Project {
 
 
 const Projects: React.FC = () => {
-  const [projects, setProjects] = useState<Project[]>([])
+  usePageMeta("Projects", "Full-stack and machine learning projects by Satyam Kumar Jha, with source code and live demos.")
+  const { data: projects, loading, error, refetch } = useApi<Project[]>("/projects")
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
   })
-  
-  const dbprojects = async () => {
-    try {
-      const response = await axiosInstance.get("/projects");
-      console.log("Projects fetched successfully:", response.data);
-      setProjects(response.data);
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-      return [];
-    }
-  }
-
-  React.useEffect(() => {
-    dbprojects();
-  }, []);
 
   return (
     <motion.div
@@ -91,9 +80,12 @@ const Projects: React.FC = () => {
             A collection of my best work showcasing my technical skills and problem-solving abilities
           </motion.p>
         </motion.div>
-        {projects.map((project, index) => (
+        {loading && <LoadingBlock label="Loading projects..." />}
+        {error && !projects && <ErrorBlock message="Couldn't load projects." onRetry={refetch} />}
+        {projects && projects.length === 0 && <EmptyBlock message="No projects yet." />}
+        {projects?.map((project) => (
           <ProjectDetails
-            key={index}
+            key={project.id}
             title={project.title}
             description={project.description}
             techStack={project.techStack}
