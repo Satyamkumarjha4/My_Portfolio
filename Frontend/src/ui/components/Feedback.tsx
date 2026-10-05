@@ -28,6 +28,7 @@ const FeedbackForm: React.FC = () => {
 
   const [hoveredStar, setHoveredStar] = useState<number>(0)
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [errors, setErrors] = useState<FormErrors>({})
   const [focusedField, setFocusedField] = useState<string | null>(null)
 
@@ -83,35 +84,31 @@ const FeedbackForm: React.FC = () => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (): void => {
-    if (validateForm()) {
-      console.log("Form submitted:", formData)
-      // Here you would typically send the data to your backend
-      const sendData = async () => {
-        try {
-          await axiosInstance.post("/feedback", formData)
-        } catch (error) {
-          console.error("Error submitting feedback:", error)
-          setErrors({ ...errors, submit: "Failed to submit feedback. Please try again later." })
-          return
-        }
-      }
-      sendData()
+  const handleSubmit = async (): Promise<void> => {
+    if (!validateForm() || isSubmitting) return
 
-      // Show success message with animation
-      setIsSubmitted(true)
-
-      // Reset form after submission
-      setTimeout(() => {
-        setFormData({
-          email: "",
-          name: "",
-          rating: 0,
-          remark: "",
-        })
-        setIsSubmitted(false)
-      }, 3000)
+    setIsSubmitting(true)
+    try {
+      await axiosInstance.post("/feedback", formData)
+    } catch (error) {
+      const status = (error as { response?: { status?: number } }).response?.status
+      setErrors({
+        ...errors,
+        submit:
+          status === 429
+            ? "Too many submissions. Please try again later."
+            : "Failed to submit feedback. Please try again later.",
+      })
+      setIsSubmitting(false)
+      return
     }
+    setIsSubmitting(false)
+    setIsSubmitted(true)
+
+    setTimeout(() => {
+      setFormData({ email: "", name: "", rating: 0, remark: "" })
+      setIsSubmitted(false)
+    }, 3000)
   }
 
   const handleFocus = (fieldName: string) => {
@@ -294,6 +291,10 @@ const FeedbackForm: React.FC = () => {
                 </motion.div>
               </motion.div>
 
+              {errors.submit && (
+                <p role="alert" className="text-center text-sm text-red-400 mb-4">{errors.submit}</p>
+              )}
+
               <motion.div
                 className="flex justify-center"
                 initial={{ y: 20, opacity: 0 }}
@@ -302,11 +303,12 @@ const FeedbackForm: React.FC = () => {
               >
                 <motion.button
                   onClick={handleSubmit}
+                  disabled={isSubmitting}
                   whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(99, 102, 241, 0.5)" }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium py-3 px-8 rounded-full flex items-center transition duration-300"
                 >
-                  <span className="mr-2">Submit Feedback</span>
+                  <span className="mr-2">{isSubmitting ? "Sending..." : "Submit Feedback"}</span>
                   <Send size={20} />
                 </motion.button>
               </motion.div>

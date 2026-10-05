@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { safeAxiosInstance } from '../../ui/utils/axios';
+import { adminApi } from '../../ui/utils/axios';
 import ProjectModal from './ProjectModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { Plus, Edit3, Trash2, ExternalLink, Github, Search, RefreshCw, Eye, EyeOff } from 'lucide-react';
@@ -30,7 +30,7 @@ const ProjectsTable: React.FC = () => {
     const fetchProjects = async () => {
         try {
             setLoading(true);
-            const res = await safeAxiosInstance.get('/projects');
+            const res = await adminApi.get('/projects');
             setProjects(res.data);
         } catch (err) {
             console.error('Fetch error:', err);
@@ -65,7 +65,7 @@ const ProjectsTable: React.FC = () => {
 
     const handleDelete = async () => {
         try {
-            await Promise.all(selected.map(id => safeAxiosInstance.delete(`/projects/${id}`)));
+            await Promise.all(selected.map(id => adminApi.delete(`/projects/${id}`)));
             setSelected([]);
             fetchProjects();
         } catch (err) {

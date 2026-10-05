@@ -1,22 +1,10 @@
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
 import { motion } from 'framer-motion';
 import DashboardHeader from '../components/DashboardHeader';
 import FeatureCard from '../components/FeatureCard';
 import { Database, Clock, Code, Award, MessageSquare } from 'lucide-react';
 
 const AdminDashboard: React.FC = () => {
-    const location = useLocation();
-    const { authAccess } = location.state || { authAccess: null };
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (authAccess !== "LetsGoo" || authAccess === null) {
-            console.error("Unauthorized access");
-            navigate('/admin/login');
-        }
-    }, [authAccess, navigate]);
-
     const features = [
         {
             title: "Projects",

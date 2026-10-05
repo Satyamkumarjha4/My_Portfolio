@@ -41,10 +41,11 @@ export const createFeedback = async (req, res) => {
   
   try {
     const feedback = await prisma.feedback.create({ 
-      data: { 
-        ...req.body,
+      data: {
+        email: req.body.email,
+        name: req.body.name,
         rating: Number(req.body.rating),
-        createdAt: new Date() 
+        remark: req.body.remark || null,
       }
     });
     res.status(201).json(feedback);

@@ -75,7 +75,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
     };
 
     const handleClick = () => {
-        navigate(url, { state: { authAccess: "LetsGoo" } });
+        navigate(url);
     };
 
     return (

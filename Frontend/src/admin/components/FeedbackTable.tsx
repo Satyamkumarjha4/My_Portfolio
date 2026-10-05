@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { safeAxiosInstance } from '../../ui/utils/axios';
+import { adminApi } from '../../ui/utils/axios';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { Trash2, Search, RefreshCw, Mail, User, Calendar, Star } from 'lucide-react';
 
@@ -24,7 +24,7 @@ const FeedbackTable: React.FC = () => {
     const fetchFeedbacks = async () => {
         try {
             setLoading(true);
-            const res = await safeAxiosInstance.get('/feedback');
+            const res = await adminApi.get('/feedback');
             setFeedbacks(res.data);
         } catch (err) {
             console.error('Fetch error:', err);
@@ -59,7 +59,7 @@ const FeedbackTable: React.FC = () => {
 
     const handleDelete = async () => {
         try {
-            await Promise.all(selected.map(id => safeAxiosInstance.delete(`/feedback/${id}`)));
+            await Promise.all(selected.map(id => adminApi.delete(`/feedback/${id}`)));
             setSelected([]);
             fetchFeedbacks();
         } catch (err) {

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ChevronRight, Shield, User, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../../ui/utils/axios';
+import { setToken } from '../../ui/utils/auth';
 
 const AdminLogin: React.FC = () => {
     const [id, setId] = useState('');
@@ -9,33 +11,29 @@ const AdminLogin: React.FC = () => {
     
     const navigate = useNavigate();
 
-    const adminID = import.meta.env.VITE_ADMIN_ID;
-    const adminAccessKey = import.meta.env.VITE_ADMIN_ACCESS_KEY;
+    const [error, setError] = useState('');
 
-    const handleLogin = async () => {
-        setIsLoading(true);
-        
-        // Validation
+    const handleLogin = async (e?: React.FormEvent) => {
+        e?.preventDefault();
         if (!id || !accessKey) {
-            alert('Please enter both ID and Access Key');
-            setIsLoading(false);
+            setError('Please enter both ID and password');
             return;
         }
-
-        if (id !== adminID || accessKey !== adminAccessKey) {
-            alert('Invalid ID or Access Key');
+        setIsLoading(true);
+        setError('');
+        try {
+            const res = await axiosInstance.post('/auth/login', { id, password: accessKey });
+            setToken(res.data.token);
+            navigate('/admin', { replace: true });
+        } catch (err) {
+            const status = (err as { response?: { status?: number } }).response?.status;
+            setError(
+                status === 401 ? 'Invalid ID or password'
+                : status === 429 ? 'Too many attempts. Try again later.'
+                : 'Could not reach the server. Try again.'
+            );
+        } finally {
             setIsLoading(false);
-            return;
-        }
-
-        // Successful login
-        if (id === adminID && accessKey === adminAccessKey) {
-            // Simulate API call delay
-            setTimeout(() => {
-                setIsLoading(false);
-                // Navigate to admin dashboard
-                navigate('/admin',{state: { authAccess: "LetsGoo" }});
-            }, 2000);
         }
     };
 
@@ -92,16 +90,18 @@ const AdminLogin: React.FC = () => {
 
                     {/* Login Form */}
                     <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 shadow-2xl">
-                        <div className="space-y-6">
+                        <form className="space-y-6" onSubmit={handleLogin}>
                             {/* ID Field */}
                             <div className="space-y-2">
-                                <label className="flex items-center gap-2 text-gray-300 text-sm font-medium">
+                                <label htmlFor="admin-id" className="flex items-center gap-2 text-gray-300 text-sm font-medium">
                                     <User className="h-4 w-4 text-indigo-400" />
                                     Administrator ID
                                 </label>
                                 <div className="relative">
                                     <input
+                                        id="admin-id"
                                         type="text"
+                                        autoComplete="username"
                                         placeholder="Enter your admin ID"
                                         className="w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all duration-300"
                                         value={id}
@@ -115,14 +115,16 @@ const AdminLogin: React.FC = () => {
 
                             {/* Access Key Field */}
                             <div className="space-y-2">
-                                <label className="flex items-center gap-2 text-gray-300 text-sm font-medium">
+                                <label htmlFor="admin-password" className="flex items-center gap-2 text-gray-300 text-sm font-medium">
                                     <Lock className="h-4 w-4 text-indigo-400" />
-                                    Admin Access Key
+                                    Password
                                 </label>
                                 <div className="relative">
                                     <input
+                                        id="admin-password"
                                         type="password"
-                                        placeholder="Enter your access key"
+                                        autoComplete="current-password"
+                                        placeholder="Enter your password"
                                         className="w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all duration-300"
                                         value={accessKey}
                                         onChange={(e) => setAccessKey(e.target.value)}
@@ -133,10 +135,14 @@ const AdminLogin: React.FC = () => {
                                 </div>
                             </div>
 
+                            {error && (
+                                <p role="alert" className="text-sm text-red-400">{error}</p>
+                            )}
+
                             {/* Login Button */}
                             <button
+                                type="submit"
                                 className="w-full bg-gradient-to-r from-indigo-500 to-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-indigo-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
-                                onClick={handleLogin}
                                 disabled={isLoading || !id || !accessKey}
                             >
                                 {isLoading ? (
@@ -151,12 +157,12 @@ const AdminLogin: React.FC = () => {
                                     </>
                                 )}
                             </button>
-                        </div>
+                        </form>
 
                         {/* Additional Info */}
                         <div className="mt-6 pt-6 border-t border-gray-700/50">
                             <p className="text-gray-400 text-xs text-center">
-                                Authorized personnel only. All access attempts are logged.
+                                Authorized personnel only. Attempts are rate limited.
                             </p>
                         </div>
                     </div>
@@ -164,7 +170,7 @@ const AdminLogin: React.FC = () => {
                     {/* Footer */}
                     <div className="text-center mt-8">
                         <p className="text-gray-500 text-sm">
-                            Protected by enterprise-grade security
+                            Sessions are verified server-side
                         </p>
                     </div>
                 </div>

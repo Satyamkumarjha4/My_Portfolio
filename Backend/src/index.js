@@ -1,31 +1,32 @@
-import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors';
-import projectRoutes from './routes/projectRoutes.js';
-import achievementRoutes from './routes/achievementRoutes.js';
-import feedbackRoutes from './routes/feedbackRoutes.js';
-import techStackRoutes from './routes/techStackRoutes.js';
-import timelineRoutes from './routes/timelineRoutes.js';
-
 dotenv.config();
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+const { default: app } = await import('./app.js');
+const { default: prisma } = await import('./config/prisma.js');
 
-// API Routes
-app.use('/api/projects', projectRoutes);
-app.use('/api/achievements', achievementRoutes);
-app.use('/api/feedback', feedbackRoutes);
-app.use('/api/tech-stacks', techStackRoutes);
-app.use('/api/timeline', timelineRoutes);
+const required = ['DATABASE_URL', 'JWT_SECRET', 'ADMIN_ID', 'ADMIN_PASSWORD_HASH'];
+const missing = required.filter((k) => !process.env[k]);
+if (missing.length) {
+  console.error(`Missing required environment variables: ${missing.join(', ')}`);
+  process.exit(1);
+}
+if (process.env.JWT_SECRET.length < 32) {
+  console.error('JWT_SECRET must be at least 32 characters');
+  process.exit(1);
+}
 
-// Health Check
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date() });
-});
-
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
+const PORT = Number(process.env.PORT) || 3000;
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+const shutdown = (signal) => {
+  console.log(`${signal} received, shutting down`);
+  server.close(async () => {
+    await prisma.$disconnect();
+    process.exit(0);
+  });
+  setTimeout(() => process.exit(1), 10_000).unref();
+};
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
