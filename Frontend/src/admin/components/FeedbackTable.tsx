@@ -15,7 +15,7 @@ interface Feedback {
 }
 
 const FeedbackTable: React.FC = () => {
-    const { items: feedbacks, selected, loading, isRefreshing, error, clearError, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Feedback>('/feedback');
+    const { items: feedbacks, selected, loading, isRefreshing, error, clearError, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Feedback>('/feedback', { publishesToSite: false });
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 

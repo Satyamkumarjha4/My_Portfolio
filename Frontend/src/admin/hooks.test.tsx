@@ -15,7 +15,7 @@ vi.mock('../ui/utils/http', () => ({
   },
 }))
 
-import { useAdminResource } from './hooks'
+import { PUBLISH_NOTICE, useAdminResource } from './hooks'
 
 describe('useAdminResource delete', () => {
   it('shows a visible error on partial failure, keeps failed rows selected and re-syncs the list', async () => {
@@ -41,5 +41,47 @@ describe('useAdminResource delete', () => {
     expect(result.current.error).toBeNull()
     expect(result.current.selected).toEqual([])
     expect(result.current.items).toEqual([])
+  })
+})
+
+describe('useAdminResource publish notice', () => {
+  it('announces that the public site will update after a successful delete or save', async () => {
+    failing.clear()
+    rows = [{ id: 'x' }, { id: 'y' }]
+    const { result } = renderHook(() => useAdminResource<{ id: string }>('/projects'))
+    await waitFor(() => expect(result.current.items).toHaveLength(2))
+    expect(result.current.notice).toBeNull()
+
+    act(() => result.current.toggleAll(['x']))
+    await act(() => result.current.handleDelete())
+    expect(result.current.notice).toBe(PUBLISH_NOTICE)
+    expect(PUBLISH_NOTICE).toBe('Saved — the public site updates in about a minute.')
+
+    act(() => result.current.clearNotice())
+    expect(result.current.notice).toBeNull()
+    act(() => result.current.announceSaved())
+    expect(result.current.notice).toBe(PUBLISH_NOTICE)
+  })
+
+  it('does not announce when every delete failed', async () => {
+    failing.add('x')
+    rows = [{ id: 'x' }]
+    const { result } = renderHook(() => useAdminResource<{ id: string }>('/projects'))
+    await waitFor(() => expect(result.current.items).toHaveLength(1))
+    act(() => result.current.toggleAll(['x']))
+    await act(() => result.current.handleDelete())
+    expect(result.current.notice).toBeNull()
+    failing.clear()
+  })
+
+  it('never announces for data that is not on the public site (feedback)', async () => {
+    failing.clear()
+    rows = [{ id: 'f' }]
+    const { result } = renderHook(() => useAdminResource<{ id: string }>('/feedback', { publishesToSite: false }))
+    await waitFor(() => expect(result.current.items).toHaveLength(1))
+    act(() => result.current.toggleAll(['f']))
+    await act(() => result.current.handleDelete())
+    act(() => result.current.announceSaved())
+    expect(result.current.notice).toBeNull()
   })
 })

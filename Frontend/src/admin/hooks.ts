@@ -1,13 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { adminApi } from '../ui/utils/http';
 
+// Content edits are published by a frontend rebuild (the backend calls a deploy hook,
+// debounced), so the public site lags a little behind a save.
+export const PUBLISH_NOTICE = 'Saved — the public site updates in about a minute.';
+
 // Shared list/refresh/select/delete behaviour for the admin tables.
-export function useAdminResource<T extends { id: string }>(path: string) {
+// `publishesToSite: false` is for data that never appears on the public site (feedback).
+export function useAdminResource<T extends { id: string }>(path: string, { publishesToSite = true } = {}) {
     const [items, setItems] = useState<T[]>([]);
     const [selected, setSelected] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [notice, setNotice] = useState<string | null>(null);
 
     const fetchItems = useCallback(async () => {
         // `loading` is only true for the initial load (it starts true). Re-fetches after
@@ -41,6 +47,11 @@ export function useAdminResource<T extends { id: string }>(path: string) {
         setSelected(selected.length === visibleIds.length ? [] : visibleIds);
     };
 
+    // Called after a successful save or delete.
+    const announceSaved = useCallback(() => {
+        if (publishesToSite) setNotice(PUBLISH_NOTICE);
+    }, [publishesToSite]);
+
     // Deletes each selected item independently so one failure does not hide the
     // others, then re-syncs the list with the server either way.
     const handleDelete = async () => {
@@ -56,12 +67,14 @@ export function useAdminResource<T extends { id: string }>(path: string) {
                 getErrorMessage(firstFailure.reason, 'request failed')
             );
         }
+        if (ids.length > failedIds.length) announceSaved();
         await fetchItems();
     };
 
     const clearError = () => setError(null);
+    const clearNotice = useCallback(() => setNotice(null), []);
 
-    return { items, selected, setSelected, loading, isRefreshing, error, clearError, fetchItems, refreshData, handleCheckbox, toggleAll, handleDelete };
+    return { items, selected, setSelected, loading, isRefreshing, error, clearError, notice, clearNotice, announceSaved, fetchItems, refreshData, handleCheckbox, toggleAll, handleDelete };
 }
 
 // Extracts a human readable message from an API error without using `any`.

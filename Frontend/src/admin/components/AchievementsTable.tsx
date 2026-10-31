@@ -5,10 +5,11 @@ import type { Achievement } from '../types';
 import AchievementModal from './AchievementModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import AdminErrorBanner from './AdminErrorBanner';
+import AdminNoticeBanner from './AdminNoticeBanner';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Award, Calendar, ExternalLink, FileText } from 'lucide-react';
 
 const AchievementsTable: React.FC = () => {
-    const { items: achievements, selected, loading, isRefreshing, error, clearError, fetchItems: fetchAchievements, refreshData, handleCheckbox, toggleAll, handleDelete } = useAdminResource<Achievement>('/achievements');
+    const { items: achievements, selected, loading, isRefreshing, error, clearError, fetchItems: fetchAchievements, refreshData, handleCheckbox, toggleAll, handleDelete, notice, clearNotice, announceSaved } = useAdminResource<Achievement>('/achievements');
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editAchievement, setEditAchievement] = useState<Achievement | null>(null);
@@ -50,6 +51,7 @@ const AchievementsTable: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-900">
             <AdminErrorBanner message={error} onDismiss={clearError} />
+            <AdminNoticeBanner message={notice} onDismiss={clearNotice} />
             {/* Background Elements */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
             
@@ -275,6 +277,7 @@ const AchievementsTable: React.FC = () => {
                             fetchAchievements();
                         }}
                         existingAchievement={editAchievement}
+                        onSuccess={announceSaved}
                     />
                 )}
 
