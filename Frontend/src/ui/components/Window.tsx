@@ -8,19 +8,19 @@ const Window = () => {
     const code = `class SatyamJha:
     def __init__(self):
         self.name = "Satyam Kumar Jha"
-        self.role = "Python/Full-Stack/ Developer and ML Engineer"
-        self.skills = ["Python", "Flask", "Express", "React", "Scikit-learn", "Keras", "Sreamlit"]
+        self.role = "Python/Full-Stack Developer and ML Engineer"
+        self.skills = ["Python", "Flask", "Express", "React", "Scikit-learn", "Keras", "Streamlit"]
         self.education = ["B.Tech from Maharaja Agrasen Institute of Technology(GGSIPU)"]
     
     def say_hello(self):
-        return "Hello! I'm Satyam Kumar Jha, Thank you visiting my Porfolio."
+        return "Hello! I'm Satyam, Thank you for visiting my Portfolio."
     
     def get_contact(self):
         return {"email": "${site.email}", "phone": "${site.phone.display}", "github": "${site.github.handle}", "linkedin": "${site.linkedin.handle}"}
-        
-    # Initialize
-    satyam = SatyamJha()
-    print(satyam.say_hello())`;
+
+# Initialize
+satyam = SatyamJha()
+print(satyam.say_hello())`;
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(code);
@@ -122,7 +122,7 @@ const Window = () => {
             <br />
             {"        "}
             <span className="text-purple-400">return </span>
-            <span className="text-green-400">"Hello! I'm Satyam, Thank you for visiting my Porfolio."</span>
+            <span className="text-green-400">"Hello! I'm Satyam, Thank you for visiting my Portfolio."</span>
             <br />
             {"    "}
             <br />
@@ -174,7 +174,7 @@ const Window = () => {
             <span className="text-xs">Output:</span>
           </div>
           <div className="text-green-400 font-mono text-sm">
-            {">"} Hello! I'm Satyam, Thank you for visiting my Porfolio.
+            {">"} Hello! I'm Satyam, Thank you for visiting my Portfolio.
           </div>
         </div>
       </div>
