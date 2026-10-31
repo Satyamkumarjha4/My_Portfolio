@@ -18,9 +18,11 @@ const About: React.FC = () => {
       transition={{ duration: 0.5 }}
     >
       <Navbar />
-      <AboutHero />
-      <Timeline />
-      <AchievementGrid />
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <AboutHero />
+        <Timeline />
+        <AchievementGrid />
+      </main>
       <Footer />
     </motion.div>
   )

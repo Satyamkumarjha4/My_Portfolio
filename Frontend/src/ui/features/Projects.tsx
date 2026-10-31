@@ -45,6 +45,7 @@ const Projects: React.FC = () => {
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-indigo-500 z-50 origin-left" style={{ scaleX }} />
       <Navbar />
 
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
       <ProjectsHero />
 
       <div className="container mx-auto px-4 py-16 z-0 ">
@@ -101,6 +102,7 @@ const Projects: React.FC = () => {
           />
         ))}
       </div>
+      </main>
 
       <ScrollToTopButton />
       <Footer />

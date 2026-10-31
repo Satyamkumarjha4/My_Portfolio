@@ -13,12 +13,14 @@ const Home: React.FC = () => {
     return (
         <>
             <Navbar />
+            <main id="main-content" tabIndex={-1} className="focus:outline-none">
             <Hero />
             <div className='bg-gray-900 w-full'>
                 <Techrow />
             </div>
 
             <ProjectsShowcase />
+            </main>
 
             <Footer />
         </>

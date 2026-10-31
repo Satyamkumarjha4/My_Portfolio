@@ -45,7 +45,7 @@ const Status: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Navbar />
-      <main className="mx-auto max-w-5xl px-6 pb-20 pt-28">
+      <main id="main-content" tabIndex={-1} className="mx-auto max-w-5xl px-6 pb-20 pt-28 focus:outline-none">
         <header className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold md:text-5xl">
             Under the <span className="text-indigo-500">hood</span>

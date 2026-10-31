@@ -82,6 +82,12 @@ const Navbar: React.FC = () => {
 
   return (
     <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-md focus:bg-indigo-600 focus:px-4 focus:py-2 focus:text-white"
+      >
+        Skip to main content
+      </a>
       <motion.nav
         className="fixed top-0 left-0 w-full flex justify-between items-center p-2 md:p-4 h-16 md:h-20 z-11"
         initial={{ y: -100 }}

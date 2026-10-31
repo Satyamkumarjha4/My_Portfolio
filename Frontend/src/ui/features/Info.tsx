@@ -10,9 +10,11 @@ export default function InfoPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Navbar />  
-      <InfoHero />
-      <Features />
-      <FuturePlans />
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <InfoHero />
+        <Features />
+        <FuturePlans />
+      </main>
       <Footer />
     </div>
   )
