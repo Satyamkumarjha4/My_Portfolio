@@ -69,7 +69,7 @@ const Hero: React.FC = () => {
               Hi, I'm <br />
               <span className="text-indigo-500">Satyam Kumar Jha</span>
             </motion.h1>
-            <motion.h3
+            <motion.h2
               className="text-3xl md:text-4xl font-semibold mb-4 min-h-[4.75rem] md:min-h-[5.5rem]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -78,11 +78,13 @@ const Hero: React.FC = () => {
               I'm not just a
               {/* Typed title on its own line: long titles no longer jump between lines (CLS) */}
               <br />
-              <span className="text-indigo-400 font-bold whitespace-nowrap">
+              {/* The typed text changes every few ms: hide it from screen readers and give them the full list once */}
+              <span className="sr-only">{TITLES.join(", ")}</span>
+              <span aria-hidden="true" className="text-indigo-400 font-bold whitespace-nowrap">
                 {displayText}
                 <span className="animate-pulse">|</span>
               </span>
-            </motion.h3>
+            </motion.h2>
             <motion.p
               className="text-lg md:text-xl text-gray-300"
               initial={{ opacity: 0, y: 20 }}

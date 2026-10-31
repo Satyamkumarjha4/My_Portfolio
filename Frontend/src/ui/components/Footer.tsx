@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12 border-y border-gray-800 py-8 md:py-12 px-2">
           {/* About column */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">
+            <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">
               <motion.span
                 className="inline-block"
                 initial={{ opacity: 0, y: -20 }}
@@ -71,7 +71,7 @@ const Footer: React.FC = () => {
               >
                 Satyam Kumar Jha
               </motion.span>
-            </h3>
+            </h2>
             <motion.p
               className="text-gray-300 mb-4"
               initial={{ opacity: 0 }}
@@ -128,7 +128,7 @@ const Footer: React.FC = () => {
 
           {/* Quick links */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Quick Links</h3>
+            <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Quick Links</h2>
             <ul className="space-y-2">
               {["Home", "About", "Projects", "Contact", "Status"].map((item, index) => (
                 <motion.li
@@ -168,7 +168,7 @@ const Footer: React.FC = () => {
 
           {/* Made Using */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Made Using</h3>
+            <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Made Using</h2>
             <ul className="space-y-2">
               {["React", "TypeScript", "Tailwind CSS", "Framer Motion"].map((tech, index) => (
                 <motion.li
