@@ -1,13 +1,13 @@
 version: 2
 
-# Major-version bumps are ignored here on purpose: each one is a planned migration, not a
-# one-click merge, and a lone bump of one half of a coupled pair (e.g. @eslint/js 10 without
-# eslint 10) cannot even install. Minor and patch updates still arrive. When you decide to take
-# a major, remove its entry below (the ESLint family and the Prisma pair must move together).
+# Every semver-major bump is ignored on purpose. Each one is a planned migration, not a
+# one-click merge, and many are coupled to other packages: a lone @eslint/js 10 needs
+# eslint 10, TypeScript 7 is outside typescript-eslint's supported range (<6.1), Prisma 7
+# needs a migration, and so on. A bump that cannot install also fails the Vercel preview
+# build for its branch. Minor and patch updates still arrive, grouped to cut the noise.
 #
-# - eslint family: eslint, @eslint/js, globals, eslint-plugin-react-refresh (+ react-hooks, typescript-eslint)
-# - Prisma 7: needs a migration; drop the deepmerge-ts override in Backend/package.json with it
-# - @vitejs/plugin-react 6, dotenv 18: not needed yet
+# To take a major deliberately, do it by hand in one PR (the ESLint family, TypeScript +
+# typescript-eslint and the Prisma pair must move together), or temporarily remove the rule.
 updates:
   - package-ecosystem: npm
     directory: /Backend
@@ -19,17 +19,7 @@ updates:
       prisma:
         patterns: ["prisma", "@prisma/*"]
     ignore:
-      - dependency-name: "eslint"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "@eslint/js"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "globals"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "prisma"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "@prisma/client"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "dotenv"
+      - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: npm
@@ -40,19 +30,15 @@ updates:
       eslint:
         patterns: ["eslint", "@eslint/*", "eslint-plugin-*", "typescript-eslint", "globals"]
     ignore:
-      - dependency-name: "eslint"
+      - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-      - dependency-name: "@eslint/js"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "globals"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "eslint-plugin-react-hooks"
-        update-types: ["version-update:semver-major"]
+      # 0.x packages treat a minor as breaking: 0.4 -> 0.5 needs eslint 9+/10 and config changes.
       - dependency-name: "eslint-plugin-react-refresh"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
-      - dependency-name: "@vitejs/plugin-react"
-        update-types: ["version-update:semver-major"]
+        update-types: ["version-update:semver-minor"]
+      - dependency-name: "lucide-react"
+        update-types: ["version-update:semver-minor"]
 
+  # Not ignored: Action majors are usually safe, but read the release notes before merging.
   - package-ecosystem: github-actions
     directory: /
     schedule:
