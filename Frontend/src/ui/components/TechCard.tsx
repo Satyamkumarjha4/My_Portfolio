@@ -2,13 +2,7 @@ import type React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { type Category, type TechStack, getCategoryIconColor } from "./TechTypes"
 import CircularProgress from "./CircularProgress"
-import { FaPython, FaJava, FaHtml5, FaCss3Alt, FaJs, FaReact, FaGitAlt } from "react-icons/fa"
-import { SiFlask, SiStreamlit, SiKeras, SiTensorflow, SiNumpy, SiPandas, SiMongodb, SiPostman, SiTailwindcss, SiTypescript, SiFramer } from "react-icons/si"
-import { TbBrandCpp } from "react-icons/tb"
-import { BiLogoPostgresql } from "react-icons/bi"
-import { BsFiletypeSql } from "react-icons/bs"
-import { DiSqllite } from "react-icons/di"
-import { RiFileExcel2Fill } from "react-icons/ri"
+import { brandIcons } from "./brandIcons"
 
 interface TechCardProps {
   tech: TechStack
@@ -40,44 +34,7 @@ const TechCard: React.FC<TechCardProps> = ({ tech, isHovered, onMouseEnter, onMo
 
   // Map icon names to actual React icon components
   const getIconComponent = (iconName: string): React.ReactNode => {
-    const iconMap: Record<string, React.ElementType> = {
-      // Languages
-      FaPython,
-      FaJava,
-      FaJs,
-      TbBrandCpp,
-      SiTypescript,
-      
-      // Frontend
-      FaHtml5,
-      FaCss3Alt,
-      FaReact,
-      SiTailwindcss,
-      SiFramer,
-      
-      // Python Frameworks
-      SiFlask,
-      SiStreamlit,
-      
-      // Data Science
-      SiKeras,
-      SiTensorflow,
-      SiNumpy,
-      SiPandas,
-      
-      // Databases
-      SiMongodb,
-      BiLogoPostgresql,
-      BsFiletypeSql,
-      DiSqllite,
-      RiFileExcel2Fill,
-      
-      // Tools
-      FaGitAlt,
-      SiPostman,
-    }
-
-    const IconComponent = iconMap[iconName]
+    const IconComponent = Object.prototype.hasOwnProperty.call(brandIcons, iconName) ? brandIcons[iconName] : undefined
     return IconComponent ? <IconComponent /> : <span className="text-xs">{iconName}</span>
   }
 

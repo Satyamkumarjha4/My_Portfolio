@@ -1,14 +1,19 @@
-import  React, {useState} from "react"
+import type React from "react"
+import { useEffect } from "react"
+import { useLocation } from "react-router-dom"
 import { motion, useScroll, useSpring } from "framer-motion"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import { ProjectDetails } from "../components/ProjectDetails"
 import ProjectsHero from "../components/ProjectHero"
 import ScrollToTopButton from "../components/ScrollToTopbutton"
-import {axiosInstance} from "../utils/axios.ts"
+import { useApi } from "../hooks/useApi"
+import { usePageMeta } from "../hooks/usePageMeta"
+import { EmptyBlock, ErrorBlock, LoadingBlock } from "../components/AsyncState"
 
 
 interface Project {
+  id: string;
   title: string;
   description: string;
   techStack: string[];
@@ -17,32 +22,26 @@ interface Project {
   githubUrl: string;
   demoUrl: string;
   imageOnRight: boolean;
+  caseStudy?: string | null;
 }
 
 
 const Projects: React.FC = () => {
-  const [projects, setProjects] = useState<Project[]>([])
+  usePageMeta("/projects")
+  const { data: projects, loading, error, refetch } = useApi<Project[]>("/projects")
+  const { hash } = useLocation()
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
   })
-  
-  const dbprojects = async () => {
-    try {
-      const response = await axiosInstance.get("/projects");
-      console.log("Projects fetched successfully:", response.data);
-      setProjects(response.data);
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-      return [];
-    }
-  }
 
-  React.useEffect(() => {
-    dbprojects();
-  }, []);
+  // Projects load asynchronously, so a #id link can only be scrolled to once they render.
+  useEffect(() => {
+    if (!hash || !projects) return
+    document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView()
+  }, [hash, projects])
 
   return (
     <motion.div
@@ -55,6 +54,7 @@ const Projects: React.FC = () => {
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-indigo-500 z-50 origin-left" style={{ scaleX }} />
       <Navbar />
 
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
       <ProjectsHero />
 
       <div className="container mx-auto px-4 py-16 z-0 ">
@@ -91,9 +91,13 @@ const Projects: React.FC = () => {
             A collection of my best work showcasing my technical skills and problem-solving abilities
           </motion.p>
         </motion.div>
-        {projects.map((project, index) => (
+        {loading && <LoadingBlock label="Loading projects..." />}
+        {error && !projects && <ErrorBlock message="Couldn't load projects." onRetry={refetch} />}
+        {projects && projects.length === 0 && <EmptyBlock message="No projects yet." />}
+        {projects?.map((project, index) => (
           <ProjectDetails
-            key={index}
+            key={project.id}
+            id={project.id}
             title={project.title}
             description={project.description}
             techStack={project.techStack}
@@ -102,10 +106,13 @@ const Projects: React.FC = () => {
             githubUrl={project.githubUrl}
             demoUrl={project.demoUrl}
             imageOnRight={project.imageOnRight}
+            caseStudy={project.caseStudy}
+            priority={index === 0}
             
           />
         ))}
       </div>
+      </main>
 
       <ScrollToTopButton />
       <Footer />

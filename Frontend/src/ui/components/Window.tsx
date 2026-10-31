@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { site } from "../../config/site";
 
 const Window = () => {
   const [copied, setCopied] = useState(false);
@@ -7,19 +8,19 @@ const Window = () => {
     const code = `class SatyamJha:
     def __init__(self):
         self.name = "Satyam Kumar Jha"
-        self.role = "Python/Full-Stack/ Developer and ML Engineer"
-        self.skills = ["Python", "Flask", "Express", "React", "Scikit-learn", "Keras", "Sreamlit"]
+        self.role = "Python/Full-Stack Developer and ML Engineer"
+        self.skills = ["Python", "Flask", "Express", "React", "Scikit-learn", "Keras", "Streamlit"]
         self.education = ["B.Tech from Maharaja Agrasen Institute of Technology(GGSIPU)"]
     
     def say_hello(self):
-        return "Hello! I'm Satyam Kumar Jha, Thank you visiting my Porfolio."
+        return "Hello! I'm Satyam, Thank you for visiting my Portfolio."
     
     def get_contact(self):
-        return {"email": "satyamjha4@gmail.com", "phone": "+91 7683095499", "github": "Satyamkumarjha4", "linkedin": "satyamkumarjha4"}
-        
-    # Initialize
-    satyam = SatyamJha()
-    print(satyam.say_hello())`;
+        return {"email": "${site.email}", "phone": "${site.phone.display}", "github": "${site.github.handle}", "linkedin": "${site.linkedin.handle}"}
+
+# Initialize
+satyam = SatyamJha()
+print(satyam.say_hello())`;
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(code);
@@ -121,7 +122,7 @@ const Window = () => {
             <br />
             {"        "}
             <span className="text-purple-400">return </span>
-            <span className="text-green-400">"Hello! I'm Satyam, Thank you for visiting my Porfolio."</span>
+            <span className="text-green-400">"Hello! I'm Satyam, Thank you for visiting my Portfolio."</span>
             <br />
             {"    "}
             <br />
@@ -137,19 +138,19 @@ const Window = () => {
             <span className="text-gray-300">{"{"}</span>
             <span className="text-green-400">"email"</span>
             <span className="text-gray-300">: </span>
-            <span className="text-green-400">"satyamjha4@gmail.com"</span>
+            <span className="text-green-400">"{site.email}"</span>
             <span className="text-gray-300">, </span>
             <span className="text-green-400">"phone"</span>
             <span className="text-gray-300">: </span>
-            <span className="text-green-400">"+91 7683095499"</span>
+            <span className="text-green-400">"{site.phone.display}"</span>
             <span className="text-gray-300">, </span>
             <span className="text-green-400">"github"</span>
             <span className="text-gray-300">: </span>
-            <span className="text-green-400">"Satyamkumarjha4"</span>
+            <span className="text-green-400">"{site.github.handle}"</span>
             <span className="text-gray-300">, </span>
             <span className="text-green-400">"linkedin"</span>
             <span className="text-gray-300">: </span>
-            <span className="text-green-400">"satyamkumarjha4"</span>
+            <span className="text-green-400">"{site.linkedin.handle}"</span>
             <span className="text-gray-300">{"}"}</span>
             <br />
             <br />
@@ -173,7 +174,7 @@ const Window = () => {
             <span className="text-xs">Output:</span>
           </div>
           <div className="text-green-400 font-mono text-sm">
-            {">"} Hello! I'm Satyam, Thank you for visiting my Porfolio.
+            {">"} Hello! I'm Satyam, Thank you for visiting my Portfolio.
           </div>
         </div>
       </div>

@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react"
+import { useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import TechCarousel from "./TechCarousel"
 import type { Category, TechStack } from "./TechTypes"
-import { axiosInstance } from "../utils/axios.ts"
+import { useApi } from "../hooks/useApi"
+import { ErrorBlock, LoadingBlock } from "./AsyncState"
 
 // Tech stack data with categories, icons, and proficiency levels
 
@@ -10,24 +11,14 @@ import { axiosInstance } from "../utils/axios.ts"
 // Component for the tech stack section
 export default function Techrow() {
   const [selectedCategory, setSelectedCategory] = useState<Category | "All">("All")
-  const [techStacks, setTechStacks] = useState<TechStack[]>([])
-
-  // Fetch tech stack data from API
-  const fetchTechStacks = async () => {
-    try {
-      const response = await axiosInstance.get("/tech-stacks")
-      setTechStacks(response.data || [])
-    } catch (error) {
-      console.error("Error fetching tech stacks:", error)
-    }
-  }
-
-  useEffect(() => {
-    fetchTechStacks()
-  }, [])
+  const { data, loading, error, refetch } = useApi<TechStack[]>("/tech-stacks")
+  const techStacks = useMemo(() => data ?? [], [data])
 
   // Get unique categories
-  const categories: (Category | "All")[] = ["All", ...Array.from(new Set(techStacks.map((tech) => tech.category)))]
+  const categories: (Category | "All")[] = useMemo(
+    () => ["All", ...Array.from(new Set(techStacks.map((tech) => tech.category)))],
+    [techStacks]
+  )
 
   // Define category colors for filter buttons
   const getCategoryButtonClass = (category: Category | "All") => {
@@ -99,7 +90,11 @@ export default function Techrow() {
       </motion.div>
 
       {/* Tech Stack Carousel */}
-      <TechCarousel techStacks={techStacks} selectedCategory={selectedCategory} />
+      {loading && <LoadingBlock label="Loading skills..." />}
+      {error && !data && <ErrorBlock message="Couldn't load the tech stack." onRetry={refetch} />}
+      {!loading && techStacks.length > 0 && (
+        <TechCarousel techStacks={techStacks} selectedCategory={selectedCategory} />
+      )}
     </div>
   )
 }

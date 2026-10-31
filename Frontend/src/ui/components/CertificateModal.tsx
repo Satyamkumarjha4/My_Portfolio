@@ -1,7 +1,9 @@
 import type React from "react"
+import { safeUrl } from "../utils/safeUrl"
 import { useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
+import { useFocusTrap } from "../hooks/useFocusTrap"
 
 interface CertificateModalProps {
   isOpen: boolean
@@ -11,6 +13,7 @@ interface CertificateModalProps {
 }
 
 const CertificateModal: React.FC<CertificateModalProps> = ({ isOpen, onClose, certificateUrl, title }) => {
+  const dialogRef = useFocusTrap<HTMLDivElement>(isOpen)
   // Close modal on escape key press
   useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
@@ -45,6 +48,11 @@ const CertificateModal: React.FC<CertificateModalProps> = ({ isOpen, onClose, ce
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          ref={dialogRef}
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Certificate: ${title}`}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -74,7 +82,7 @@ const CertificateModal: React.FC<CertificateModalProps> = ({ isOpen, onClose, ce
               {certificateUrl ? (
                 <div className="relative pt-[56.25%] w-full bg-gray-900 rounded">
                   <iframe
-                    src={certificateUrl.replace("/view", "/preview")}
+                    src={safeUrl(certificateUrl.replace("/view", "/preview"))}
                     className="absolute top-0 left-0 w-full h-full rounded"
                     allow="autoplay"
                     title="Certificate Preview"
@@ -90,7 +98,7 @@ const CertificateModal: React.FC<CertificateModalProps> = ({ isOpen, onClose, ce
             <div className="p-4 border-t border-gray-700 flex justify-end">
               {certificateUrl && (
                 <motion.a
-                  href={certificateUrl}
+                  href={safeUrl(certificateUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors"

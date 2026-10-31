@@ -1,73 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { safeAxiosInstance } from '../../ui/utils/axios';
+import { useAdminResource } from '../hooks';
+import type { Achievement } from '../types';
 import AchievementModal from './AchievementModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminErrorBanner from './AdminErrorBanner';
+import AdminNoticeBanner from './AdminNoticeBanner';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Award, Calendar, ExternalLink, FileText } from 'lucide-react';
 
-interface Achievement {
-    id: string;
-    title: string;
-    date: string;
-    overview: string;
-    certificate: string | null;
-}
-
 const AchievementsTable: React.FC = () => {
-    const [achievements, setAchievements] = useState<Achievement[]>([]);
-    const [selected, setSelected] = useState<string[]>([]);
+    const { items: achievements, selected, loading, isRefreshing, error, clearError, fetchItems: fetchAchievements, refreshData, handleCheckbox, toggleAll, handleDelete, notice, clearNotice, announceSaved } = useAdminResource<Achievement>('/achievements');
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editAchievement, setEditAchievement] = useState<Achievement | null>(null);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isRefreshing, setIsRefreshing] = useState(false);
 
-    const fetchAchievements = async () => {
-        try {
-            setLoading(true);
-            const res = await safeAxiosInstance.get('/achievements');
-            setAchievements(res.data);
-        } catch (err) {
-            console.error('Fetch error:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const refreshData = async () => {
-        setIsRefreshing(true);
-        await fetchAchievements();
-        setTimeout(() => setIsRefreshing(false), 500);
-    };
-
-    useEffect(() => {
-        fetchAchievements();
-    }, []);
-
-    const handleCheckbox = (id: string) => {
-        setSelected(prev =>
-            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-        );
-    };
-
-    const handleSelectAll = () => {
-        if (selected.length === filteredAchievements.length) {
-            setSelected([]);
-        } else {
-            setSelected(filteredAchievements.map(a => a.id));
-        }
-    };
-
-    const handleDelete = async () => {
-        try {
-            await Promise.all(selected.map(id => safeAxiosInstance.delete(`/achievements/${id}`)));
-            setSelected([]);
-            fetchAchievements();
-        } catch (err) {
-            console.error('Delete error:', err);
-        }
-    };
 
     const filteredAchievements = achievements.filter(achievement =>
         achievement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -88,6 +35,8 @@ const AchievementsTable: React.FC = () => {
         });
     };
 
+    const handleSelectAll = () => toggleAll(filteredAchievements.map(item => item.id));
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -101,6 +50,8 @@ const AchievementsTable: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-900">
+            <AdminErrorBanner message={error} onDismiss={clearError} />
+            <AdminNoticeBanner message={notice} onDismiss={clearNotice} />
             {/* Background Elements */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
             
@@ -326,6 +277,7 @@ const AchievementsTable: React.FC = () => {
                             fetchAchievements();
                         }}
                         existingAchievement={editAchievement}
+                        onSuccess={announceSaved}
                     />
                 )}
 

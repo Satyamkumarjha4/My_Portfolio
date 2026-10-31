@@ -1,15 +1,21 @@
+import { useEscapeKey } from '../../ui/hooks/useEscapeKey';
+import { useFocusTrap } from '../../ui/hooks/useFocusTrap';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { safeAxiosInstance } from '../../ui/utils/axios';
+import { adminApi } from '../../ui/utils/http';
+import { getErrorMessage } from '../hooks';
+import type { Project } from '../types';
 import { X, Save, Plus, Github, ExternalLink, Image } from 'lucide-react';
 
 interface Props {
     onClose: () => void;
-    existingProject?: any;
+    existingProject?: Project | null;
     onSuccess?: () => void; // Add callback for successful operations
 }
 
 const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) => {
+    useEscapeKey(onClose);
+    const dialogRef = useFocusTrap<HTMLDivElement>();
     const [form, setForm] = useState({
         title: '',
         description: '',
@@ -19,6 +25,7 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
         githubUrl: '',
         demoUrl: '',
         imageOnRight: false,
+        caseStudy: '',
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -38,6 +45,7 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
                 githubUrl: existingProject.githubUrl || '',
                 demoUrl: existingProject.demoUrl || '',
                 imageOnRight: existingProject.imageOnRight || false,
+                caseStudy: existingProject.caseStudy || '',
             });
         } else {
             // Reset form for new project
@@ -50,6 +58,7 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
                 githubUrl: '',
                 demoUrl: '',
                 imageOnRight: false,
+                caseStudy: '',
             });
         }
         setErrors({});
@@ -87,7 +96,7 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
         try {
             new URL(string);
             return true;
-        } catch (_) {
+        } catch {
             return false;
         }
     };
@@ -123,14 +132,15 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
             githubUrl: form.githubUrl.trim() || null,
             demoUrl: form.demoUrl.trim() || null,
             imageOnRight: form.imageOnRight,
+            caseStudy: form.caseStudy.trim() || null,
         };
 
 
         try {
             if (existingProject && existingProject.id) {
-                await safeAxiosInstance.put(`/projects/${existingProject.id}`, payload);
+                await adminApi.put(`/projects/${existingProject.id}`, payload);
             } else {
-                await safeAxiosInstance.post('/projects', payload);
+                await adminApi.post('/projects', payload);
             }
             
             // Call success callback to refresh data
@@ -139,27 +149,9 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
             }
             
             onClose();
-        } catch (err: any) {
+        } catch (err) {
             console.error('Submit error:', err);
-            console.error('Error response:', err.response?.data);
-            
-            let errorMessage = 'Failed to save project. Please try again.';
-            
-            if (err.response?.data?.message) {
-                errorMessage = err.response.data.message;
-            } else if (err.response?.data?.error) {
-                errorMessage = err.response.data.error;
-            } else if (err.response?.data?.errors) {
-                // Handle validation errors
-                const validationErrors = err.response.data.errors;
-                if (Array.isArray(validationErrors)) {
-                    errorMessage = validationErrors.map(e => e.message || e).join(', ');
-                } else if (typeof validationErrors === 'object') {
-                    errorMessage = Object.values(validationErrors).join(', ');
-                }
-            }
-            
-            setErrors({ submit: errorMessage });
+            setErrors({ submit: getErrorMessage(err, 'Failed to save project. Please try again.') });
         } finally {
             setLoading(false);
         }
@@ -168,6 +160,10 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
     return (
         <AnimatePresence>
             <motion.div
+                ref={dialogRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
                 className="fixed inset-0 z-50 flex items-center justify-center p-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -242,6 +238,23 @@ const ProjectModal: React.FC<Props> = ({ onClose, existingProject, onSuccess }) 
                             {errors.description && (
                                 <p className="text-red-400 text-sm mt-1">{errors.description}</p>
                             )}
+                        </div>
+
+                        {/* Case study */}
+                        <div>
+                            <label className="block text-sm font-medium text-white mb-2">
+                                Case study (optional)
+                            </label>
+                            <textarea
+                                name="caseStudy"
+                                value={form.caseStudy}
+                                onChange={handleChange}
+                                placeholder={"## Problem\n\n## Key decisions\n\n## Trade-offs\n\n## Result"}
+                                rows={8}
+                                maxLength={20000}
+                                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500"
+                            />
+                            <p className="text-gray-400 text-xs mt-1">Blank line = new paragraph. Start a line with "## " for a heading.</p>
                         </div>
 
                         {/* Tech Stack */}

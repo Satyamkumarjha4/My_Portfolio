@@ -1,15 +1,21 @@
+import { useEscapeKey } from '../../ui/hooks/useEscapeKey';
+import { useFocusTrap } from '../../ui/hooks/useFocusTrap';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { safeAxiosInstance } from '../../ui/utils/axios';
+import { adminApi } from '../../ui/utils/http';
+import { getErrorMessage } from '../hooks';
+import type { TechStack } from '../types';
 import { X, Save, Plus, Code, Layers } from 'lucide-react';
 
 interface Props {
     onClose: () => void;
-    existingTechStack?: any;
+    existingTechStack?: TechStack | null;
     onSuccess?: () => void;
 }
 
 const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess }) => {
+    useEscapeKey(onClose);
+    const dialogRef = useFocusTrap<HTMLDivElement>();
     const [form, setForm] = useState({
         name: '',
         category: 'Languages',
@@ -67,8 +73,8 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
             newErrors.iconName = 'Icon name is required';
         }
 
-        if (form.proficiency < 0 || form.proficiency > 100) {
-            newErrors.proficiency = 'Proficiency must be between 0 and 100';
+        if (form.proficiency < 1 || form.proficiency > 100) {
+            newErrors.proficiency = 'Proficiency must be between 1 and 100';
         }
 
         setErrors(newErrors);
@@ -106,9 +112,9 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
 
         try {
             if (existingTechStack && existingTechStack.id) {
-                await safeAxiosInstance.put(`/tech-stacks/${existingTechStack.id}`, payload);
+                await adminApi.put(`/tech-stacks/${existingTechStack.id}`, payload);
             } else {
-                await safeAxiosInstance.post('/tech-stacks', payload);
+                await adminApi.post('/tech-stacks', payload);
             }
             
             // Call success callback to refresh data
@@ -117,27 +123,9 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
             }
             
             onClose();
-        } catch (err: any) {
+        } catch (err) {
             console.error('Submit error:', err);
-            console.error('Error response:', err.response?.data);
-            
-            let errorMessage = 'Failed to save tech stack. Please try again.';
-            
-            if (err.response?.data?.message) {
-                errorMessage = err.response.data.message;
-            } else if (err.response?.data?.error) {
-                errorMessage = err.response.data.error;
-            } else if (err.response?.data?.errors) {
-                // Handle validation errors
-                const validationErrors = err.response.data.errors;
-                if (Array.isArray(validationErrors)) {
-                    errorMessage = validationErrors.map(e => e.message || e).join(', ');
-                } else if (typeof validationErrors === 'object') {
-                    errorMessage = Object.values(validationErrors).join(', ');
-                }
-            }
-            
-            setErrors({ submit: errorMessage });
+            setErrors({ submit: getErrorMessage(err, 'Failed to save tech stack. Please try again.') });
         } finally {
             setLoading(false);
         }
@@ -169,6 +157,10 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
     return (
         <AnimatePresence>
             <motion.div
+                ref={dialogRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
                 className="fixed inset-0 z-50 flex items-center justify-center p-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -258,7 +250,7 @@ const TechStackModal: React.FC<Props> = ({ onClose, existingTechStack, onSuccess
                                     <input
                                         type="range"
                                         name="proficiency"
-                                        min="0"
+                                        min="1"
                                         max="100"
                                         step="5"
                                         value={form.proficiency}

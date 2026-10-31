@@ -9,6 +9,7 @@ interface TechBadgeProps {
 }
 
 export interface ProjectCardProps {
+  id?: string
   title: string
   description: string
   image?: string
@@ -35,7 +36,7 @@ const TechBadge: React.FC<TechBadgeProps> = ({ label }) => {
 }
 
 // Individual project card component with 3D effects
-const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, technologies }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ id, title, description, image, technologies }) => {
   // References for the card element
   const cardRef = useRef<HTMLDivElement>(null)
 
@@ -91,7 +92,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, te
 
   return (
     <>
-    <Link to={`/projects/`}>
+    <Link to={id ? `/projects#${id}` : "/projects"}>
     <motion.div
       ref={cardRef}
       className="relative h-full perspective-1000 cursor-pointer"
@@ -134,6 +135,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, te
           <motion.img
             src={image}
             alt={title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover"
             style={{
               x: imageX,

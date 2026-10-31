@@ -1,25 +1,26 @@
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
-import { motion, useScroll, useSpring } from "framer-motion"
+import { useMemo, useRef, useState } from "react"
+import { motion, useInView, useMotionValueEvent, useScroll, useSpring } from "framer-motion"
 import { TimelineCard, type TimelineItemType } from "./TimelineCard"
-import { axiosInstance } from "../utils/axios.ts"
+import { useApi } from "../hooks/useApi"
+import { useMediaQuery } from "../hooks/useMediaQuery"
+import { ErrorBlock, EmptyBlock, LoadingBlock } from "./AsyncState"
 
-// Sort timeline items from latest to oldest
-const sortTimelineItems = (items: TimelineItemType[]): TimelineItemType[] => {
-  return [...items].sort((a, b) => {
-    // Extract years from date strings
-    const yearA = Number.parseInt(a.date.split(" ")[0])
-    const yearB = Number.parseInt(b.date.split(" ")[0])
-
-    // If years are the same, keep original order
-    if (isNaN(yearA) || isNaN(yearB)) return 0
-
-    // Sort in descending order (latest first)
-    return yearB - yearA
-  })
+// Newest first. Prefer the server-provided startDate, fall back to the year in the label.
+const timeOf = (item: TimelineItemType): number => {
+  if (item.startDate) return new Date(item.startDate).getTime()
+  const year = /\b(19|20)\d{2}\b/.exec(item.date)?.[0]
+  return year ? Date.UTC(Number(year), 0, 1) : 0
 }
 
-// Main timeline component
+const sortTimelineItems = (items: TimelineItemType[]): TimelineItemType[] =>
+  [...items].sort((a, b) => timeOf(b) - timeOf(a))
+
+const titleVariants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2 } },
+}
+
 interface TimelineProps {
   items?: TimelineItemType[]
   title?: string
@@ -31,167 +32,41 @@ const Timeline: React.FC<TimelineProps> = ({
   title = "Academic & Professional Timeline",
   className = "",
 }) => {
+  const api = useApi<TimelineItemType[]>("/timeline")
+  const timelineItems = items ?? api.data
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const [timelineItems, setTimelineItems] = useState<TimelineItemType[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const isMobile = useMediaQuery("(max-width: 759px)")
   const timelineRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
 
-  // Use the timeline container for more precise scroll tracking
-  const { scrollYProgress } = useScroll({
-    target: timelineRef,
-    offset: ["start start", "end end"],
+  const sortedItems = useMemo(() => sortTimelineItems(timelineItems ?? []), [timelineItems])
+  const inView = useInView(timelineRef)
+
+  // scrollYProgress (0..1 across the timeline) drives both the progress line and the
+  // active card. No scroll listeners or layout reads: framer-motion handles that.
+  const { scrollYProgress } = useScroll({ target: timelineRef, offset: ["start start", "end end"] })
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
+
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    if (sortedItems.length === 0) return
+    setActiveIndex(Math.min(Math.floor(v * sortedItems.length), sortedItems.length - 1))
   })
 
-  // Add smooth spring animation to the line
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  })
+  const currentActive = inView ? activeIndex : null
 
-  // Fetch timeline data from API
-  useEffect(() => {
-    const fetchTimelineData = async () => {
-      // If items are provided as props, use them instead of fetching
-      if (items) {
-        setTimelineItems(items)
-        setLoading(false)
-        return
-      }
-
-      try {
-        setLoading(true)
-        setError(null)
-        const response = await axiosInstance.get("/timeline")
-        setTimelineItems(response.data || [])
-      } catch (error) {
-        console.error("Error fetching timeline items:", error)
-        setError("Failed to fetch timeline data")
-        // Fallback to sample data on error
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchTimelineData()
-  }, [items])
-
-  // Sort items from latest to oldest
-  const sortedItems = sortTimelineItems(timelineItems)
-
-  // Check if screen is mobile width
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 760)
-    }
-
-    // Initial check
-    checkMobile()
-
-    // Add event listener for window resize
-    window.addEventListener("resize", checkMobile)
-
-    // Cleanup
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
-
-  // Improved active index calculation based on scroll progress and item positions
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!timelineRef.current || sortedItems.length === 0) return
-
-      const timelineRect = timelineRef.current.getBoundingClientRect()
-      const viewportHeight = window.innerHeight
-      
-      // Calculate how much of the timeline is visible
-      const timelineTop = timelineRect.top
-      const timelineBottom = timelineRect.bottom
-      
-      // If timeline is not in view at all
-      if (timelineBottom < 0 || timelineTop > viewportHeight) {
-        setActiveIndex(null)
-        return
-      }
-      
-      // Calculate the visible progress through the timeline
-      const timelineHeight = timelineRect.height
-      const scrolledPastTop = Math.max(0, -timelineTop)
-      // Calculate progress as a percentage (0 to 1)
-      const progress = scrolledPastTop / (timelineHeight - viewportHeight + 100) // Add padding
-      const clampedProgress = Math.max(0, Math.min(1, progress))
-      
-      // Map progress to timeline items
-      const activeItemIndex = Math.min(
-        Math.floor(clampedProgress * sortedItems.length),
-        sortedItems.length - 1
-      )
-      
-      setActiveIndex(activeItemIndex >= 0 ? activeItemIndex : null)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    handleScroll() // Initial check
-
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [sortedItems.length])
-
-  // Animation for the title
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        delay: 0.2,
-      },
-    },
-  }
-
-
-  // Calculate line height based on active index for more precise sync
-  const [lineHeightState, setLineHeightState] = useState("0%")
-  
-  useEffect(() => {
-    if (activeIndex !== null && sortedItems.length > 0) {
-      // Calculate the percentage based on active index
-      const percentage = ((activeIndex + 1) / sortedItems.length) * 100
-      setLineHeightState(`${Math.min(percentage, 100)}%`)
-    } else if (activeIndex === null) {
-      // Use scroll progress when no active index
-      const unsubscribe = smoothProgress.onChange((value) => {
-        setLineHeightState(`${value * 100}%`)
-      })
-      return unsubscribe
-    }
-  }, [activeIndex, sortedItems.length, smoothProgress])
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className="w-full min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mx-auto mb-4"></div>
-          <p className="text-gray-300">Loading timeline...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Error state (still shows fallback data)
-  if (error) {
-    console.warn("Timeline error:", error)
-  }
+  // Rendered inside the ref'd container so the scroll target exists from the first render.
+  const status = !items && api.loading
+    ? <LoadingBlock label="Loading timeline..." />
+    : !items && api.error && !timelineItems
+      ? <ErrorBlock message="Couldn't load the timeline." onRetry={api.refetch} />
+      : sortedItems.length === 0
+        ? <EmptyBlock message="No timeline entries yet." />
+        : null
 
   return (
     <div
       className="w-full min-h-screen flex items-center justify-center bg-gray-900 py-16"
       id="timeline"
-      ref={containerRef}
-    >
+          >
       <div className={`container mx-auto ${className}`}>
         <motion.div
           className="text-center mb-16"
@@ -227,6 +102,8 @@ const Timeline: React.FC<TimelineProps> = ({
           className="relative wrap overflow-hidden p-4 md:p-10 h-full"
           ref={timelineRef}
         >
+          {status}
+          {!status && (<>
           {/* Static background line */}
           <div
             className={`absolute border-opacity-20 border-gray-700 h-full border 
@@ -242,9 +119,10 @@ const Timeline: React.FC<TimelineProps> = ({
             style={{ width: "4px", marginLeft: "-2px" }}
           >
             <motion.div
-              className="bg-indigo-500 w-full rounded-full origin-top transition-all duration-300 ease-out"
+              className="bg-indigo-500 w-full rounded-full origin-top"
               style={{
-                height: lineHeightState,
+                scaleY: smoothProgress,
+                height: "100%",
                 width: "4px",
               }}
             />
@@ -256,11 +134,12 @@ const Timeline: React.FC<TimelineProps> = ({
               <TimelineCard
                 item={item}
                 isLeft={isMobile ? false : index % 2 === 0}
-                isActive={index === activeIndex}
+                isActive={index === currentActive}
                 isMobile={isMobile}
               />
             </div>
           ))}
+          </>)}
         </div>
       </div>
     </div>

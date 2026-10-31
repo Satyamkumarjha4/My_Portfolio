@@ -3,8 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/S.svg" />
+    <link rel="icon" type="image/png" sizes="260x260" href="/S.png" />
+    <link rel="apple-touch-icon" href="/S.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Satyam's Porfolio</title>
+    <meta name="theme-color" content="#111827" />
+
+    <!-- Per-route values for title/description/canonical/og/twitter below are rewritten
+         at build time by scripts/route-pages.mjs (one HTML file per route). -->
+    <title>Satyam Kumar Jha - Full-Stack &amp; AI/ML Developer</title>
+    <meta name="description" content="Satyam Kumar Jha - full-stack developer and AI/ML engineer. Projects built with React, Express, PostgreSQL and Python." />
+    <link rel="canonical" href="__SITE_URL__/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Satyam Kumar Jha" />
+    <meta property="og:title" content="Satyam Kumar Jha - Full-Stack &amp; AI/ML Developer" />
+    <meta property="og:description" content="Satyam Kumar Jha - full-stack developer and AI/ML engineer. Projects built with React, Express, PostgreSQL and Python." />
+    <meta property="og:url" content="__SITE_URL__/" />
+    <meta property="og:image" content="__SITE_URL__/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Satyam Kumar Jha - Full-Stack and AI/ML Developer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Satyam Kumar Jha - Full-Stack &amp; AI/ML Developer" />
+    <meta name="twitter:description" content="Satyam Kumar Jha - full-stack developer and AI/ML engineer. Projects built with React, Express, PostgreSQL and Python." />
+    <meta name="twitter:image" content="__SITE_URL__/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Satyam Kumar Jha",
+        "url": "__SITE_URL__/",
+        "jobTitle": "Full-Stack Developer",
+        "sameAs": [
+          "https://github.com/Satyamkumarjha4",
+          "https://www.linkedin.com/in/satyamkumarjha4"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -2,8 +2,10 @@ import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { ProjectImage } from "./ProjectImage"
 import { ProjectInfo } from "./ProjectInfo"
+import { CaseStudy } from "./CaseStudy"
 
 interface ProjectDetailsProps {
+  id: string
   title: string
   description: string
   techStack: string[]
@@ -12,9 +14,12 @@ interface ProjectDetailsProps {
   githubUrl: string
   demoUrl: string
   imageOnRight?: boolean
+  caseStudy?: string | null
+  priority?: boolean
 }
 
 export function ProjectDetails({
+  id,
   title,
   description,
   techStack,
@@ -23,6 +28,8 @@ export function ProjectDetails({
   githubUrl,
   demoUrl,
   imageOnRight = false,
+  caseStudy,
+  priority = false,
 }: ProjectDetailsProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.3 })
@@ -30,7 +37,8 @@ export function ProjectDetails({
   return (
     <motion.div
       ref={ref}
-      className="max-w-6xl mx-auto mb-16 overflow-hidden rounded-xl bg-gray-800 shadow-lg transition-all hover:shadow-xl"
+      id={id}
+      className="scroll-mt-24 max-w-6xl mx-auto mb-16 overflow-hidden rounded-xl bg-gray-800 shadow-lg transition-all hover:shadow-xl"
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{
@@ -44,19 +52,20 @@ export function ProjectDetails({
         boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)",
       }}
     >
-      <div className={`flex md:flex-row ${imageOnRight ? "flex-col-reverse" : "flex-col"}`} id={imageUrl}>
+      <div className={`flex md:flex-row ${imageOnRight ? "flex-col-reverse" : "flex-col"}`}>
         {imageOnRight ? (
           <>
             <ProjectInfo title={title} description={description} techStack={techStack} tags={tags} demoUrl={demoUrl} />
-            <ProjectImage imageUrl={imageUrl} githubUrl={githubUrl} title={title} />
+            <ProjectImage imageUrl={imageUrl} githubUrl={githubUrl} title={title} priority={priority} />
           </>
         ) : (
           <>
-            <ProjectImage imageUrl={imageUrl} githubUrl={githubUrl} title={title} />
+            <ProjectImage imageUrl={imageUrl} githubUrl={githubUrl} title={title} priority={priority} />
             <ProjectInfo title={title} description={description} techStack={techStack} tags={tags} demoUrl={demoUrl} />
           </>
         )}
       </div>
+      {caseStudy && <CaseStudy text={caseStudy} title={title} />}
     </motion.div>
   )
 }

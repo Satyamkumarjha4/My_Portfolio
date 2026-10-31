@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,6 +20,9 @@ model Project {
   githubUrl      String
   demoUrl        String
   imageOnRight   Boolean
+  sortOrder      Int      @default(0)
+  // Plain-text write-up (problem, decisions, trade-offs). Blank line = paragraph, "## " = heading
+  caseStudy      String?
 }
 
 model Achievement {
@@ -67,6 +67,8 @@ model TimelineItem {
   description String
   type        TimelineType
   remarks     String?
+  // Sortable form of `date` (the free-text label shown in the UI)
+  startDate   DateTime?
 }
 
 enum TimelineType {

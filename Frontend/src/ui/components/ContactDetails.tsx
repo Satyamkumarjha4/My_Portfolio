@@ -1,6 +1,7 @@
 import type React from "react"
 import { Mail, Phone, Linkedin, Github, FileDown } from "lucide-react"
 import { motion } from "framer-motion"
+import { site } from "../../config/site"
 
 const ContactDetails: React.FC = () => {
   return (
@@ -46,10 +47,10 @@ const ContactDetails: React.FC = () => {
               <div>
                 <h3 className="text-lg font-medium text-indigo-400">Email</h3>
                 <a
-                  href="mailto:satyamjha4@gmail.com"
+                  href={`mailto:${site.email}`}
                   className="text-white hover:text-indigo-300 transition-colors duration-300"
                 >
-                  satyamjha4@gmail.com
+                  {site.email}
                 </a>
               </div>
             </motion.div>
@@ -65,8 +66,8 @@ const ContactDetails: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-lg font-medium text-indigo-400">Phone</h3>
-                <a href="tel:+917060298070" className="text-white hover:text-indigo-300 transition-colors duration-300">
-                  +91 768-309-5499
+                <a href={`tel:${site.phone.tel}`} className="text-white hover:text-indigo-300 transition-colors duration-300">
+                  {site.phone.display}
                 </a>
               </div>
             </motion.div>
@@ -83,12 +84,12 @@ const ContactDetails: React.FC = () => {
               <div>
                 <h3 className="text-lg font-medium text-indigo-400">LinkedIn</h3>
                 <a
-                  href="https://www.linkedin.com/in/satyamkumarjha4"
+                  href={site.linkedin.url}
                   className="text-white hover:text-indigo-300 transition-colors duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  satyamkumarjha4
+                  {site.linkedin.handle}
                 </a>
               </div>
             </motion.div>
@@ -105,12 +106,12 @@ const ContactDetails: React.FC = () => {
               <div>
                 <h3 className="text-lg font-medium text-indigo-400">GitHub</h3>
                 <a
-                  href="https://github.com/Satyamkumarjha4"
+                  href={site.github.url}
                   className="text-white hover:text-indigo-300 transition-colors duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Satyamkumarjha4
+                  {site.github.handle}
                 </a>
               </div>
             </motion.div>
@@ -124,7 +125,7 @@ const ContactDetails: React.FC = () => {
             className="mb-12"
           >
             <a
-              href="https://drive.google.com/file/d/1tQ9_ap-tw5Et5qku7h7328wDLC3Bg8I8/view?usp=sharing"
+              href={site.resumeUrl}
               download
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-full hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-indigo-500/30 transform hover:-translate-y-1"
             >

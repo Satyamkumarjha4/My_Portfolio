@@ -1,4 +1,5 @@
 import { Github } from "lucide-react"
+import { safeUrl } from "../utils/safeUrl"
 import { motion } from "framer-motion"
 import { useState } from "react"
 
@@ -6,9 +7,10 @@ interface ProjectImageProps {
   imageUrl: string
   githubUrl: string
   title: string
+  priority?: boolean
 }
 
-export function ProjectImage({ imageUrl, githubUrl, title }: ProjectImageProps) {
+export function ProjectImage({ imageUrl, githubUrl, title, priority = false }: ProjectImageProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
@@ -35,6 +37,9 @@ export function ProjectImage({ imageUrl, githubUrl, title }: ProjectImageProps) 
         <motion.img
           src={imageUrl}
           alt={title}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          decoding="async"
           className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
           initial={{ filter: "blur(10px)" }}
           animate={{ filter: imageLoaded ? "blur(0px)" : "blur(10px)" }}
@@ -42,7 +47,7 @@ export function ProjectImage({ imageUrl, githubUrl, title }: ProjectImageProps) 
           onLoad={() => setImageLoaded(true)}
         />
         <motion.a
-          href={githubUrl}
+          href={safeUrl(githubUrl)}
           target="_blank"
           rel="noopener noreferrer"
           className="absolute left-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500/90 shadow-md transition-all hover:bg-indigo-600 hover:shadow-lg"

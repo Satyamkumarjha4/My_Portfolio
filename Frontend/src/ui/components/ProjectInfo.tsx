@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react"
+import { safeUrl } from "../utils/safeUrl"
 import { motion } from "framer-motion"
 
 interface ProjectInfoProps {
@@ -22,7 +23,7 @@ export function ProjectInfo({ title, description, techStack, tags, demoUrl }: Pr
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
+    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } },
   }
 
   return (
@@ -33,15 +34,15 @@ export function ProjectInfo({ title, description, techStack, tags, demoUrl }: Pr
       animate="show"
     >
       <div>
-        <motion.h2 className="mb-3 text-2xl font-bold tracking-tight text-white" variants={item}>
+        <motion.h3 className="mb-3 text-2xl font-bold tracking-tight text-white" variants={item}>
           {title}
-        </motion.h2>
+        </motion.h3>
         <motion.p className="mb-6 text-gray-300 leading-relaxed" variants={item}>
           {description}
         </motion.p>
 
         <motion.div className="mb-6" variants={item}>
-          <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-gray-400">Tech Stack</h3>
+          <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-gray-400">Tech Stack</h4>
           <motion.div className="flex flex-wrap gap-2" variants={container} initial="hidden" animate="show">
             {techStack.map((tech) => (
               <motion.span
@@ -65,7 +66,7 @@ export function ProjectInfo({ title, description, techStack, tags, demoUrl }: Pr
         <motion.div className="mb-4">
           {demoUrl && (
             <motion.a
-              href={demoUrl}
+              href={safeUrl(demoUrl)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center rounded-lg bg-indigo-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-4 focus:ring-indigo-300"

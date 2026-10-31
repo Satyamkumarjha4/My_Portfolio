@@ -6,20 +6,47 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "hash-password": "node scripts/hash-password.js",
+    "lint": "eslint .",
+    "start:local": "node --env-file=.env.local src/index.js",
+    "db:host:local": "node --env-file=.env.local scripts/print-db-host.js",
+    "migrate:status:local": "node --env-file=.env.local node_modules/prisma/build/index.js migrate status",
+    "migrate:deploy:local": "node --env-file=.env.local node_modules/prisma/build/index.js migrate deploy"
   },
   "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.13.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0"
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^3.0.3",
+    "compression": "^1.8.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.2",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "pino": "^10.4.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10",
-    "prisma": "^6.13.0"
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "globals": "^16.5.0",
+    "nodemon": "^3.1.14",
+    "prisma": "^6.19.3",
+    "supertest": "^7.3.1",
+    "vitest": "^5.0.5"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "overrides": {
+    "deepmerge-ts": "^8.0.2"
   }
 }

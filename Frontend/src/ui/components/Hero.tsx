@@ -1,65 +1,48 @@
 import type React from "react"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Window from "./Window"
 import ProfileImage from "./ProfileImage"
 import { Link } from "react-router-dom"
 
+const MotionLink = motion.create(Link)
+
+const TITLES = [
+  "AI Enthusiast",
+  "ML Engineer",
+  "Full-Stack Developer",
+  "Data Analyst",
+  "Problem Solver",
+  "React Developer",
+  "Software Engineer",
+  "Tech Explorer",
+  "Python Developer",
+]
 
 const Hero: React.FC = () => {
-  const titles = [
-    "AI Enthusiast",
-    "ML Engineer",
-    "Full-Stack Developer",
-    "Data Analyst",
-    "Problem Solver",
-    "React Developer",
-    "Software Engineer",
-    "Tech Explorer",
-    "Python Developer",
-  ]
-
   const [displayText, setDisplayText] = useState("")
   const [titleIndex, setTitleIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [typingSpeed, setTypingSpeed] = useState(150)
   const [showWindow, setShowWindow] = useState(true)
 
-  const handleTyping = useCallback(() => {
-    const currentTitle = titles[titleIndex]
-    const shouldDelete = isDeleting
-
-    setDisplayText((prev) => {
-      if (!shouldDelete && prev === currentTitle) {
-        // Full word is typed, pause before deleting
-        setIsDeleting(true)
-        setTypingSpeed(750) // Pause at the end before deleting
-        return prev
-      }
-
-      if (shouldDelete && prev === "") {
-        // Finished deleting, move to next word
-        setIsDeleting(false)
-        setTypingSpeed(100) // Reset typing speed
-        setTitleIndex((titleIndex + 1) % titles.length)
-        return ""
-      }
-
-      if (shouldDelete) {
-        // Delete character
-        setTypingSpeed(50) // Delete faster than typing
-        return prev.substring(0, prev.length - 1)
-      }
-
-      // Add character
-      return currentTitle.substring(0, prev.length + 1)
-    })
-  }, [titleIndex, isDeleting, titles])
-
+  // One timer per tick, driven by derived state. No setState inside updaters.
   useEffect(() => {
-    const timer = setTimeout(handleTyping, typingSpeed)
+    const current = TITLES[titleIndex]
+    const finishedTyping = !isDeleting && displayText === current
+    const finishedDeleting = isDeleting && displayText === ""
+    const delay = finishedTyping ? 750 : isDeleting ? 50 : 100
+
+    const timer = setTimeout(() => {
+      if (finishedTyping) setIsDeleting(true)
+      else if (finishedDeleting) {
+        setIsDeleting(false)
+        setTitleIndex((i) => (i + 1) % TITLES.length)
+      } else {
+        setDisplayText(isDeleting ? displayText.slice(0, -1) : current.slice(0, displayText.length + 1))
+      }
+    }, delay)
     return () => clearTimeout(timer)
-  }, [displayText, handleTyping, typingSpeed])
+  }, [displayText, isDeleting, titleIndex])
 
   const toggleDisplay = () => {
     setShowWindow((prev) => !prev)
@@ -86,18 +69,22 @@ const Hero: React.FC = () => {
               Hi, I'm <br />
               <span className="text-indigo-500">Satyam Kumar Jha</span>
             </motion.h1>
-            <motion.h3
-              className="text-3xl md:text-4xl font-semibold mb-4"
+            <motion.h2
+              className="text-3xl md:text-4xl font-semibold mb-4 min-h-[4.75rem] md:min-h-[5.5rem]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              I'm not just a{" "}
-              <span className="text-indigo-400 font-bold">
+              I'm not just a
+              {/* Typed title on its own line: long titles no longer jump between lines (CLS) */}
+              <br />
+              {/* The typed text changes every few ms: hide it from screen readers and give them the full list once */}
+              <span className="sr-only">{TITLES.join(", ")}</span>
+              <span aria-hidden="true" className="text-indigo-400 font-bold whitespace-nowrap">
                 {displayText}
                 <span className="animate-pulse">|</span>
               </span>
-            </motion.h3>
+            </motion.h2>
             <motion.p
               className="text-lg md:text-xl text-gray-300"
               initial={{ opacity: 0, y: 20 }}
@@ -116,20 +103,22 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.8 }}
             >
-              <motion.button
-                className="mt-6 bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300"
+              <MotionLink
+                to="/contact"
+                className="mt-6 inline-block text-center bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link to="/Contact">Get in Touch</Link>
-              </motion.button>
-              <motion.button
-                className="mt-6 bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300"
+                Get in Touch
+              </MotionLink>
+              <MotionLink
+                to="/projects"
+                className="mt-6 inline-block text-center bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link to="/Projects">View Projects</Link>
-              </motion.button>
+                View Projects
+              </MotionLink>
             </motion.div>
           </div>
         </motion.div>
@@ -142,6 +131,14 @@ const Hero: React.FC = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="relative w-full h-96">
+            {/* Keyboard/screen-reader equivalent of clicking the panel. Hidden until focused. */}
+            <button
+              type="button"
+              onClick={toggleDisplay}
+              className="sr-only focus:not-sr-only focus:absolute focus:right-2 focus:top-2 focus:z-10 focus:rounded-md focus:bg-indigo-600 focus:px-3 focus:py-1 focus:text-sm focus:text-white"
+            >
+              {showWindow ? "Show profile photo" : "Show code window"}
+            </button>
             <AnimatePresence mode="wait">
               {showWindow ? (
                 <motion.div

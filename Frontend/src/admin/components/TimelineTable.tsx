@@ -1,75 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { safeAxiosInstance } from '../../ui/utils/axios';
+import { useAdminResource } from '../hooks';
+import type { TimelineItem } from '../types';
 import TimelineModal from './TimelineModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import AdminErrorBanner from './AdminErrorBanner';
+import AdminNoticeBanner from './AdminNoticeBanner';
 import { Plus, Edit3, Trash2, Search, RefreshCw, Calendar, BookOpen, Trophy, Briefcase, Clock } from 'lucide-react';
 
-interface TimelineItem {
-    id: string;
-    title: string;
-    date: string;
-    description: string;
-    type: 'EDUCATION' | 'HACKATHON' | 'WORK';
-    remarks: string | null;
-}
-
 const TimelineTable: React.FC = () => {
-    const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([]);
-    const [selected, setSelected] = useState<string[]>([]);
+    const { items: timelineItems, selected, loading, isRefreshing, error, clearError, fetchItems: fetchTimelineItems, refreshData, handleCheckbox, toggleAll, handleDelete, notice, clearNotice, announceSaved } = useAdminResource<TimelineItem>('/timeline');
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editItem, setEditItem] = useState<TimelineItem | null>(null);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isRefreshing, setIsRefreshing] = useState(false);
     const [filterType, setFilterType] = useState<'ALL' | 'EDUCATION' | 'HACKATHON' | 'WORK'>('ALL');
 
-    const fetchTimelineItems = async () => {
-        try {
-            setLoading(true);
-            const res = await safeAxiosInstance.get('/timeline');
-            setTimelineItems(res.data);
-        } catch (err) {
-            console.error('Fetch error:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const refreshData = async () => {
-        setIsRefreshing(true);
-        await fetchTimelineItems();
-        setTimeout(() => setIsRefreshing(false), 500);
-    };
-
-    useEffect(() => {
-        fetchTimelineItems();
-    }, []);
-
-    const handleCheckbox = (id: string) => {
-        setSelected(prev =>
-            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-        );
-    };
-
-    const handleSelectAll = () => {
-        if (selected.length === filteredItems.length) {
-            setSelected([]);
-        } else {
-            setSelected(filteredItems.map(item => item.id));
-        }
-    };
-
-    const handleDelete = async () => {
-        try {
-            await Promise.all(selected.map(id => safeAxiosInstance.delete(`/timeline/${id}`)));
-            setSelected([]);
-            fetchTimelineItems();
-        } catch (err) {
-            console.error('Delete error:', err);
-        }
-    };
 
     const filteredItems = timelineItems.filter(item => {
         const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -124,6 +70,8 @@ const TimelineTable: React.FC = () => {
 
     const typeCounts = getTypeCounts();
 
+    const handleSelectAll = () => toggleAll(filteredItems.map(item => item.id));
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -137,6 +85,8 @@ const TimelineTable: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-900">
+            <AdminErrorBanner message={error} onDismiss={clearError} />
+            <AdminNoticeBanner message={notice} onDismiss={clearNotice} />
             {/* Background Elements */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
             
@@ -231,7 +181,7 @@ const TimelineTable: React.FC = () => {
                         
                         <select
                             value={filterType}
-                            onChange={(e) => setFilterType(e.target.value as any)}
+                            onChange={(e) => setFilterType(e.target.value as typeof filterType)}
                             className="px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50"
                         >
                             <option value="ALL">All Types</option>
@@ -368,7 +318,10 @@ const TimelineTable: React.FC = () => {
                             setEditItem(null);
                         }}
                         existingItem={editItem}
-                        onSuccess={fetchTimelineItems}
+                        onSuccess={() => {
+                            fetchTimelineItems();
+                            announceSaved();
+                        }}
                     />
                 )}
 

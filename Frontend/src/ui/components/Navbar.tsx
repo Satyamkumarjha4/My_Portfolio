@@ -1,24 +1,119 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link, useLocation } from "react-router-dom"
-import Image from "../../../public/S.png"
 import { Menu, X } from "lucide-react"
+import { useEscapeKey } from "../hooks/useEscapeKey"
+import { useFocusTrap } from "../hooks/useFocusTrap"
+
+const navItems = [
+  { path: "/", label: "Home" },
+  { path: "/about", label: "About" },
+  { path: "/projects", label: "Projects" },
+  { path: "/contact", label: "Contact" },
+]
+
+// Rendered only while the menu is open, so the focus trap and Escape handling
+// are active exactly as long as the dialog is on screen.
+const MobileMenu: React.FC<{ pathname: string; onClose: () => void }> = ({ pathname, onClose }) => {
+  const trapRef = useFocusTrap<HTMLDivElement>()
+  useEscapeKey(onClose)
+  const activeTab = pathname
+
+  return (
+    <motion.div
+      ref={trapRef}
+      id="mobile-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu"
+      tabIndex={-1}
+      className="fixed top-0 right-0 h-full w-64 bg-gray-900 z-10 shadow-lg flex flex-col focus:outline-none"
+      initial={{ x: "100%" }}
+      animate={{ x: 0 }}
+      exit={{ x: "100%" }}
+      transition={{ type: "spring", damping: 25, stiffness: 300 }}
+    >
+      <div className="flex justify-end p-4">
+        <motion.button
+          onClick={() => onClose()}
+          className="text-white"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          aria-label="Close menu"
+        >
+          <X size={24} />
+        </motion.button>
+      </div>
+
+      <div className="flex flex-col items-center mt-8">
+        <motion.div className="w-16 h-16 mb-6" whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.9 }}>
+          <Link to="/" aria-label="Home" onClick={() => onClose()}>
+            <img src="/S.png" alt="Satyam Kumar Jha logo" width={64} height={64} className="rounded-full" />
+          </Link>
+        </motion.div>
+
+        <nav aria-label="Mobile" className="w-full">
+          <ul className="flex flex-col items-center space-y-4 w-full">
+            {navItems.map((item, index) => (
+              <motion.li
+                key={item.path}
+                className="w-full"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Link
+                  to={item.path}
+                  className="w-full"
+                  onClick={() => onClose()}
+                >
+                  <motion.div
+                    className={`text-white text-lg py-2 px-6 w-full text-center ${
+                      activeTab === item.path ? "bg-gray-800 font-medium" : "hover:bg-gray-800/50"
+                    } rounded-md transition-colors`}
+                    whileHover={{ x: 5 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {item.label}
+                  </motion.div>
+                </Link>
+              </motion.li>
+            ))}
+
+            {/* Admin Button in Mobile Menu */}
+            <motion.li
+              className="w-full mt-4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: navItems.length * 0.1 }}
+            >
+              <Link to="/info" className="block w-full" onClick={() => onClose()}>
+                <motion.div
+                  className="bg-gray-800 text-white py-2 px-6 rounded-md w-full text-center hover:bg-gray-700 shadow-md"
+                  whileHover={{ x: 5 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Info
+                </motion.div>
+              </Link>
+            </motion.li>
+          </ul>
+        </nav>
+      </div>
+    </motion.div>
+  )
+}
 
 const Navbar: React.FC = () => {
   const location = useLocation()
   const pathname = location.pathname
   const [visible, setVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
-  const [activeTab, setActiveTab] = useState("/")
+  const lastScrollY = useRef(0)
+  const activeTab = pathname
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  useEffect(() => {
-    // Set active tab based on current path
-    setActiveTab(pathname)
-  }, [pathname])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +124,7 @@ const Navbar: React.FC = () => {
         setVisible(true)
       }
       // Hide when scrolling down
-      else if (currentScrollY > lastScrollY) {
+      else if (currentScrollY > lastScrollY.current) {
         setVisible(false)
       }
       // Show when scrolling up
@@ -37,7 +132,7 @@ const Navbar: React.FC = () => {
         setVisible(true)
       }
 
-      setLastScrollY(currentScrollY)
+      lastScrollY.current = currentScrollY
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
@@ -45,7 +140,7 @@ const Navbar: React.FC = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll)
     }
-  }, [lastScrollY])
+  }, [])
 
   useEffect(() => {
     // Close mobile menu when screen size changes to desktop
@@ -74,18 +169,7 @@ const Navbar: React.FC = () => {
     }
   }, [mobileMenuOpen])
 
-  const navigateTo = (path: string) => {
-    window.location.href = path
-    setActiveTab(path)
-    setMobileMenuOpen(false)
-  }
-
-  const navItems = [
-    { path: "/", label: "Home" },
-    { path: "/about", label: "About" },
-    { path: "/projects", label: "Projects" },
-    { path: "/contact", label: "Contact" },
-  ]
+  const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), [])
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen)
@@ -93,39 +177,50 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <motion.nav
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-md focus:bg-indigo-600 focus:px-4 focus:py-2 focus:text-white"
+      >
+        Skip to main content
+      </a>
+      <motion.header
         className="fixed top-0 left-0 w-full flex justify-between items-center p-2 md:p-4 h-16 md:h-20 z-11"
         initial={{ y: -100 }}
         animate={{ y: visible ? 0 : -100 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <motion.div className="w-12 md:w-16 p-2" whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.9 }}>
-          <img
-            src={Image || "/placeholder.svg"}
-            alt="logo"
-            className="rounded-full mt-4 cursor-pointer"
-            onClick={() => navigateTo("/")}
-          />
+          <Link to="/" aria-label="Home">
+            <img
+              src="/S.png"
+              alt="Satyam Kumar Jha logo"
+              width={64}
+              height={64}
+              className="rounded-full mt-4"
+            />
+          </Link>
         </motion.div>
 
         {/* Desktop Navigation - Hidden on mobile */}
-        <motion.div
+        <motion.nav
+          aria-label="Main"
           className={`bg-gray-800 w-auto h-full rounded-full px-2 md:px-4 gap-2 md:gap-10 shadow-lg hidden md:block`}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
         >
           <ul className="flex space-x-1 md:space-x-4 justify-center items-center justify-between h-full">
-            {navItems.map((item, index) => (
-              <Link to={item.label === "Home" ? "/" : `/${item.label.toLowerCase()}`} key={index}>
-                <motion.li
-                  key={item.path}
-                  onClick={() => navigateTo(item.path)}
-                  className={`text-white cursor-pointer text-sm md:text-lg p-1 md:p-2 relative ${
-                    activeTab === item.path ? "font-medium" : ""
-                  }`}
-                  whileHover={{ backgroundColor: "rgba(75, 85, 99, 0.5)", borderRadius: "9999px" }}
-                  whileTap={{ scale: 0.95 }}
+            {navItems.map((item) => (
+              <motion.li
+                key={item.path}
+                className={`text-white text-sm md:text-lg relative ${activeTab === item.path ? "font-medium" : ""}`}
+                whileHover={{ backgroundColor: "rgba(75, 85, 99, 0.5)", borderRadius: "9999px" }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link
+                  to={item.path}
+                  className="relative block p-1 md:p-2 focus-visible:outline-2 focus-visible:outline-indigo-400 rounded-full"
+                  aria-current={activeTab === item.path ? "page" : undefined}
                 >
                   {item.label}
                   {activeTab === item.path && (
@@ -137,20 +232,21 @@ const Navbar: React.FC = () => {
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
-                </motion.li>
-              </Link>
+                </Link>
+              </motion.li>
             ))}
           </ul>
-        </motion.div>
+        </motion.nav>
 
         {/* Admin Button - Hidden on mobile */}
-        <Link to="/info">
-          <motion.div className="hidden md:block" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <button className="bg-gray-800 text-white px-3 py-1 md:px-4 md:py-2 text-sm md:text-base rounded-full hover:bg-gray-700 shadow-md">
-              Info
-            </button>
-          </motion.div>
-        </Link>
+        <motion.div className="hidden md:block" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Link
+            to="/info"
+            className="block bg-gray-800 text-white px-3 py-1 md:px-4 md:py-2 text-sm md:text-base rounded-full hover:bg-gray-700 shadow-md"
+          >
+            Info
+          </Link>
+        </motion.div>
 
         {/* Hamburger Menu Button - Visible only on mobile */}
         <motion.button
@@ -159,6 +255,8 @@ const Navbar: React.FC = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-menu"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </motion.button>
@@ -167,7 +265,7 @@ const Navbar: React.FC = () => {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              className="fixed inset-0 bg-black bg-opacity-50 z-10"
+              className="fixed inset-0 bg-black/50 z-10"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -178,87 +276,9 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Menu */}
         <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              className="fixed top-0 right-0 h-full w-64 bg-gray-900 z-10 shadow-lg flex flex-col"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            >
-              <div className="flex justify-end p-4">
-                <motion.button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-white"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  aria-label="Close menu"
-                >
-                  <X size={24} />
-                </motion.button>
-              </div>
-
-              <div className="flex flex-col items-center mt-8">
-                <motion.div className="w-16 h-16 mb-6" whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.9 }}>
-                  <img
-                    src={Image || "/placeholder.svg"}
-                    alt="logo"
-                    className="rounded-full cursor-pointer"
-                    onClick={() => navigateTo("/")}
-                  />
-                </motion.div>
-
-                <nav className="w-full">
-                  <ul className="flex flex-col items-center space-y-4 w-full">
-                    {navItems.map((item, index) => (
-                      <motion.li
-                        key={item.path}
-                        className="w-full"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        <Link
-                          to={item.label === "Home" ? "/" : `/${item.label.toLowerCase()}`}
-                          className="w-full"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <motion.div
-                            className={`text-white text-lg py-2 px-6 w-full text-center ${
-                              activeTab === item.path ? "bg-gray-800 font-medium" : "hover:bg-gray-800/50"
-                            } rounded-md transition-colors`}
-                            whileHover={{ x: 5 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => navigateTo(item.path)}
-                          >
-                            {item.label}
-                          </motion.div>
-                        </Link>
-                      </motion.li>
-                    ))}
-
-                    {/* Admin Button in Mobile Menu */}
-                    <motion.li
-                      className="w-full mt-4"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: navItems.length * 0.1 }}
-                    >
-                      <motion.button
-                        className="bg-gray-800 text-white py-2 px-6 rounded-md w-full hover:bg-gray-700 shadow-md"
-                        whileHover={{ x: 5 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Info
-                      </motion.button>
-                    </motion.li>
-                  </ul>
-                </nav>
-              </div>
-            </motion.div>
-          )}
+          {mobileMenuOpen && <MobileMenu pathname={pathname} onClose={closeMobileMenu} />}
         </AnimatePresence>
-      </motion.nav>
+      </motion.header>
     </>
   )
 }

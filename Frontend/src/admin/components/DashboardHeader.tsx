@@ -2,12 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Home, User, LogOut } from 'lucide-react';
+import { clearToken } from '../../ui/utils/auth';
 
 const DashboardHeader: React.FC = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Clear any auth state if needed
+        clearToken();
         navigate('/admin/login');
     };
 

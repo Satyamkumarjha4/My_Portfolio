@@ -1,4 +1,5 @@
 import type React from "react"
+import { useMemo } from "react"
 import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 
@@ -10,14 +11,9 @@ const AboutHero: React.FC = () => {
     }
   }
 
-  return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
-
-      {/* Animated particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 20 }).map((_, i) => (
+  // Generated once so the background does not re-randomise on every render
+  const particles = useMemo(
+    () => Array.from({ length: 20 }).map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full bg-indigo-500/10"
@@ -40,7 +36,18 @@ const AboutHero: React.FC = () => {
               delay: Math.random() * 5,
             }}
           />
-        ))}
+        )),
+    []
+  )
+
+  return (
+    <div className="relative min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900/10" />
+
+      {/* Animated particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        {particles}
       </div>
 
       <div className="container mx-auto px-6 z-10 text-center">
