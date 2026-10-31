@@ -1,0 +1,32 @@
+[
+  {
+    "path": "/",
+    "title": "Satyam Kumar Jha - Full-Stack & AI/ML Developer",
+    "description": "Satyam Kumar Jha - full-stack developer and AI/ML engineer. Projects built with React, Express, PostgreSQL and Python."
+  },
+  {
+    "path": "/about",
+    "title": "About | Satyam Kumar Jha",
+    "description": "Education, hackathons, achievements and certifications of Satyam Kumar Jha."
+  },
+  {
+    "path": "/projects",
+    "title": "Projects | Satyam Kumar Jha",
+    "description": "Full-stack and machine learning projects by Satyam Kumar Jha, with source code and live demos."
+  },
+  {
+    "path": "/contact",
+    "title": "Contact | Satyam Kumar Jha",
+    "description": "Get in touch with Satyam Kumar Jha or leave feedback on the portfolio."
+  },
+  {
+    "path": "/info",
+    "title": "About this site | Satyam Kumar Jha",
+    "description": "How this portfolio is built: React, Express, Prisma and PostgreSQL, and what is planned next."
+  },
+  {
+    "path": "/status",
+    "title": "Under the hood | Satyam Kumar Jha",
+    "description": "Live API status, an interactive API explorer and the architecture decisions behind this portfolio."
+  }
+]

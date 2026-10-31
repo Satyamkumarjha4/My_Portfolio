@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: /admin
-Allow: /
-
-Sitemap: https://satyamportfolio-seven.vercel.app/sitemap.xml
