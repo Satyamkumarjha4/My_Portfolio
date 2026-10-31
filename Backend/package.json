@@ -8,7 +8,11 @@
     "start": "node src/index.js",
     "test": "vitest run",
     "hash-password": "node scripts/hash-password.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "start:local": "node --env-file=.env.local src/index.js",
+    "db:host:local": "node --env-file=.env.local scripts/print-db-host.js",
+    "migrate:status:local": "node --env-file=.env.local node_modules/prisma/build/index.js migrate status",
+    "migrate:deploy:local": "node --env-file=.env.local node_modules/prisma/build/index.js migrate deploy"
   },
   "type": "module",
   "keywords": [],
