@@ -1,6 +1,9 @@
 {
   "rewrites": [
-    { "source": "/((?!assets/|.*\\..*).*)", "destination": "/index.html" }
+    { "source": "/(about|projects|contact|info|status)", "destination": "/index.html" },
+    { "source": "/(about|projects|contact|info|status)/", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/admin/:path*", "destination": "/index.html" }
   ],
   "headers": [
     {
