@@ -20,9 +20,9 @@ jobs:
           cache-dependency-path: Backend/package-lock.json
       - run: npm ci
       - run: npx prisma generate
+      - run: npm run lint
       - run: npm test
       - run: npm audit --omit=dev --audit-level=high
-        continue-on-error: true
 
   frontend:
     runs-on: ubuntu-latest
@@ -43,4 +43,3 @@ jobs:
         env:
           VITE_API_URL: http://localhost:3000/api
       - run: npm audit --omit=dev --audit-level=high
-        continue-on-error: true
