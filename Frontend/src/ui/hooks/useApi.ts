@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useState } from "react"
 import { publicApi } from "../utils/http"
+import snapshot from "../../data/snapshot.json"
 
 // Tiny stale-while-revalidate cache for public GET endpoints.
 // - Fresh data (< TTL) is served without a request
 // - Stale data is rendered immediately and revalidated in the background
 // - Concurrent callers share one in-flight request (Home + Projects both need /projects)
+// - The public collections are pre-seeded from the build-time snapshot
+//   (scripts/snapshot.mjs), so the first render has real content even while the
+//   API is asleep. Seeds are marked stale (at: 0) and revalidated in the background.
 const TTL_MS = 60_000
 
 interface Entry {
@@ -12,7 +16,14 @@ interface Entry {
   at: number
 }
 
-const cache = new Map<string, Entry>()
+const SEEDS: [string, unknown][] = [
+  ["/projects", snapshot.projects],
+  ["/tech-stacks", snapshot.techStacks],
+  ["/timeline", snapshot.timeline],
+  ["/achievements", snapshot.achievements],
+]
+
+const cache = new Map<string, Entry>(SEEDS.map(([path, data]) => [path, { data, at: 0 }]))
 const inflight = new Map<string, Promise<unknown>>()
 
 const request = (path: string): Promise<unknown> => {
