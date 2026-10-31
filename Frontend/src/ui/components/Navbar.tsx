@@ -233,13 +233,15 @@ const Navbar: React.FC = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: navItems.length * 0.1 }}
                     >
-                      <motion.button
-                        className="bg-gray-800 text-white py-2 px-6 rounded-md w-full hover:bg-gray-700 shadow-md"
-                        whileHover={{ x: 5 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Info
-                      </motion.button>
+                      <Link to="/info" className="block w-full" onClick={() => setMobileMenuOpen(false)}>
+                        <motion.div
+                          className="bg-gray-800 text-white py-2 px-6 rounded-md w-full text-center hover:bg-gray-700 shadow-md"
+                          whileHover={{ x: 5 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          Info
+                        </motion.div>
+                      </Link>
                     </motion.li>
                   </ul>
                 </nav>
