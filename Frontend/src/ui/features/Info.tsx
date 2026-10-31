@@ -6,7 +6,7 @@ import Footer from "../components/Footer"
 import { usePageMeta } from "../hooks/usePageMeta"
 
 export default function InfoPage() {
-  usePageMeta('About this site', 'How this portfolio is built: React, Express, Prisma and PostgreSQL, and what is planned next.')
+  usePageMeta("/info")
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Navbar />  

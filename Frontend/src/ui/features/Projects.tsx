@@ -27,7 +27,7 @@ interface Project {
 
 
 const Projects: React.FC = () => {
-  usePageMeta("Projects", "Full-stack and machine learning projects by Satyam Kumar Jha, with source code and live demos.")
+  usePageMeta("/projects")
   const { data: projects, loading, error, refetch } = useApi<Project[]>("/projects")
   const { hash } = useLocation()
   const { scrollYProgress } = useScroll()

@@ -7,7 +7,7 @@ import { usePageMeta } from "../hooks/usePageMeta"
 
 
 const Contact: React.FC = () => {
-  usePageMeta('Contact', 'Get in touch with Satyam Kumar Jha or leave feedback on the portfolio.')
+  usePageMeta("/contact")
   return (
     <div className="relative min-h-screen bg-gray-900 overflow-hidden">
       <Navbar />

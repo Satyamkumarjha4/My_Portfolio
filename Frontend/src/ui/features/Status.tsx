@@ -40,7 +40,7 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
 )
 
 const Status: React.FC = () => {
-  usePageMeta("Under the hood", "Live API status, an interactive API explorer and the architecture decisions behind this portfolio.")
+  usePageMeta("/status")
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">

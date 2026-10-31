@@ -9,7 +9,7 @@ import ProjectsShowcase from '../components/ProjectGrid';
 
 
 const Home: React.FC = () => {
-  usePageMeta("", 'Satyam Kumar Jha - full-stack developer and AI/ML engineer. Projects built with React, Express, PostgreSQL and Python.')
+  usePageMeta("/")
     return (
         <>
             <Navbar />

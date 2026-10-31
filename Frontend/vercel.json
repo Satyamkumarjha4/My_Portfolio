@@ -1,12 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/(about|projects|contact|info|status)",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/(about|projects|contact|info|status)/",
-      "destination": "/index.html"
+      "source": "/:route(about|projects|contact|info|status)",
+      "destination": "/:route/index.html"
     },
     {
       "source": "/admin",

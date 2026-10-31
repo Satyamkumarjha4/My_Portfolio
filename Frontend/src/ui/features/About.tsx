@@ -8,7 +8,7 @@ import AboutHero from "../components/AboutHero"
 import { usePageMeta } from "../hooks/usePageMeta"
 
 const About: React.FC = () => {
-  usePageMeta('About', 'Education, hackathons, achievements and certifications of Satyam Kumar Jha.')
+  usePageMeta("/about")
   return (
     <motion.div
       className="bg-gray-900"

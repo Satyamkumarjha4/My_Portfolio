@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
 import { resolveSiteUrl } from './site-url.mjs';
 import { writeSeoFiles } from './seo-files.mjs';
+import { writeRoutePages } from './route-pages.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = path.join(root, 'dist');
@@ -15,3 +16,6 @@ const pages = JSON.parse(fs.readFileSync(path.join(root, 'src/config/pages.json'
 
 writeSeoFiles({ distDir, siteUrl, paths: pages.map((p) => p.path) });
 console.log(`[postbuild] site URL ${siteUrl}: wrote robots.txt and sitemap.xml (${pages.length} URLs)`);
+
+const written = writeRoutePages({ distDir, siteUrl, pages });
+console.log(`[postbuild] wrote per-route HTML: ${written.join(', ')}`);
