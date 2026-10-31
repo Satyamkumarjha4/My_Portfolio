@@ -4,7 +4,6 @@ import type React from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link, useLocation } from "react-router-dom"
-import Image from "../../../public/S.png"
 import { Menu, X } from "lucide-react"
 import { useEscapeKey } from "../hooks/useEscapeKey"
 import { useFocusTrap } from "../hooks/useFocusTrap"
@@ -52,7 +51,7 @@ const MobileMenu: React.FC<{ pathname: string; onClose: () => void }> = ({ pathn
       <div className="flex flex-col items-center mt-8">
         <motion.div className="w-16 h-16 mb-6" whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.9 }}>
           <Link to="/" aria-label="Home" onClick={() => onClose()}>
-            <img src={Image} alt="Satyam Kumar Jha logo" width={64} height={64} className="rounded-full" />
+            <img src="/S.png" alt="Satyam Kumar Jha logo" width={64} height={64} className="rounded-full" />
           </Link>
         </motion.div>
 
@@ -193,7 +192,7 @@ const Navbar: React.FC = () => {
         <motion.div className="w-12 md:w-16 p-2" whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.9 }}>
           <Link to="/" aria-label="Home">
             <img
-              src={Image}
+              src="/S.png"
               alt="Satyam Kumar Jha logo"
               width={64}
               height={64}
