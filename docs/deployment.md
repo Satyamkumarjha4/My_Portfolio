@@ -202,6 +202,72 @@ API_ORIGIN=https://<render-service>.onrender.com ./scripts/cold-warm.sh
 Pre-cutover baseline: cold 55.4 s, warm 0.38 s. Do not change the keep-warm approach
 unless these numbers show a problem.
 
+## Content snapshot and the publish hook
+
+Public pages render from a snapshot of the API content baked into the build, so they
+show real content even while the Render API is asleep. Admin edits therefore have to
+trigger a rebuild, which is what the deploy hook does.
+
+```
+admin saves  ->  API write succeeds  ->  API waits 60 s of quiet  ->  POST Vercel Deploy Hook
+             ->  Vercel build: prebuild fetches the API into the snapshot, vite build, postbuild
+             ->  new static site live (about 1-2 minutes after the last save)
+```
+
+Until the rebuild finishes, visitors still see fresh data: each page revalidates from the
+API in the background and swaps in the newer data once it arrives (if the API is awake).
+
+### Setup (manual, once)
+
+1. **Vercel > project > Settings > Environment Variables**
+   - `VITE_API_URL` = `https://<render-service>.onrender.com/api` must be available to
+     **Production builds** (the snapshot is fetched at build time, not at runtime).
+   - Optional `VITE_SITE_URL` = the public URL, e.g. your custom domain
+     (`https://example.com`, no trailing slash). Leave unset to keep
+     `https://satyamportfolio-seven.vercel.app`. It drives canonical/OG URLs, `sitemap.xml`
+     and `robots.txt`.
+2. **Create the deploy hook:** Vercel > project > **Settings > Git > Deploy Hooks** > name
+   `content-publish`, branch `main` > **Create Hook**. Copy the URL. Treat it like a
+   password: anyone with it can trigger builds.
+3. **Render > service > Environment:** add `VERCEL_DEPLOY_HOOK_URL` = that URL, save (Render
+   redeploys). Without it the API silently skips the hook (the admin message will still
+   say the site updates, but nothing is rebuilt).
+4. **Deploy the new backend before relying on this.** The hook lives in the API code; the
+   production API that was live when this was written (2026-10-31) did not have it yet.
+
+### Verify
+
+- In the admin panel edit a project and save: you should see *"Saved - the public site
+  updates in about a minute."*
+- About a minute later Vercel > Deployments shows a new deployment whose source is
+  "Deploy Hook". Render logs contain `Triggered frontend deploy hook` (the URL is never
+  logged).
+- In that Vercel build log look for `[snapshot] refreshed: projects, ...`. If it says
+  `kept committed` the API was unreachable during the build and the site was built from
+  the last committed snapshot (still working, but stale). Re-run the deployment once the API
+  is awake, or run `npm run snapshot` locally and commit `src/data/snapshot.json`.
+- `curl -s https://<site>/projects | grep -E "<title>|canonical|og:image"` shows the
+  `/projects` title and URLs in the raw HTML. Unknown paths (e.g. `/nope`) must return a
+  real 404 and `/admin/login` must still load the app.
+
+### Things to know
+
+- A burst of edits makes **one** build: the API waits 60 s after the last write (max 5 min).
+  A pending call is sent on shutdown so a restart does not lose it.
+- Only projects, achievements, tech stack and timeline writes trigger it. Feedback and login
+  do not.
+- Vercel hobby limits apply to build minutes and deploys per day; one build per burst keeps
+  normal use well under them.
+- The cold start can make the build slower: the snapshot step waits up to 70 s per request
+  and retries once.
+- `src/data/snapshot.json` is committed so builds still succeed if the API is down. It is
+  refreshed on every Vercel build but that refresh is not committed back, so run
+  `npm run snapshot` and commit now and then to keep the fallback current.
+- `public/og-image.png` (1200x630) was rendered from `Frontend/scripts/og-card.html`; re-render it
+  with Playwright if the name/role changes.
+- CSP: `vercel.json` allows `connect-src https://*.onrender.com`. Narrow it to your exact
+  service host once you are happy with the setup.
+
 ## Keep-warm (Render free tier)
 
 `.github/workflows/keep-warm.yml` pings `GET /livez` every 10 minutes.
@@ -247,6 +313,7 @@ unless these numbers show a problem.
 - [ ] Deploy backend, then verify `/livez`, `/health`
 - [ ] Verify new authentication, old token returns 401 (`smoke-test.sh`)
 - [ ] Deploy frontend; verify admin login, public pages, feedback, `/status`
+- [ ] Create the Vercel deploy hook, add `VERCEL_DEPLOY_HOOK_URL` to Render, edit something in the admin and confirm a rebuild starts (see *Content snapshot and the publish hook*)
 
 **Post-deploy**
 - [ ] Two-network rate-limit test
@@ -266,10 +333,13 @@ Use the pooled Neon URL for the app; run future migrations with
 
 ### Frontend (Vercel)
 
-`VITE_API_URL` is the only variable the app reads. `vercel.json` provides SPA rewrites
-(static files such as `robots.txt` are not rewritten), immutable caching for `/assets/*`
-and security headers. Update the canonical/OG/sitemap domain in `index.html` and
-`public/sitemap.xml` if the site is not on `satyamportfolio-seven.vercel.app`.
+The app reads `VITE_API_URL` (the API) and, optionally, `VITE_SITE_URL` (the public URL;
+canonical/OG tags, `sitemap.xml` and `robots.txt` are generated from it at build, so there is
+nothing to edit when the domain changes). `vercel.json` maps `/about`, `/projects`,
+`/contact`, `/info` and `/status` to their prebuilt `<route>/index.html`, falls back to
+`index.html` for `/admin/*`, serves real 404s for everything else, and provides immutable
+caching for `/assets/*`, security headers and the CSP. See
+[Content snapshot and the publish hook](#content-snapshot-and-the-publish-hook).
 
 ### Operations
 

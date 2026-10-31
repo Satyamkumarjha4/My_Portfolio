@@ -26,6 +26,7 @@ npm test                        # vitest + supertest (Prisma is mocked, no DB ne
 | `TRUST_PROXY` | prod | Set to `1` behind a reverse proxy so rate limiting sees real client IPs |
 | `PORT` | no | Defaults to 3000 |
 | `LOG_LEVEL` | no | pino level, default `info` |
+| `VERCEL_DEPLOY_HOOK_URL` | no | Vercel Deploy Hook URL. When set, admin content writes trigger a (debounced) frontend rebuild. Unset = no-op |
 
 The server refuses to start if a required variable is missing.
 
@@ -40,7 +41,20 @@ npm run lint && npm test && npm run build
 ```
 
 `VITE_*` variables are **public**: they are inlined into the JS bundle. Never put
-secrets in them. The only one used is `VITE_API_URL`.
+secrets in them. Used: `VITE_API_URL` (the API) and the optional `VITE_SITE_URL`
+(public URL for canonical/OG tags, `sitemap.xml` and `robots.txt`; defaults to the
+current vercel.app URL).
+
+`npm run build` also runs two scripts automatically:
+
+- `prebuild` (`scripts/snapshot.mjs`) fetches `/projects`, `/tech-stacks`, `/timeline` and
+  `/achievements` from `VITE_API_URL` into `src/data/snapshot.json` (committed). The app
+  renders from it on first paint and revalidates from the API. If the API is unreachable
+  the committed snapshot is kept (warning); the build only fails if there is none.
+  `npm run snapshot` refreshes it on its own; commit the result when content changed.
+- `postbuild` (`scripts/postbuild.mjs`) writes `sitemap.xml`, `robots.txt` and one HTML file
+  per route (`dist/<route>/index.html`) with that route's title, description, canonical and
+  Open Graph tags. Titles/descriptions live in `src/config/pages.json`.
 
 ## Migrations
 
