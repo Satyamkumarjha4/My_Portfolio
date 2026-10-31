@@ -129,6 +129,14 @@ const Hero: React.FC = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="relative w-full h-96">
+            {/* Keyboard/screen-reader equivalent of clicking the panel. Hidden until focused. */}
+            <button
+              type="button"
+              onClick={toggleDisplay}
+              className="sr-only focus:not-sr-only focus:absolute focus:right-2 focus:top-2 focus:z-10 focus:rounded-md focus:bg-indigo-600 focus:px-3 focus:py-1 focus:text-sm focus:text-white"
+            >
+              {showWindow ? "Show profile photo" : "Show code window"}
+            </button>
             <AnimatePresence mode="wait">
               {showWindow ? (
                 <motion.div
