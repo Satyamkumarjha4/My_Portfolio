@@ -4,6 +4,7 @@ import type React from "react"
 import { Github, Linkedin, Mail } from "lucide-react"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
+import { site } from "../../config/site"
 
 const MotionLink = motion.create(Link)
 
@@ -89,7 +90,7 @@ const Footer: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.5 }}
             >
               <motion.a
-                href="https://github.com/Satyamkumarjha4"
+                href={site.github.url}
                 target="_blank"
                 className="text-gray-400 hover:text-indigo-400 transition-colors"
                 variants={socialIconVariants}
@@ -101,7 +102,7 @@ const Footer: React.FC = () => {
                 <span className="sr-only">GitHub</span>
               </motion.a>
               <motion.a
-                href="https://linkedin.com/in/satyamkumarjha4"
+                href={site.linkedin.url}
                 target="_blank"
                 className="text-gray-400 hover:text-indigo-400 transition-colors"
                 variants={socialIconVariants}
@@ -113,7 +114,7 @@ const Footer: React.FC = () => {
                 <span className="sr-only">LinkedIn</span>
               </motion.a>
               <motion.a
-                href="mailto:satyamjha4@gmail.com"
+                href={`mailto:${site.email}`}
                 className="text-gray-400 hover:text-indigo-400 transition-colors"
                 variants={socialIconVariants}
                 whileHover="hover"

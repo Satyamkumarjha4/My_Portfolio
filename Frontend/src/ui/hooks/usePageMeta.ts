@@ -1,6 +1,7 @@
 import { useEffect } from "react"
+import { site } from "../../config/site"
 
-const SITE = "Satyam Kumar Jha"
+const SITE = site.name
 
 // Per-route <title> and description for a client-rendered SPA.
 export function usePageMeta(title: string, description?: string) {

@@ -5,8 +5,9 @@ import ArchitectureDiagram from "../components/ArchitectureDiagram"
 import HealthWidget from "../components/HealthWidget"
 import ApiExplorer from "../components/ApiExplorer"
 import { usePageMeta } from "../hooks/usePageMeta"
+import { site } from "../../config/site"
 
-const REPO = "https://github.com/Satyamkumarjha4/My_Portfolio"
+const REPO = site.github.repoUrl
 
 const decisions = [
   {

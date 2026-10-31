@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { site } from "../../config/site";
 
 const Window = () => {
   const [copied, setCopied] = useState(false);
@@ -15,7 +16,7 @@ const Window = () => {
         return "Hello! I'm Satyam Kumar Jha, Thank you visiting my Porfolio."
     
     def get_contact(self):
-        return {"email": "satyamjha4@gmail.com", "phone": "+91 7683095499", "github": "Satyamkumarjha4", "linkedin": "satyamkumarjha4"}
+        return {"email": "${site.email}", "phone": "${site.phone.display}", "github": "${site.github.handle}", "linkedin": "${site.linkedin.handle}"}
         
     # Initialize
     satyam = SatyamJha()
@@ -137,19 +138,19 @@ const Window = () => {
             <span className="text-gray-300">{"{"}</span>
             <span className="text-green-400">"email"</span>
             <span className="text-gray-300">: </span>
-            <span className="text-green-400">"satyamjha4@gmail.com"</span>
+            <span className="text-green-400">"{site.email}"</span>
             <span className="text-gray-300">, </span>
             <span className="text-green-400">"phone"</span>
             <span className="text-gray-300">: </span>
-            <span className="text-green-400">"+91 7683095499"</span>
+            <span className="text-green-400">"{site.phone.display}"</span>
             <span className="text-gray-300">, </span>
             <span className="text-green-400">"github"</span>
             <span className="text-gray-300">: </span>
-            <span className="text-green-400">"Satyamkumarjha4"</span>
+            <span className="text-green-400">"{site.github.handle}"</span>
             <span className="text-gray-300">, </span>
             <span className="text-green-400">"linkedin"</span>
             <span className="text-gray-300">: </span>
-            <span className="text-green-400">"satyamkumarjha4"</span>
+            <span className="text-green-400">"{site.linkedin.handle}"</span>
             <span className="text-gray-300">{"}"}</span>
             <br />
             <br />
