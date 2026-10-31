@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link, useLocation } from "react-router-dom"
 import Image from "../../../public/S.png"
@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   const location = useLocation()
   const pathname = location.pathname
   const [visible, setVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
+  const lastScrollY = useRef(0)
   const activeTab = pathname
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
         setVisible(true)
       }
       // Hide when scrolling down
-      else if (currentScrollY > lastScrollY) {
+      else if (currentScrollY > lastScrollY.current) {
         setVisible(false)
       }
       // Show when scrolling up
@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
         setVisible(true)
       }
 
-      setLastScrollY(currentScrollY)
+      lastScrollY.current = currentScrollY
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll)
     }
-  }, [lastScrollY])
+  }, [])
 
   useEffect(() => {
     // Close mobile menu when screen size changes to desktop
