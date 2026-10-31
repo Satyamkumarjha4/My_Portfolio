@@ -11,7 +11,8 @@
     "postbuild": "node scripts/postbuild.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "preview:prod": "node scripts/preview-prod.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.43.0",
