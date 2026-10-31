@@ -1,4 +1,6 @@
 import type React from "react"
+import { useEffect } from "react"
+import { useLocation } from "react-router-dom"
 import { motion, useScroll, useSpring } from "framer-motion"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
@@ -27,12 +29,19 @@ interface Project {
 const Projects: React.FC = () => {
   usePageMeta("Projects", "Full-stack and machine learning projects by Satyam Kumar Jha, with source code and live demos.")
   const { data: projects, loading, error, refetch } = useApi<Project[]>("/projects")
+  const { hash } = useLocation()
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
   })
+
+  // Projects load asynchronously, so a #id link can only be scrolled to once they render.
+  useEffect(() => {
+    if (!hash || !projects) return
+    document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView()
+  }, [hash, projects])
 
   return (
     <motion.div
@@ -88,6 +97,7 @@ const Projects: React.FC = () => {
         {projects?.map((project, index) => (
           <ProjectDetails
             key={project.id}
+            id={project.id}
             title={project.title}
             description={project.description}
             techStack={project.techStack}

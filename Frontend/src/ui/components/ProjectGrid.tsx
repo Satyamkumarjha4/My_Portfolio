@@ -31,6 +31,7 @@ const ProjectsShowcase: React.FC = () => {
 
   const { data, loading, error, refetch } = useApi<ApiProject[]>("/projects")
   const projects: ProjectCardProps[] = (data ?? []).slice(0, 3).map((p) => ({
+    id: p.id,
     title: p.title,
     description: p.description,
     image: p.imageUrl,
@@ -111,7 +112,7 @@ const ProjectsShowcase: React.FC = () => {
         >
           {projects.map((project) => (
             <motion.div
-              key={project.title}
+              key={project.id}
               variants={itemVariants}
               className="h-full"
               style={{
@@ -121,6 +122,7 @@ const ProjectsShowcase: React.FC = () => {
             >
               
                 <ProjectCard
+                  id={project.id}
                   title={project.title}
                   description={project.description}
                   image={project.image}
