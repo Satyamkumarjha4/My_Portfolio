@@ -1,0 +1,474 @@
+{
+  "projects": [
+    {
+      "id": "c86f03f6-3e3d-41ce-a493-de74ff53eb05",
+      "title": "Movie Buddy – Recommendation Engine",
+      "description": "An interactive and personalized movie recommendation engine that leverages NLP techniques and cosine similarity to suggest movies based on user input. It uses metadata like genres, cast, and keywords to create a tag-based vector for each movie and generates recommendations accordingly. Built with Streamlit for a user-friendly interface, and integrated with the TMDb API to fetch real-time poster images and movie details. The project demonstrates the power of content-based filtering in recommendation systems.",
+      "techStack": [
+        "Streamlit",
+        "Pandas",
+        "Scikit-learn",
+        "TMDb API",
+        "Python",
+        "NLTK",
+        "Kaggle"
+      ],
+      "tags": [
+        "NLP",
+        "Recommender System",
+        "Movie App",
+        "Content-Based Filtering",
+        "Cosine Similarity",
+        "Streamlit App",
+        "Machine Learning",
+        "Data Science",
+        "User Personalization",
+        "Python Project",
+        "Metadata Extraction"
+      ],
+      "imageUrl": "/project_images/movie_recomendation_system.png",
+      "githubUrl": "https://github.com/Satyamkumarjha4/Movie_Recomendation_System",
+      "demoUrl": "https://movie-recomendation-system-skj.streamlit.app/",
+      "imageOnRight": true
+    },
+    {
+      "id": "14cac00a-2185-4496-bf5a-3899a24418df",
+      "title": "Car Price Prediction Web App",
+      "description": "A data-driven web application that predicts the price of used cars based on their features. It utilizes advanced machine learning models including CatBoost and ensemble techniques to provide accurate results. The backend is built using Flask, and the app is deployed on Render for easy accessibility. Users can input details like engine type, year, mileage, fuel type, etc to get instant price estimates. The project emphasizes feature engineering, model optimization, and a clean user interface.",
+      "techStack": [
+        "Flask",
+        "Python",
+        "CatBoost",
+        "Render",
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Pandas",
+        "NumPy",
+        "Scikit-learn",
+        "Kaggle",
+        "Matplotlib",
+        "Seaborn"
+      ],
+      "tags": [
+        "Machine Learning",
+        "Regression",
+        "Car Pricing",
+        "Model Deployment",
+        "Flask App",
+        "Feature Engineering",
+        "Data Analysis",
+        "Hyperparameter Tuning",
+        "Python Project",
+        "Scikit-learn",
+        "Render"
+      ],
+      "imageUrl": "/project_images/car_prediction.png",
+      "githubUrl": "https://github.com/Satyamkumarjha4/Car_Price_Predictor",
+      "demoUrl": "https://car-price-predictor-4aiw.onrender.com",
+      "imageOnRight": false
+    },
+    {
+      "id": "04a0a60a-ffe4-49a2-8c40-d1c73ce01080",
+      "title": "Tic-Tac-Toe Game with AI",
+      "description": "An interactive web-based Tic-Tac-Toe game where players compete against an AI opponent. Built using Streamlit for a simple interface, the game includes three difficulty levels: easy (random AI), medium (blocking strategy), and hard (min-max algorithm). The app uses Python for game logic and ensures smooth gameplay with dynamic board rendering, game state tracking, and replay functionality. It demonstrates efficient use of session state, conditional rendering, and UI interactivity within Streamlit.",
+      "techStack": [
+        "Streamlit",
+        "Python"
+      ],
+      "tags": [
+        "Game",
+        "AI",
+        "Tic-Tac-Toe",
+        "Streamlit",
+        "Python Project",
+        "Interactive UI",
+        "Mini Project",
+        "Game Logic",
+        "Session State",
+        "Turn-Based Game",
+        "Game Theory",
+        "Min-Max Algorithm"
+      ],
+      "imageUrl": "/project_images/tic-tac-toe.png",
+      "githubUrl": "https://github.com/Satyamkumarjha4/AI_Projects/blob/main/tic-tac.py",
+      "demoUrl": "https://minmax-tic-tac-toe.streamlit.app/",
+      "imageOnRight": false
+    },
+    {
+      "id": "7192512b-a703-4bc2-9965-772e04a99b06",
+      "title": "Contact Manager Streamlit App",
+      "description": "A feature-rich desktop application designed to efficiently manage personal or professional contacts. Built with PyQt5 for the GUI and SQLite for persistent data storage, it supports creating, editing, searching, and deleting contact entries. The project follows object-oriented principles and includes a user-friendly interface designed with PyQt Designer. It is ideal for users who need an offline and organized way to handle their contact database, with emphasis on usability and clean design.",
+      "techStack": [
+        "SQLite",
+        "Python",
+        "Streamlit"
+      ],
+      "tags": [
+        "Desktop App",
+        "Contact Management",
+        "OOP",
+        "PyQt5",
+        "SQLite",
+        "GUI",
+        "Python Project",
+        "Streamlit",
+        "Form-based Application",
+        "CRUD Operations"
+      ],
+      "imageUrl": "/project_images/contact_management.png",
+      "githubUrl": "https://github.com/Satyamkumarjha4/CodSoft/blob/main/STcontact.py",
+      "demoUrl": "https://stcontactpy-edcajvvka5wklxn9rq7bcm.streamlit.app/",
+      "imageOnRight": true
+    },
+    {
+      "id": "0284fd78-516a-40a6-a2bd-ea8bf3733b24",
+      "title": "Binge+ – Movie & Web Series Explorer",
+      "description": "Binge+ is a dynamic content discovery platform that enables users to explore movies and web series interactively. It features real-time search, filtering by genres or ratings, and displays live metadata such as cast, plot summaries, and posters fetched via the MongoDB Database. This responsive website provides a seamless user experience and caters to entertainment enthusiasts looking for curated content. It's designed to function as a lightweight and fast full-stack application.",
+      "techStack": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "React",
+        "Express.js",
+        "Node.js",
+        "Prisma",
+        "Postgress",
+        "Supabase"
+      ],
+      "tags": [
+        "Full-Stack",
+        "MERN",
+        "Entertainment App",
+        "Movie Database",
+        "Dynamic Search",
+        "Filtering",
+        "MongoDB",
+        "REST API",
+        "Web Development",
+        "Responsive Design",
+        "JavaScript Project"
+      ],
+      "imageUrl": "/project_images/Binge.png",
+      "githubUrl": "https://github.com/binge-plus",
+      "demoUrl": "http://34.61.33.171:3000/",
+      "imageOnRight": true
+    }
+  ],
+  "techStacks": [
+    {
+      "id": "41752953-d4e7-47c4-8cf2-c7cccaad0587",
+      "name": "JavaScript",
+      "category": "Languages",
+      "proficiency": 65,
+      "description": "Web development, frontend and backend scripting",
+      "iconName": "FaJs"
+    },
+    {
+      "id": "9c06ac0b-7f8d-467d-b609-f205c8b21ceb",
+      "name": "Python",
+      "category": "Languages",
+      "proficiency": 90,
+      "description": "Data analysis, automation, and backend development",
+      "iconName": "FaPython"
+    },
+    {
+      "id": "58912f9d-bddb-431b-ad7c-5547aec01c97",
+      "name": "TypeScript",
+      "category": "Languages",
+      "proficiency": 40,
+      "description": "Typed superset of JavaScript for scalable applications",
+      "iconName": "SiTypescript"
+    },
+    {
+      "id": "ac5907b9-0d38-4a55-b26f-b68cd242f358",
+      "name": "HTML",
+      "category": "Frontend",
+      "proficiency": 75,
+      "description": "Markup language for creating web pages",
+      "iconName": "FaHtml5"
+    },
+    {
+      "id": "0e8c7c05-d2cd-499b-8cc1-73834676d4e5",
+      "name": "CSS",
+      "category": "Frontend",
+      "proficiency": 65,
+      "description": "Styling and layout for web applications",
+      "iconName": "FaCss3Alt"
+    },
+    {
+      "id": "fc1323cd-d756-44af-870b-047830f7d973",
+      "name": "Tailwind CSS",
+      "category": "Frontend",
+      "proficiency": 50,
+      "description": "Utility-first CSS framework for rapid UI development",
+      "iconName": "SiTailwindcss"
+    },
+    {
+      "id": "529cc6ab-03a8-4376-8d52-c35c0ff8d5bb",
+      "name": "Streamlit",
+      "category": "Python_Frameworks",
+      "proficiency": 75,
+      "description": "Rapid data application development",
+      "iconName": "SiStreamlit"
+    },
+    {
+      "id": "a3d814c7-d6f2-4f0a-ae67-fd9bfe87d09a",
+      "name": "Flask",
+      "category": "Python_Frameworks",
+      "proficiency": 75,
+      "description": "Lightweight web application framework",
+      "iconName": "SiFlask"
+    },
+    {
+      "id": "154ea979-bf80-4cf2-b85b-210096a3da54",
+      "name": "SQL",
+      "category": "Databases",
+      "proficiency": 85,
+      "description": "Structured query language for database management",
+      "iconName": "BsFiletypeSql"
+    },
+    {
+      "id": "66a619f4-9338-416a-958f-5aac3110329b",
+      "name": "SQLite",
+      "category": "Databases",
+      "proficiency": 80,
+      "description": "Embedded relational database",
+      "iconName": "DiSqllite"
+    },
+    {
+      "id": "cdfd43b3-0629-434a-965d-cc13192dc2b0",
+      "name": "Postgres",
+      "category": "Databases",
+      "proficiency": 65,
+      "description": "Object-relational database system",
+      "iconName": "BiLogoPostgresql"
+    },
+    {
+      "id": "5d4a32b2-bccc-4d70-805a-64a7277b3e4a",
+      "name": "MongoDB",
+      "category": "Databases",
+      "proficiency": 60,
+      "description": "NoSQL document database",
+      "iconName": "SiMongodb"
+    },
+    {
+      "id": "41e3f5eb-85b2-4c17-a51b-f43fc1df1da0",
+      "name": "TensorFlow",
+      "category": "Data_Science",
+      "proficiency": 60,
+      "description": "Deep learning framework",
+      "iconName": "SiTensorflow"
+    },
+    {
+      "id": "fb98d405-679e-4154-bb43-b3217a31134e",
+      "name": "Git/GitHub",
+      "category": "Tools",
+      "proficiency": 90,
+      "description": "Version control and code collaboration",
+      "iconName": "FaGitAlt"
+    },
+    {
+      "id": "7e86a398-50fc-4d4c-a3f4-27c1a57a455a",
+      "name": "Excel",
+      "category": "Tools",
+      "proficiency": 75,
+      "description": "Data analysis, visualization, and spreadsheet management",
+      "iconName": "RiFileExcel2Fill"
+    },
+    {
+      "id": "c367ba07-df40-4280-9c47-5176ff6ee6b3",
+      "name": "Java",
+      "category": "Languages",
+      "proficiency": 50,
+      "description": "Object-oriented programming and enterprise applications",
+      "iconName": "FaJava"
+    },
+    {
+      "id": "342d3734-ca7d-4741-b40a-ceb3eba8fd1f",
+      "name": "Postman",
+      "category": "Tools",
+      "proficiency": 50,
+      "description": "API development and testing tool",
+      "iconName": "SiPostman"
+    },
+    {
+      "id": "c5a081f2-290c-4bff-8e7d-fc6a31648e7d",
+      "name": "React",
+      "category": "Frontend",
+      "proficiency": 50,
+      "description": "Building dynamic and component-based user interfaces",
+      "iconName": "FaReact"
+    },
+    {
+      "id": "e18f85a2-73ab-40b5-b2d7-e3dbb9c378e9",
+      "name": "Framer Motion",
+      "category": "Frontend",
+      "proficiency": 25,
+      "description": "Declarative animations and transitions for React apps",
+      "iconName": "SiFramer"
+    },
+    {
+      "id": "db97fd28-3cb0-4ef4-805e-73facdffd8e3",
+      "name": "Keras",
+      "category": "Data_Science",
+      "proficiency": 60,
+      "description": "Deep learning API running on TensorFlow",
+      "iconName": "SiKeras"
+    },
+    {
+      "id": "8b83aa6e-fc8a-4e93-a4b5-99dd74ef380f",
+      "name": "NumPy",
+      "category": "Data_Science",
+      "proficiency": 75,
+      "description": "Numerical computing with Python",
+      "iconName": "SiNumpy"
+    },
+    {
+      "id": "fdb649e6-fbf8-4b09-96c5-11013c9899e5",
+      "name": "Pandas",
+      "category": "Data_Science",
+      "proficiency": 80,
+      "description": "Data manipulation and analysis library",
+      "iconName": "SiPandas"
+    },
+    {
+      "id": "851bb202-1af9-44af-bbb9-c12bf651d391",
+      "name": "C/C++",
+      "category": "Languages",
+      "proficiency": 40,
+      "description": "System programming, algorithms, and data structures",
+      "iconName": "TbBrandCpp"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "29b1fbed-62c3-400e-9170-2d4d18f74db9",
+      "title": "B.Tech in Computer Science Engineering, MAIT Delhi (GGSIPU)",
+      "date": "2023 - 2027 (Expected)",
+      "description": "Pursuing B.Tech at Maharaja Agrasen Institute of Technology, Rohini, Delhi. Focused on AI, full-stack development, and research.",
+      "type": "EDUCATION",
+      "remarks": "CGPA: 8.7 till 4th semester"
+    },
+    {
+      "id": "3a466ea7-914d-47df-95b2-5a465a202f0f",
+      "title": "CBSE (Class XII), PCM with Computer Science",
+      "date": "2022",
+      "description": "Completed senior secondary education from Arwachin International School, Dilshad Garden, Delhi.",
+      "type": "EDUCATION",
+      "remarks": "Scored 84.6%"
+    },
+    {
+      "id": "52147d1a-7ed9-4fc7-a4b1-7ca213186d0d",
+      "title": "CBSE (Class X)",
+      "date": "2020",
+      "description": "Completed secondary education from Arwachin International School, Dilshad Garden, Delhi.",
+      "type": "EDUCATION",
+      "remarks": "Scored 91.4%"
+    },
+    {
+      "id": "a50243ce-702f-4a14-b396-2a8e0297e1ff",
+      "title": "Hackathon Participant – Smart India Hackathon 2024",
+      "date": "September - December 2024",
+      "description": "Built a freelancer opportunities platform with AI-based job matching. Developed DBMS and cosine similarity-based recommendation model. Selected among the top 25 teams from the total of 250+ teams.",
+      "type": "HACKATHON",
+      "remarks": "AI/ML & DBMS Developer"
+    },
+    {
+      "id": "56cffa7a-11c9-45ee-9835-326949faafed",
+      "title": "Hackathon Participant – HACKCBS 7.0",
+      "date": "November 2024",
+      "description": "Created an integrated interview platform with real-time code editor and virtual interviews using socket programming.",
+      "type": "HACKATHON",
+      "remarks": "Team Lead and developed the LLM based code editor"
+    },
+    {
+      "id": "21a3eb6b-355a-4bf8-9a8e-db384be0830e",
+      "title": "Hackathon Participant – CodeNakshatra 1.0",
+      "date": "April 2025",
+      "description": "Led team to build a cross-platform gig marketplace using React Native and NestJS. Included in-app messaging, multilingual support, and subscription model.",
+      "type": "HACKATHON",
+      "remarks": "Team Lead & DBMS Architect"
+    },
+    {
+      "id": "223107d7-5155-464d-b2c9-10a7f604cb84",
+      "title": "Hackathon Participant – Vihaan 8.0",
+      "date": "April 2025",
+      "description": "Developed a doctor-patient platform with real-time booking, WebRTC video calls, digital prescriptions, and monetization features.",
+      "type": "HACKATHON",
+      "remarks": "Team Lead & DBMS Developer"
+    }
+  ],
+  "achievements": [
+    {
+      "id": "59708317-3ed4-4f32-8d4c-659b512b10f3",
+      "title": "Machine Learning – Internshala Certification",
+      "date": "2024-08-01T00:00:00.000Z",
+      "overview": "Completed certified training on supervised and unsupervised learning via Internshala, focusing on introduction to ML world.",
+      "certificate": "https://drive.google.com/file/d/12-ooGdY1TRg4mHjNx_UoGgIxX8iE7C_0/view?usp=drive_link"
+    },
+    {
+      "id": "a29903cc-92d6-492e-8830-548a985d9a39",
+      "title": "Programming with Python – Internshala Certification",
+      "date": "2024-07-10T00:00:00.000Z",
+      "overview": "Gained hands-on experience in core Python concepts and real-world applications through Internshala's certified program.",
+      "certificate": "https://drive.google.com/file/d/16jUid31uqQuA6RBvcLXuq0YjanL3sOzH/view?usp=drive_link"
+    },
+    {
+      "id": "436194f1-c1cb-450f-a0f2-2e1629ba5d36",
+      "title": "Python for Data Science – NPTEL (Top 5% Toppers)",
+      "date": "2024-11-01T00:00:00.000Z",
+      "overview": "Explored data analysis, visualization, and scientific computing using Python. Recognized among top 5% performers.",
+      "certificate": "https://drive.google.com/file/d/1oZlciqTzt16UmPG7JvvR-qhJPWZizb0y/view?usp=drive_link"
+    },
+    {
+      "id": "3f8d84b6-bef4-4e6b-a532-7a2124663656",
+      "title": "AI: Search Methods for Problem Solving – NPTEL",
+      "date": "2024-11-20T00:00:00.000Z",
+      "overview": "Learned fundamental AI concepts, including search techniques and strategies for solving complex problems.",
+      "certificate": "https://drive.google.com/file/d/14dbkGfkSKqVNEIDUztWLbzAeFTMx20Zk/view?usp=drive_link"
+    },
+    {
+      "id": "6d13c672-1755-477f-ae68-2721ec808342",
+      "title": "Top Performer – Internship & Job Preparation Training",
+      "date": "2024-08-01T00:00:00.000Z",
+      "overview": "Achieved top performer recognition with 95% score in a 4-week certified course covering resumes, interviews, and job applications.",
+      "certificate": ""
+    },
+    {
+      "id": "8ba6ba88-24b5-45fb-8ab8-df435433ae9a",
+      "title": "CBSE State Championship – Badminton (2019)",
+      "date": "2019-10-15T00:00:00.000Z",
+      "overview": "Represented the North Zone (Delhi) in the CBSE State Championship for Badminton at the school level.",
+      "certificate": ""
+    },
+    {
+      "id": "0255e9c5-636d-45bf-918f-349d4d2898b6",
+      "title": "Inter-Zonal Captain – Netball (Delhi)",
+      "date": "2019-12-01T00:00:00.000Z",
+      "overview": "Captained the zone netball team, led training and game strategies, and secured 2nd place out of 10 teams in Delhi's inter-zonal competition.",
+      "certificate": ""
+    },
+    {
+      "id": "945597ca-733e-4b2b-82fc-550516585fec",
+      "title": "Data Analytics with Python – NPTEL (Certified by IIT Faculty)",
+      "date": "2025-04-01T00:00:00.000Z",
+      "overview": "Completed a 12-week IIT-led course on statistical thinking, hypothesis testing, regression, clustering, and data-driven modeling using Python. Strengthened practical and theoretical foundations for data science roles.",
+      "certificate": "https://drive.google.com/file/d/1GDtmqL86zxJo6xv7fSumU4kDU0R6eiOb/view?usp=sharing"
+    },
+    {
+      "id": "6426563c-32bc-40ce-9524-d531b5a85047",
+      "title": "Web Development Training – Internshala",
+      "date": "2025-05-17T00:00:00.000Z",
+      "overview": "Completed an 8-week intensive training covering HTML, CSS, Bootstrap, DBMS, PHP, JavaScript, React, AI in Web Development, and a final hands-on project. Strengthened full-stack web development skills.",
+      "certificate": "https://drive.google.com/file/d/1eXh0xAyFlxKaDyLPa-MgDgl-Siz3u52Y/view?usp=sharing"
+    },
+    {
+      "id": "55e4cafc-0e19-47f6-883e-eabefdf751f3",
+      "title": "Getting Started with Competitive Programming – NPTEL",
+      "date": "2025-04-30T00:00:00.000Z",
+      "overview": "Completed a 12-week certified course offered by NPTEL, focused on core algorithmic techniques including sorting, searching, greedy algorithms, graph theory, disjoint set union, minimum spanning trees, shortest paths, network flows, and dynamic programming. Strengthened competitive programming skills in preparation for contests like ICPC and tech placements.",
+      "certificate": "https://drive.google.com/file/d/1iqzEnV6_7J-9uQDTTd_ss4simWa1s1b5/view?usp=sharing"
+    }
+  ]
+}
