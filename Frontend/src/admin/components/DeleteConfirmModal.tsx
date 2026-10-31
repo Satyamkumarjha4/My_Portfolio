@@ -20,7 +20,7 @@ const DeleteConfirmModal: React.FC<Props> = ({ onCancel, onConfirm, count }) => 
             scale: 1, 
             y: 0,
             transition: { 
-                type: "spring",
+                type: "spring" as const,
                 damping: 20,
                 stiffness: 300
             }
@@ -45,7 +45,7 @@ const DeleteConfirmModal: React.FC<Props> = ({ onCancel, onConfirm, count }) => 
             scale: 1, 
             rotate: 0,
             transition: { 
-                type: "spring",
+                type: "spring" as const,
                 damping: 15,
                 delay: 0.2
             }

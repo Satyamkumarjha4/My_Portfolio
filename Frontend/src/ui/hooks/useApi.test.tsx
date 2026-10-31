@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderHook, waitFor } from '@testing-library/react'
 
 const get = vi.fn()
-vi.mock('../utils/axios', () => ({ axiosInstance: { get: (...a: unknown[]) => get(...a) } }))
+vi.mock('../utils/http', () => ({ publicApi: { get: (...a: unknown[]) => get(...a) } }))
 
 const load = async () => (await import('./useApi')).useApi
 

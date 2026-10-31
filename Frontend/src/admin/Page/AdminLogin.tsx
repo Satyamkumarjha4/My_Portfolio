@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ChevronRight, Shield, User, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { axiosInstance } from '../../ui/utils/axios';
+import { publicApi } from '../../ui/utils/http';
 import { setToken } from '../../ui/utils/auth';
 
 const AdminLogin: React.FC = () => {
@@ -22,7 +22,7 @@ const AdminLogin: React.FC = () => {
         setIsLoading(true);
         setError('');
         try {
-            const res = await axiosInstance.post('/auth/login', { id, password: accessKey });
+            const res = await publicApi.post<{ token: string }>('/auth/login', { id, password: accessKey });
             setToken(res.data.token);
             navigate('/admin', { replace: true });
         } catch (err) {

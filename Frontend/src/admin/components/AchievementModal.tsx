@@ -2,7 +2,7 @@ import { useEscapeKey } from '../../ui/hooks/useEscapeKey';
 import { useFocusTrap } from '../../ui/hooks/useFocusTrap';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { adminApi } from '../../ui/utils/axios';
+import { adminApi } from '../../ui/utils/http';
 import { getErrorMessage } from '../hooks';
 import type { Achievement } from '../types';
 import { X, Save, Plus, Award, Calendar, FileText } from 'lucide-react';

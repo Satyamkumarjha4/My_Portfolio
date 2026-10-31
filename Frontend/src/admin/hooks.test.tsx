@@ -3,7 +3,7 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 
 let rows = [{ id: 'a' }, { id: 'b' }, { id: 'c' }]
 const failing = new Set<string>()
-vi.mock('../ui/utils/axios', () => ({
+vi.mock('../ui/utils/http', () => ({
   adminApi: {
     get: async () => ({ data: rows }),
     delete: async (url: string) => {

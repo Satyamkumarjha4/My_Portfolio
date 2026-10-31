@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { adminApi } from '../ui/utils/axios';
+import { adminApi } from '../ui/utils/http';
 
 // Shared list/refresh/select/delete behaviour for the admin tables.
 export function useAdminResource<T extends { id: string }>(path: string) {
@@ -64,7 +64,7 @@ export function useAdminResource<T extends { id: string }>(path: string) {
     return { items, selected, setSelected, loading, isRefreshing, error, clearError, fetchItems, refreshData, handleCheckbox, toggleAll, handleDelete };
 }
 
-// Extracts a human readable message from an axios-style error without using `any`.
+// Extracts a human readable message from an API error without using `any`.
 export function getErrorMessage(err: unknown, fallback = 'Something went wrong'): string {
     const data = (err as { response?: { data?: { error?: string; details?: { message: string }[] } } })?.response?.data;
     if (data?.details?.length) return data.details.map(d => d.message).join(', ');

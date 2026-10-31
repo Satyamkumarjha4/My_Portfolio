@@ -1,7 +1,6 @@
 import type React from "react"
-import { useEffect } from "react"
-import { motion, useAnimation } from "framer-motion"
-import { useInView } from "react-intersection-observer"
+import { useEffect, useRef } from "react"
+import { motion, useAnimation, useInView } from "framer-motion"
 import ProjectCard, { type ProjectCardProps } from "./ProjectCard"
 import { useApi } from "../hooks/useApi"
 import { ErrorBlock, LoadingBlock } from "./AsyncState"
@@ -17,10 +16,8 @@ interface ApiProject {
 const ProjectsShowcase: React.FC = () => {
   // Animation controls for staggered entrance
   const controls = useAnimation()
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  })
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { amount: 0.1, once: true })
 
   // Trigger animations when section comes into view
   useEffect(() => {
@@ -55,7 +52,7 @@ const ProjectsShowcase: React.FC = () => {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
         damping: 20,
       },

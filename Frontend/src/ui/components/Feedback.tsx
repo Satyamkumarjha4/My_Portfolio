@@ -2,7 +2,7 @@ import type React from "react"
 import { useState, type ChangeEvent } from "react"
 import { Star, Send, CheckCircle } from "lucide-react"
 import { motion } from "framer-motion"
-import { axiosInstance } from "../utils/axios.ts"
+import { publicApi } from "../utils/http"
 
 interface FormData {
   email: string
@@ -89,7 +89,7 @@ const FeedbackForm: React.FC = () => {
 
     setIsSubmitting(true)
     try {
-      await axiosInstance.post("/feedback", formData)
+      await publicApi.post("/feedback", formData)
     } catch (error) {
       const status = (error as { response?: { status?: number } }).response?.status
       setErrors({

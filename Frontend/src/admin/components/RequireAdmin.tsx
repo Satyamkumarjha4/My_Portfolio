@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { adminApi } from '../../ui/utils/axios';
+import { adminApi } from '../../ui/utils/http';
 import { getToken } from '../../ui/utils/auth';
 
 // Server-verified gate: the UI only renders once /auth/me accepts the token.

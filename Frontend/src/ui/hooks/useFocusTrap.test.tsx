@@ -56,7 +56,7 @@ describe('modal focus management', () => {
 // must stay mounted or focus cannot return to the opener.
 import { vi } from 'vitest'
 import { waitFor } from '@testing-library/react'
-vi.mock('../utils/axios', () => ({ adminApi: { get: async () => ({ data: [] }), delete: async () => ({}) } }))
+vi.mock('../utils/http', () => ({ adminApi: { get: async () => ({ data: [] }), delete: async () => ({}) } }))
 import { useAdminResource } from '../../admin/hooks'
 
 const TableHarness = () => {

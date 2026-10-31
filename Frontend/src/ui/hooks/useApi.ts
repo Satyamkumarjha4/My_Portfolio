@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { axiosInstance } from "../utils/axios"
+import { publicApi } from "../utils/http"
 
 // Tiny stale-while-revalidate cache for public GET endpoints.
 // - Fresh data (< TTL) is served without a request
@@ -18,7 +18,7 @@ const inflight = new Map<string, Promise<unknown>>()
 const request = (path: string): Promise<unknown> => {
   const existing = inflight.get(path)
   if (existing) return existing
-  const p = axiosInstance
+  const p = publicApi
     .get(path)
     .then((res) => {
       cache.set(path, { data: res.data, at: Date.now() })

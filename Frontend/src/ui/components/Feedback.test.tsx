@@ -9,7 +9,7 @@ const post = (...a: unknown[]) => {
   calls.push(a)
   return impl(...a)
 }
-vi.mock('../utils/axios', () => ({ axiosInstance: { post: (...a: unknown[]) => post(...a) } }))
+vi.mock('../utils/http', () => ({ publicApi: { post: (...a: unknown[]) => post(...a) } }))
 
 import FeedbackForm from './Feedback'
 
