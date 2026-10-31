@@ -4,6 +4,7 @@ dotenv.config();
 const { default: app } = await import('./app.js');
 const { default: prisma } = await import('./config/prisma.js');
 const { default: logger } = await import('./utils/logger.js');
+const { flushDeploy } = await import('./utils/deployHook.js');
 
 const required = ['DATABASE_URL', 'JWT_SECRET', 'ADMIN_ID', 'ADMIN_PASSWORD_HASH'];
 const missing = required.filter((k) => !process.env[k]);
@@ -24,6 +25,7 @@ const server = app.listen(PORT, () => {
 const shutdown = (signal) => {
   console.log(`${signal} received, shutting down`);
   server.close(async () => {
+    await flushDeploy();
     await prisma.$disconnect();
     process.exit(0);
   });
