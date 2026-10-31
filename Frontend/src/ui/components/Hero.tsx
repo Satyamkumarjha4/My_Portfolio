@@ -5,6 +5,7 @@ import Window from "./Window"
 import ProfileImage from "./ProfileImage"
 import { Link } from "react-router-dom"
 
+const MotionLink = motion.create(Link)
 
 const TITLES = [
   "AI Enthusiast",
@@ -100,20 +101,22 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.8 }}
             >
-              <motion.button
-                className="mt-6 bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300"
+              <MotionLink
+                to="/contact"
+                className="mt-6 inline-block text-center bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link to="/Contact">Get in Touch</Link>
-              </motion.button>
-              <motion.button
-                className="mt-6 bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300"
+                Get in Touch
+              </MotionLink>
+              <MotionLink
+                to="/projects"
+                className="mt-6 inline-block text-center bg-indigo-500 text-white px-6 py-3 rounded-full hover:bg-indigo-600 transition duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link to="/Projects">View Projects</Link>
-              </motion.button>
+                View Projects
+              </MotionLink>
             </motion.div>
           </div>
         </motion.div>

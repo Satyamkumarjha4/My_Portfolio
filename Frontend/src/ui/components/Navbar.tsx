@@ -143,13 +143,14 @@ const Navbar: React.FC = () => {
         </motion.div>
 
         {/* Admin Button - Hidden on mobile */}
-        <Link to="/info">
-          <motion.div className="hidden md:block" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <button className="bg-gray-800 text-white px-3 py-1 md:px-4 md:py-2 text-sm md:text-base rounded-full hover:bg-gray-700 shadow-md">
-              Info
-            </button>
-          </motion.div>
-        </Link>
+        <motion.div className="hidden md:block" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Link
+            to="/info"
+            className="block bg-gray-800 text-white px-3 py-1 md:px-4 md:py-2 text-sm md:text-base rounded-full hover:bg-gray-700 shadow-md"
+          >
+            Info
+          </Link>
+        </motion.div>
 
         {/* Hamburger Menu Button - Visible only on mobile */}
         <motion.button
