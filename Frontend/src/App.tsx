@@ -6,6 +6,7 @@ import About from './ui/features/About';
 import Projects from './ui/features/Projects';
 import Contact from './ui/features/Contact';
 import Info from './ui/features/Info';
+import ErrorBoundary from './ui/components/ErrorBoundary';
 
 // Public pages are small (10-17 kB each), so splitting them only added a
 // request waterfall to every landing page (measured: LCP +0.5s). Only the
@@ -28,21 +29,24 @@ const Fallback: React.FC = () => (
 );
 
 const App: React.FC = () => {
+    const { pathname } = useLocation();
     return (
         <>
             <ScrollToTop />
-            <Suspense fallback={<Fallback />}>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/projects" element={<Projects />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/info" element={<Info />} />
-                    <Route path="/status" element={<Status />} />
-                    <Route path="/admin/*" element={<Admin />} />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </Suspense>
+            <ErrorBoundary resetKey={pathname}>
+                <Suspense fallback={<Fallback />}>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/projects" element={<Projects />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/info" element={<Info />} />
+                        <Route path="/status" element={<Status />} />
+                        <Route path="/admin/*" element={<Admin />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </Suspense>
+            </ErrorBoundary>
         </>
     );
 };
