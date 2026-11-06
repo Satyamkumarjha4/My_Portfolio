@@ -3,21 +3,21 @@
 # 10 min keeps the API process warm without keeping the Neon database awake.
 # Requires the repository variable API_ORIGIN (e.g. https://<service>.onrender.com).
 # Note: GitHub may delay scheduled runs under load, so occasional cold starts can still happen.
-name: Keep API warm
+# name: Keep API warm
 
-on:
-  schedule:
-    - cron: "*/10 * * * *"
-  workflow_dispatch:
+# on:
+#   schedule:
+#     - cron: "*/10 * * * *"
+#   workflow_dispatch:
 
-jobs:
-  ping:
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    steps:
-      - name: Ping /livez
-        env:
-          API_ORIGIN: ${{ vars.API_ORIGIN }}
-        run: |
-          if [ -z "$API_ORIGIN" ]; then echo "API_ORIGIN repository variable not set; skipping"; exit 0; fi
-          curl -sS -o /dev/null -w "status=%{http_code} ttfb=%{time_starttransfer}s\n" --max-time 120 "$API_ORIGIN/livez"
+# jobs:
+#   ping:
+#     runs-on: ubuntu-latest
+#     timeout-minutes: 3
+#     steps:
+#       - name: Ping /livez
+#         env:
+#           API_ORIGIN: ${{ vars.API_ORIGIN }}
+#         run: |
+#           if [ -z "$API_ORIGIN" ]; then echo "API_ORIGIN repository variable not set; skipping"; exit 0; fi
+#           curl -sS -o /dev/null -w "status=%{http_code} ttfb=%{time_starttransfer}s\n" --max-time 120 "$API_ORIGIN/livez"
